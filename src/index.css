@@ -1,0 +1,756 @@
+@import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
+@import 'tailwindcss';
+
+/* 색 토큰. 장면마다 --hue 만 바뀌고, 나머지 색은 hue에서 계산한다. */
+@property --hue {
+  syntax: '<number>';
+  inherits: true;
+  initial-value: 255;
+}
+
+@theme {
+  --font-sans: 'Pretendard Variable', Pretendard, system-ui, -apple-system, 'Apple SD Gothic Neo', sans-serif;
+}
+
+@theme inline {
+  --color-fg: var(--fg);
+  --color-muted: var(--muted);
+  --color-accent: var(--accent);
+  --color-line: var(--line);
+  --color-surface: var(--surface);
+}
+
+:root {
+  --hue: 255;
+  --bg: oklch(0.955 0.03 var(--hue));
+  --surface: oklch(0.985 0.012 var(--hue));
+  --fg: oklch(0.22 0.03 var(--hue));
+  --muted: oklch(0.42 0.04 var(--hue));
+  --accent: oklch(0.42 0.15 var(--hue));
+  --line: oklch(0.74 0.05 var(--hue));
+  color-scheme: light dark;
+  /* 장면이 바뀌면 배경 색조가 600ms 동안 바뀐다. */
+  transition: --hue 600ms ease;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: oklch(0.21 0.04 var(--hue));
+    --surface: oklch(0.26 0.04 var(--hue));
+    --fg: oklch(0.95 0.015 var(--hue));
+    --muted: oklch(0.78 0.04 var(--hue));
+    --accent: oklch(0.82 0.11 var(--hue));
+    --line: oklch(0.42 0.05 var(--hue));
+  }
+}
+
+/* 장면별 색조 */
+:root[data-scene='intro'] { --hue: 255; }
+:root[data-scene='background'] { --hue: 225; }
+:root[data-scene='skills'] { --hue: 195; }
+:root[data-scene='projects'] { --hue: 165; }
+:root[data-scene='project-detail'] { --hue: 285; }
+:root[data-scene='how-built'] { --hue: 310; }
+:root[data-scene='journal'] { --hue: 15; }
+:root[data-scene='contact'] { --hue: 240; }
+
+@media (prefers-reduced-motion: reduce) {
+  :root {
+    transition: none;
+  }
+}
+
+html {
+  scroll-padding-top: 1rem;
+}
+html.snap {
+  scroll-snap-type: y proximity;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.7;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+  -webkit-font-smoothing: antialiased;
+}
+
+a {
+  color: var(--accent);
+  text-underline-offset: 0.2em;
+}
+a:hover {
+  text-decoration-thickness: 2px;
+}
+:focus-visible {
+  outline: 3px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: -4rem;
+  z-index: 50;
+  background: var(--fg);
+  color: var(--bg);
+  padding: 0.5rem 0.9rem;
+  border-radius: 4px;
+}
+.skip-link:focus {
+  top: 1rem;
+}
+
+/* 고정 배경 1장 */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: -1;
+  background: var(--bg);
+}
+/* 장면 */
+.scene {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  padding: 10svh 4.5rem 10svh clamp(1.25rem, 8vw, 8rem);
+  scroll-snap-align: start;
+  box-sizing: border-box;
+}
+.scene-tall {
+  align-items: flex-start;
+  scroll-snap-align: none;
+}
+@media (max-width: 767px) {
+  .scene {
+    padding-right: 1.25rem;
+  }
+  /* 좁은 화면에서는 위치 표시 점이 본문과 겹치므로 숨긴다. */
+  .scene-nav {
+    display: none;
+  }
+}
+.scene-inner {
+  width: 100%;
+  max-width: 44rem;
+}
+
+/* 들어올 때 한 번 나타난다. scene-motion 클래스는 움직임 줄이기가 꺼졌을 때만 붙는다. */
+.scene-motion .reveal {
+  transition:
+    opacity 500ms ease,
+    transform 500ms ease;
+}
+.scene-motion:not([data-seen]) .reveal {
+  opacity: 0;
+  transform: translateY(12px);
+}
+
+.scene-title {
+  margin: 0 0 1.5rem;
+  font-size: clamp(2rem, 5.2vw, 3.5rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+#intro-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
+.hero-role {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--accent);
+}
+.hero-name {
+  margin: 0.25rem 0 0;
+  font-size: clamp(3.5rem, 13vw, 9rem);
+  font-weight: 800;
+  letter-spacing: -0.04em;
+  line-height: 1;
+}
+.hero-region {
+  margin: 0.75rem 0 2rem;
+  color: var(--muted);
+}
+
+.prose-block p,
+.lead {
+  max-width: 34em;
+  margin: 0 0 0.6rem;
+}
+.lead {
+  margin-bottom: 1.5rem;
+  color: var(--muted);
+}
+
+.sub-title {
+  margin: 2.25rem 0 0.6rem;
+  font-size: 1.25rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.35;
+}
+h4.sub-title {
+  margin-top: 1.5rem;
+  font-size: 1.0625rem;
+}
+
+.strengths {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.strengths li {
+  display: grid;
+  gap: 0.1rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent);
+  max-width: 34em;
+}
+.strengths strong {
+  font-weight: 700;
+}
+.strengths span {
+  color: var(--muted);
+}
+
+.example-badge {
+  display: inline-block;
+  margin: 2.5rem 0 0;
+  padding: 0.35rem 0.75rem;
+  border: 1.5px dashed var(--muted);
+  border-radius: 4px;
+  font-size: 0.875rem;
+  color: var(--muted);
+}
+
+.entries,
+.plain-list,
+.contact-list,
+.project-list,
+.journal {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.plain-list li {
+  position: relative;
+  padding-left: 1rem;
+}
+.plain-list li::before {
+  content: '';
+  position: absolute;
+  left: 0.15rem;
+  top: 0.8em;
+  width: 0.35rem;
+  height: 0.35rem;
+  background: var(--accent);
+  border-radius: 50%;
+}
+.entries li {
+  margin-bottom: 1rem;
+}
+.entries p,
+.entry-head,
+.entry-meta {
+  margin: 0;
+}
+.entry-meta {
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+.tag {
+  display: inline-block;
+  padding: 0 0.5rem;
+  margin-right: 0.35rem;
+  font-size: 0.8125rem;
+  font-weight: 700;
+  line-height: 1.6;
+  color: var(--bg);
+  background: var(--accent);
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.tag-lack {
+  background: transparent;
+  color: var(--fg);
+  box-shadow: inset 0 0 0 1.5px var(--fg);
+}
+
+.skills > div {
+  margin-bottom: 1.1rem;
+}
+.skills dt {
+  font-weight: 700;
+}
+.skills dd {
+  margin: 0.15rem 0 0;
+  max-width: 36em;
+}
+
+/* 프로젝트 목록 */
+.project-list {
+  display: grid;
+  gap: 0;
+}
+.project-row {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 0.15rem 1rem;
+  padding: 1.1rem 0;
+  border-top: 1.5px solid var(--line);
+  color: var(--fg);
+  text-decoration: none;
+}
+.project-list li:last-child .project-row {
+  border-bottom: 1.5px solid var(--line);
+}
+.project-row:hover .project-row-name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+}
+.project-row-name {
+  font-size: 1.375rem;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.project-row-meta,
+.project-row-stack {
+  color: var(--muted);
+  font-size: 0.9375rem;
+  text-align: right;
+}
+.project-row-stack {
+  grid-column: 2;
+  grid-row: 2;
+}
+.project-row-summary {
+  grid-column: 1;
+  grid-row: 2;
+  max-width: 32em;
+}
+@media (max-width: 640px) {
+  .project-row {
+    grid-template-columns: 1fr;
+  }
+  .project-row-meta,
+  .project-row-stack,
+  .project-row-summary {
+    grid-column: 1;
+    grid-row: auto;
+    text-align: left;
+  }
+}
+
+/* 프로젝트 상세 */
+.project {
+  padding-bottom: 3.5rem;
+  margin-bottom: 3rem;
+  border-bottom: 1.5px solid var(--line);
+}
+.project:last-child {
+  border-bottom: 0;
+}
+.project p {
+  max-width: 36em;
+  margin: 0;
+}
+.project-name {
+  margin: 0;
+  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+
+.flow {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem 2.2rem;
+}
+.flow li {
+  position: relative;
+  display: grid;
+  padding: 0.5rem 0.9rem;
+  border: 1.5px solid var(--fg);
+  border-radius: 6px;
+}
+.flow li span {
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.flow li:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  left: 100%;
+  top: 50%;
+  width: 2.2rem;
+  border-top: 1.5px solid var(--fg);
+}
+@media (max-width: 640px) {
+  .flow {
+    flex-direction: column;
+    gap: 1.6rem;
+  }
+  .flow li:not(:last-child)::after {
+    left: 1.5rem;
+    top: 100%;
+    width: 0;
+    height: 1.6rem;
+    border-top: 0;
+    border-left: 1.5px solid var(--fg);
+  }
+}
+
+.problems > div {
+  margin-bottom: 0.9rem;
+  max-width: 36em;
+}
+.problems dt {
+  font-weight: 600;
+}
+.problems dd {
+  margin: 0.2rem 0 0;
+}
+
+.results {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  gap: 1rem 1.5rem;
+  margin: 0;
+}
+.results dt {
+  font-size: 1.75rem;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.2;
+}
+.results dd {
+  margin: 0.1rem 0 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
+
+/* 사이트 소개 표 */
+.table-wrap {
+  max-width: 100%;
+}
+.folder-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9375rem;
+}
+.folder-table th,
+.folder-table td {
+  padding: 0.55rem 0.75rem 0.55rem 0;
+  text-align: left;
+  vertical-align: top;
+  border-bottom: 1.5px solid var(--line);
+}
+.folder-table thead th {
+  color: var(--muted);
+  font-weight: 600;
+}
+.folder-table code {
+  font-size: 0.875rem;
+}
+@media (max-width: 640px) {
+  .folder-table thead {
+    position: absolute;
+    clip-path: inset(50%);
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+  }
+  .folder-table,
+  .folder-table tbody,
+  .folder-table tr,
+  .folder-table th,
+  .folder-table td {
+    display: block;
+  }
+  .folder-table tr {
+    padding: 0.5rem 0;
+    border-bottom: 1.5px solid var(--line);
+  }
+  .folder-table th,
+  .folder-table td {
+    border: 0;
+    padding: 0;
+  }
+  .folder-table td:last-child {
+    color: var(--muted);
+  }
+  .folder-table td:last-child::before {
+    content: '의존: ';
+  }
+}
+
+.journal li {
+  margin-bottom: 1.75rem;
+  padding-left: 1rem;
+  border-left: 3px solid var(--accent);
+}
+.journal dl {
+  margin: 0.2rem 0 0;
+  display: grid;
+  grid-template-columns: 3rem 1fr;
+  gap: 0.25rem 0.75rem;
+  max-width: 38em;
+}
+.journal dt {
+  font-weight: 700;
+}
+.journal dd {
+  margin: 0;
+}
+
+.contact-list {
+  display: grid;
+  gap: 0.9rem;
+  font-size: 1.25rem;
+  overflow-wrap: anywhere;
+}
+
+/* 장면 위치 표시 */
+.scene-nav {
+  position: fixed;
+  right: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 20;
+}
+.scene-nav ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.scene-dot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 2.25rem;
+  height: 1.75rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--fg);
+}
+.scene-dot-mark {
+  width: 0.625rem;
+  height: 0.625rem;
+  margin-right: 0.8rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--fg);
+  transition: background-color 200ms ease, transform 200ms ease;
+}
+.scene-dot[aria-current='true'] .scene-dot-mark {
+  background: var(--fg);
+  transform: scale(1.35);
+}
+.scene-dot-label {
+  position: absolute;
+  right: 2.1rem;
+  padding: 0.1rem 0.5rem;
+  font-size: 0.8125rem;
+  white-space: nowrap;
+  background: var(--fg);
+  color: var(--bg);
+  border-radius: 3px;
+  opacity: 0;
+  pointer-events: none;
+}
+.scene-dot:hover .scene-dot-label,
+.scene-dot:focus-visible .scene-dot-label {
+  opacity: 1;
+}
+@media (prefers-reduced-motion: reduce) {
+  .scene-dot-mark {
+    transition: none;
+  }
+}
+
+/* 없는 주소 */
+.notfound {
+  min-height: 100svh;
+  box-sizing: border-box;
+  padding: 12svh clamp(1.25rem, 8vw, 8rem);
+}
+.notfound h1 {
+  margin: 0 0 1rem;
+  font-size: clamp(2.25rem, 7vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+.notfound p {
+  max-width: 30em;
+  margin: 0 0 1.5rem;
+}
+.notfound-link {
+  display: inline-block;
+  padding: 0.6rem 1.1rem;
+  font-weight: 700;
+  text-decoration: none;
+  color: var(--bg);
+  background: var(--fg);
+  border-radius: 4px;
+}
+
+/* ---------- 단축본 (/print) ---------- */
+@page {
+  size: A4;
+  margin: 14mm;
+}
+
+.print-page {
+  min-height: 100svh;
+  padding: 1.5rem 1rem 3rem;
+  box-sizing: border-box;
+}
+.print-toolbar {
+  max-width: 210mm;
+  margin: 0 auto 1rem;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 1rem;
+}
+.print-toolbar p {
+  margin: 0;
+  font-size: 0.875rem;
+  color: var(--muted);
+  flex: 1 1 16rem;
+}
+.print-button {
+  padding: 0.6rem 1.2rem;
+  font: inherit;
+  font-weight: 700;
+  color: var(--bg);
+  background: var(--fg);
+  border: 0;
+  border-radius: 4px;
+  cursor: pointer;
+}
+.sheet {
+  box-sizing: border-box;
+  max-width: 210mm;
+  margin: 0 auto;
+  padding: 14mm;
+  background: #fff;
+  color: #000;
+  font-size: 10.5pt;
+  line-height: 1.5;
+  word-break: keep-all;
+  box-shadow: 0 0 0 1px rgb(0 0 0 / 0.15);
+}
+.sheet a {
+  color: #000;
+}
+.sheet h1 {
+  margin: 0;
+  font-size: 24pt;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.15;
+}
+.sheet h2 {
+  margin: 12pt 0 3pt;
+  padding-bottom: 2pt;
+  font-size: 12pt;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  border-bottom: 1.2pt solid #000;
+  break-after: avoid;
+}
+.sheet h3 {
+  margin: 0 0 2pt;
+  font-size: 10.5pt;
+  font-weight: 700;
+}
+.sheet h3 span {
+  font-weight: 400;
+  font-size: 9pt;
+}
+.sheet p,
+.sheet-header p {
+  margin: 0;
+}
+.sheet ul {
+  margin: 0;
+  padding-left: 1.1em;
+  list-style: disc;
+}
+.sheet li {
+  margin-bottom: 1.5pt;
+}
+.sheet-example {
+  margin: 4pt 0 0;
+  padding: 1pt 5pt;
+  border-color: #000;
+  color: #000;
+  font-size: 8pt;
+}
+.sheet-project {
+  margin-bottom: 7pt;
+  break-inside: avoid;
+}
+.sheet-project dl {
+  margin: 0;
+  display: grid;
+  grid-template-columns: 4.6em 1fr;
+  gap: 1pt 6pt;
+}
+.sheet-project dt {
+  font-weight: 700;
+}
+.sheet-project dd {
+  margin: 0;
+}
+
+@media print {
+  html,
+  body {
+    background: #fff !important;
+    color: #000;
+  }
+  .print-toolbar,
+  .backdrop,
+  .scene-nav {
+    display: none !important;
+  }
+  .print-page {
+    padding: 0;
+    min-height: 0;
+  }
+  .sheet {
+    max-width: none;
+    padding: 0;
+    box-shadow: none;
+  }
+  .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+    transition: none !important;
+  }
+}
