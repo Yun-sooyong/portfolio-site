@@ -57,7 +57,8 @@ describe('주소', () => {
     renderAt('/')
     expect(screen.getByRole('heading', { name: '시행착오' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: '이 사이트를 만든 방식' })).toBeInTheDocument()
-    expect(screen.getByRole('heading', { name: '구조, 확장성, 보안' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: 'CI 단계' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '연락처' })).toBeInTheDocument()
   })
 
   it('/print 는 단축본이다. PDF로 저장 단추가 print를 부르고 noindex 이다', async () => {
@@ -129,7 +130,7 @@ describe('움직임', () => {
   it('reduced-motion 이면 장면에 전환 클래스가 없다', () => {
     mockMatchMedia(true)
     const { container } = renderAt('/')
-    expect(container.querySelectorAll('section.scene').length).toBeGreaterThan(8)
+    expect(container.querySelectorAll('section.scene').length).toBeGreaterThanOrEqual(8)
     expect(container.querySelector('.scene-motion')).toBeNull()
   })
 })
@@ -146,7 +147,11 @@ describe('빌드 입력', () => {
 describe('시행착오 장면', () => {
   it('기록이 없으면 빈 상태 문구를 보인다', async () => {
     const { JournalScenes } = await import('../features/detail/TailScenes')
-    render(<JournalScenes entries={[]} title="시행착오" />)
+    render(
+      <MemoryRouter>
+        <JournalScenes entries={[]} title="시행착오" />
+      </MemoryRouter>,
+    )
     expect(screen.getByText(/아직 기록한 시행착오가 없습니다/)).toBeInTheDocument()
   })
 
@@ -156,8 +161,8 @@ describe('시행착오 장면', () => {
     expect(within(scene).getAllByText('원인').length).toBeGreaterThan(0)
     expect(within(scene).getAllByText('해결').length).toBeGreaterThan(0)
     expect(scene.querySelector('time')).toHaveAttribute('datetime', '2026-11-04')
-    // 시행착오는 4개씩 화면 한 칸에 담는다.
-    expect(scene.querySelectorAll('li > dl').length).toBeLessThanOrEqual(4)
+    // 시행착오는 6개씩 화면 한 칸에 담는다.
+    expect(scene.querySelectorAll('li > dl').length).toBeLessThanOrEqual(6)
   })
 })
 
@@ -215,10 +220,8 @@ describe('제목 중복', () => {
   it('프로젝트 장면의 제목에 어느 프로젝트인지 드러난다', () => {
     renderAt('/')
     for (const p of portfolio.projects) {
-      for (const id of [`project-${p.id}`, `project-${p.id}-2`]) {
-        const h2 = document.getElementById(id)!.querySelector('h2')
-        expect(h2?.textContent).toBe(p.name)
-      }
+      const h2 = document.getElementById(`project-${p.id}`)!.querySelector('h2')
+      expect(h2?.textContent).toBe(p.name)
     }
   })
 })
@@ -236,8 +239,10 @@ describe('벤토 그리드', () => {
     // 기술 장면의 기술 이름도 mono 글꼴이다.
     for (const g of portfolio.skillGroups) {
       for (const s of g.skills) {
-        const dt = screen.getByText(s.name, { selector: 'dt' })
-        expect(dt).toHaveClass('font-mono')
+        const dt = [...document.querySelectorAll('dt')].find((d) => d.textContent === s.name)!
+        expect(dt, s.name).toBeDefined()
+        // 한글이 섞인 이름은 영문 부분만 mono 이고, 영문 이름은 dt 전체가 mono 이다.
+        expect(dt.classList.contains('font-mono') || dt.querySelector('.font-mono') !== null, s.name).toBe(true)
       }
     }
   })
@@ -245,7 +250,7 @@ describe('벤토 그리드', () => {
   it('장면마다 강조 타일이 1개 이하이고 style 속성이 없다', () => {
     const { container } = renderAt('/')
     const scenes = container.querySelectorAll('section.scene')
-    expect(scenes.length).toBeGreaterThan(8)
+    expect(scenes.length).toBeGreaterThanOrEqual(8)
     for (const scene of scenes) {
       expect(scene.querySelectorAll('.tile-strong').length, scene.id).toBeLessThanOrEqual(1)
     }
@@ -256,5 +261,65 @@ describe('벤토 그리드', () => {
     const yml = readFileSync(resolve(process.cwd(), '.github/workflows/ci.yml'), 'utf8')
     const runs = [...yml.matchAll(/^\s*- run: (.+)$/gm)].map((m) => m[1])
     expect(portfolio.howBuilt.ciSteps).toEqual(runs)
+  })
+})
+
+describe('장면 압축', () => {
+  it('프로젝트는 장면 1개씩이다', () => {
+    renderAt('/')
+    for (const p of portfolio.projects) {
+      expect(document.getElementById(`project-${p.id}`)).not.toBeNull()
+      expect(document.getElementById(`project-${p.id}-2`)).toBeNull()
+    }
+  })
+
+  it('연락처는 마지막 장면이고 시행착오와 섞이지 않는다', () => {
+    const { container } = renderAt('/')
+    const scenes = [...container.querySelectorAll('section.scene')]
+    const last = scenes[scenes.length - 1]!
+    expect(last.id).toBe('contact')
+    expect(within(last as HTMLElement).getByRole('link', { name: 'hello@example.com' })).toBeInTheDocument()
+    for (const scene of scenes.filter((s) => s.id.startsWith('journal'))) {
+      expect(scene.querySelector('a')).toBeNull()
+    }
+  })
+
+  it('시행착오는 6개씩 나뉜다', () => {
+    const { container } = renderAt('/')
+    const pages = [...container.querySelectorAll('section.scene')].filter((s) => s.id.startsWith('journal'))
+    expect(pages).toHaveLength(Math.ceil(portfolio.journal.length / 6))
+    for (const page of pages) expect(page.querySelectorAll('li > dl').length).toBeLessThanOrEqual(6)
+  })
+
+  it('소개와 이력 장면에 경력, 학력, 교육 이력, 자격증이 있고 연락처 링크는 없다', () => {
+    renderAt('/')
+    const intro = document.getElementById('intro')!
+    for (const label of ['경력', '학력과 교육 이력', '자격증']) {
+      expect(within(intro).getByRole('heading', { name: label })).toBeInTheDocument()
+    }
+    expect(intro.querySelector('a')).toBeNull()
+  })
+
+  it('프로젝트 목록 타일마다 대표 결과 숫자 1개가 있다', () => {
+    renderAt('/')
+    const list = document.getElementById('projects')!
+    expect(list.querySelectorAll('.project-result-value')).toHaveLength(portfolio.projects.length)
+    portfolio.projects.forEach((p, i) => {
+      expect(list.querySelectorAll('.project-result-value')[i]?.textContent).toBe(p.results[0]!.value)
+    })
+  })
+
+  it('기술 장면에 프로젝트 목록이 섞이지 않는다', () => {
+    renderAt('/')
+    expect(document.getElementById('skills')!.querySelector('.project-card')).toBeNull()
+  })
+
+  it('한글 문장은 mono 글꼴 영역에 넣지 않는다(영문 기술 이름만 mono)', () => {
+    renderAt('/')
+    const hangul = /[가-힣]/
+    for (const el of document.querySelectorAll('.font-mono')) {
+      if (el.closest('.chip')) continue
+      expect(hangul.test(el.textContent ?? ''), el.outerHTML.slice(0, 80)).toBe(false)
+    }
   })
 })

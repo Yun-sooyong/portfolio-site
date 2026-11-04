@@ -114,11 +114,10 @@ a:hover {
 /* 장면. 바깥 폭은 최대 1280px이다. 기본은 보통 스크롤이고, 큰 화면에서만 한 칸씩 맞춘다. */
 .scene {
   --gutter: clamp(1.25rem, 5vw, 4rem);
-  min-height: 100svh;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: clamp(2rem, 8svh, 5rem) var(--gutter);
+  align-items: flex-start;
+  padding: clamp(1rem, 3vw, 2rem) var(--gutter);
   scroll-margin-top: 1rem;
   box-sizing: border-box;
 }
@@ -134,84 +133,113 @@ a:hover {
 }
 
 /*
- * 한 칸씩 넘기기: 폭 1024px 이상이고 높이 640px 이상일 때만. 브라우저 기본 snap만 쓴다.
- * 내용을 자르거나 숨기지 않는다. 넘치면 글자 크기와 간격을 줄인다.
+ * 한 칸씩 넘기기: 폭 1024px 이상이고 높이 720px 이상일 때만(720px 미만은 보통 스크롤).
+ * 위아래 여백은 화면 높이의 4%다. 타일이 장면 높이를 채우고, 내용을 세로 가운데에 모으지 않는다.
+ * 내용을 자르거나 숨기지 않는다. 기준 글자는 13px 이상이다.
  */
-@media (min-width: 1024px) and (min-height: 640px) {
+@media (min-width: 1024px) and (min-height: 720px) {
   html.snap {
     scroll-snap-type: y mandatory;
     scroll-padding-top: 0;
-    /* 화면이 낮을수록 글자와 간격을 줄여 한 칸 안에 담는다(rem 기준 배치). */
-    font-size: clamp(12px, 1.9svh, 16px);
+    /* 높이와 폭 중 작은 쪽에 맞춘다. 기준 글자는 13.5px 이상, 16.5px 이하다. */
+    font-size: clamp(13.5px, min(1.95svh, 1.3vw), 16.5px);
   }
   html.snap body {
-    line-height: 1.55;
+    line-height: 1.5;
   }
   html.snap .scene {
     height: 100svh;
     min-height: 0;
-    padding-top: clamp(0.75rem, 3svh, 2.5rem);
-    padding-bottom: clamp(0.75rem, 3svh, 2.5rem);
+    align-items: stretch;
+    padding-top: 4svh;
+    padding-bottom: 4svh;
     scroll-snap-align: start;
     scroll-snap-stop: always;
     scroll-margin-top: 0;
   }
+  html.snap .scene-inner {
+    display: flex;
+    flex-direction: column;
+    min-height: 100%;
+  }
+  html.snap .bento {
+    flex: 1 1 auto;
+  }
   html.snap .scene-title {
-    margin-bottom: 0.7rem;
-    font-size: clamp(1.5rem, 2.8vw, 2.5rem);
+    margin-bottom: 0;
+    font-size: clamp(1.375rem, 2.2vw, 2rem);
   }
-  html.snap .lead {
-    margin-bottom: 0.7rem;
+  html.snap .scene-head {
+    margin-bottom: 0.6rem;
   }
-  /* 한 칸 장면은 글자를 키워 타일을 채운다. 높이가 낮을수록 기준 글자(rem)가 줄어든다. */
   html.snap .tile {
-    padding: 1.2rem 1.4rem;
-    font-size: 1.0625rem;
+    padding: 1rem 1.2rem;
+    font-size: var(--tf, 1rem);
   }
   html.snap .tile-title {
-    margin-bottom: 0.65rem;
-    font-size: 1.1875rem;
+    margin-bottom: 0.5em;
   }
-  html.snap .strengths strong {
-    font-size: 1.125rem;
+  /* 행 높이의 비율. 내용이 더 크면 내용 높이(min-content)를 따른다. 글자 크기는 높이와 폭 중 작은 쪽에 맞춘다. */
+  html.snap .bento {
+    grid-auto-rows: auto;
+    align-content: stretch;
   }
-  html.snap .results dt {
-    font-size: 2.25rem;
+  html.snap .bento-intro {
+    --tf: clamp(14px, min(2.2svh, 1.3vw), 22px);
   }
-  html.snap .results dd,
-  html.snap .journal dd,
-  html.snap .entry-meta {
-    font-size: 0.9375rem;
+  html.snap .tile.tile-roomy-sm {
+    font-size: calc(var(--tf, 1rem) * 1.06);
   }
-  html.snap .folder-table th,
-  html.snap .folder-table td {
-    padding-top: 0.8rem;
-    padding-bottom: 0.8rem;
+  html.snap .tile.tile-roomy-lg {
+    font-size: calc(var(--tf, 1rem) * 1.28);
   }
-  html.snap .problems {
-    font-size: 1.125rem;
+  html.snap .tile.tile-roomy {
+    font-size: calc(var(--tf, 1rem) * 1.14);
   }
-  html.snap .problems li {
-    margin-bottom: 1.1rem;
+  html.snap .tile-flow {
+    display: flex;
+    flex-direction: column;
   }
-  html.snap .skills > div {
-    margin-bottom: 0.9rem;
+  html.snap .tile-flow .flow {
+    flex: 1;
+    align-content: center;
+    align-items: center;
   }
-  html.snap .entries li {
-    margin-bottom: 0.9rem;
+  html.snap .bento-skills {
+    --tf: clamp(14px, min(2.55svh, 1.45vw), 24px);
   }
-  html.snap .terminal,
-  html.snap .folder-table,
-  html.snap .folder-table code,
-  html.snap .chip,
-  html.snap .flow li {
-    font-size: 0.9375rem;
+  html.snap .bento-projects {
+    --tf: clamp(14px, min(2.6svh, 1.5vw), 24px);
   }
-  html.snap .flow li span {
-    font-size: 0.8125rem;
+  html.snap .bento-project {
+    --tf: clamp(14px, min(2.5svh, 1.42vw), 24px);
   }
-  html.snap .contact-link {
-    font-size: 1.625rem;
+  html.snap .bento-how {
+    --tf: clamp(14px, min(1.95svh, 1.15vw), 20px);
+  }
+  html.snap .bento-journal-5,
+  html.snap .bento-journal-6 {
+    --tf: clamp(13px, min(2.15svh, 1.28vw), 21px);
+  }
+  html.snap .bento-journal-4 {
+    --tf: clamp(13px, min(2.55svh, 1.5vw), 24px);
+  }
+  html.snap .bento-journal-1,
+  html.snap .bento-journal-2,
+  html.snap .bento-journal-3 {
+    --tf: clamp(14px, min(2.6svh, 1.5vw), 24px);
+  }
+  html.snap .bento-contact {
+    --tf: clamp(16px, min(2.8svh, 1.6vw), 26px);
+  }
+  html.snap .hero-name {
+    font-size: clamp(3.5rem, 12svh, 8rem);
+  }
+  html.snap .intro-main .prose-block {
+    font-size: 1.2em;
+  }
+  html.snap .intro-main .prose-block p {
+    margin-bottom: 0.7em;
   }
 }
 
@@ -223,8 +251,20 @@ a:hover {
   opacity: 0;
 }
 
+.scene-head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 1.25rem;
+  margin-bottom: 0.75rem;
+}
+.scene-aside {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.9375rem;
+}
 .scene-title {
-  margin: 0 0 1rem;
+  margin: 0;
   font-size: clamp(1.75rem, 4.4vw, 2.75rem);
   text-wrap: balance;
   font-weight: 800;
@@ -268,24 +308,26 @@ a:hover {
 }
 .tile-title {
   margin: 0 0 0.55rem;
-  font-size: 1.0625rem;
+  font-size: 1.15em;
   font-weight: 700;
   letter-spacing: -0.01em;
   line-height: 1.35;
 }
 .tile-subtitle {
   margin: 0.7rem 0 0.2rem;
-  font-size: 0.9375rem;
+  font-size: 1em;
   font-weight: 700;
 }
 .tile-caption {
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: .85em;
 }
-.tile-center {
+.tile-center,
+.tile-contact {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: space-between;
+  gap: 1rem;
 }
 .tile-link {
   padding: 0;
@@ -354,7 +396,7 @@ a:hover {
 .chip {
   display: inline-block;
   padding: 0.05rem 0.55rem;
-  font-size: 0.8125rem;
+  font-size: .85em;
   line-height: 1.6;
   color: var(--neon-blue);
   background: var(--bg);
@@ -366,7 +408,7 @@ a:hover {
 /* 소개 */
 .hero-role {
   margin: 0;
-  font-size: 1.125rem;
+  font-size: 1.1em;
   font-weight: 600;
   color: var(--muted);
 }
@@ -391,18 +433,13 @@ a:hover {
   display: grid;
   gap: 0.75rem 1.5rem;
 }
-@media (min-width: 768px) {
-  .strengths {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-  }
-}
 .strengths li {
   display: grid;
   align-content: start;
   gap: 0.15rem;
 }
 .strengths strong {
-  font-size: 1rem;
+  font-size: 1.05em;
   font-weight: 700;
   letter-spacing: -0.01em;
 }
@@ -420,7 +457,7 @@ a:hover {
   padding: 0.2rem 0.6rem;
   border: 1px dashed var(--muted);
   border-radius: var(--radius-chip);
-  font-size: 0.8125rem;
+  font-size: .8em;
   color: var(--muted);
 }
 
@@ -457,7 +494,7 @@ a:hover {
 }
 .entry-meta {
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: .9em;
   font-variant-numeric: tabular-nums;
 }
 
@@ -465,7 +502,7 @@ a:hover {
   display: inline-block;
   padding: 0 0.45rem;
   margin-right: 0.3rem;
-  font-size: 0.75rem;
+  font-size: .78em;
   font-weight: 700;
   line-height: 1.6;
   color: var(--fg);
@@ -496,27 +533,30 @@ a:hover {
   max-width: 44em;
 }
 
-/* 프로젝트 목록. 타일 전체가 링크다. */
+/* 프로젝트 목록. 항목 전체가 링크이고 위쪽 1px 선으로 나눈다. */
+.project-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.project-list li + li {
+  margin-top: 0.4rem;
+  padding-top: 0.4rem;
+  border-top: 1px solid var(--line);
+}
 .project-row {
   display: grid;
-  align-content: center;
-  gap: 0.35rem;
-  height: 100%;
-  box-sizing: border-box;
-  padding: 1.1rem 1.25rem;
+  align-content: start;
+  gap: 0.25rem;
   color: var(--fg);
   text-decoration: none;
-  border-radius: var(--radius-tile);
 }
 .project-row-name {
-  font-size: 1.25rem;
+  font-size: 1.2em;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.3;
   color: var(--neon-blue);
-}
-.project-first .project-row-name {
-  font-size: clamp(1.5rem, 2.6vw, 2.25rem);
 }
 .project-row:hover .project-row-name {
   text-decoration: underline;
@@ -525,16 +565,58 @@ a:hover {
 }
 .project-row-meta {
   color: var(--muted);
-  font-size: 0.875rem;
-}
-.project-row-summary {
-  max-width: 34em;
+  font-size: .85em;
 }
 
-.project-meta {
-  margin-top: 0.5rem !important;
-  margin-bottom: 0.5rem !important;
+/* 영문 기술 이름만 mono. 한글 문장은 Pretendard */
+.mono-term {
+  font-size: 0.92em;
 }
+.tile-three-col .skills {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0 1.5rem;
+}
+.tile-two-col .skills {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0 1.5rem;
+}
+.tile-title-gap {
+  margin-top: 0.9rem;
+}
+
+/* 소개: 경력·학력 요약 */
+.summary {
+  margin: 0;
+}
+.summary > div {
+  display: grid;
+  grid-template-columns: 5rem minmax(0, 1fr);
+  gap: 0 0.75rem;
+  padding: 0.35rem 0;
+  border-top: 1px solid var(--line);
+}
+.summary > div:first-child {
+  border-top: 0;
+  padding-top: 0;
+}
+.summary dt {
+  color: var(--muted);
+  font-weight: 600;
+}
+.summary dd {
+  margin: 0;
+}
+.summary-item {
+  display: block;
+}
+.summary-note {
+  display: block;
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
 .link-list a {
   display: inline-block;
   padding: 0.2rem 0;
@@ -548,39 +630,44 @@ a:hover {
   padding: 0;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;
+  gap: 1.1em;
 }
 .flow li {
   position: relative;
   display: grid;
-  padding: 0.4rem 0.8rem;
+  padding: 0.45em 0.8em;
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: var(--radius-chip);
-  font-size: 0.8125rem;
+  font-size: .85em;
 }
 .flow li span {
   color: var(--muted);
-  font-size: 0.75rem;
+  font-size: .78em;
 }
 .flow li:not(:last-child)::after {
   content: '';
   position: absolute;
   left: 1.5rem;
   top: 100%;
-  height: 1.1rem;
+  height: 1.1em;
   border-left: 1px solid var(--muted);
 }
 @media (min-width: 640px) {
   .flow {
     flex-direction: row;
-    flex-wrap: wrap;
-    gap: 0.6rem 1.6rem;
+    flex-wrap: nowrap;
+    gap: 0.6em 1.6em;
   }
+  .flow li {
+    flex: 1 1 0;
+    min-width: 0;
+  }
+
   .flow li:not(:last-child)::after {
     left: 100%;
     top: 50%;
-    width: 1.6rem;
+    width: 1.6em;
     height: 0;
     border-left: 0;
     border-top: 1px solid var(--muted);
@@ -616,7 +703,7 @@ a:hover {
   margin: 0;
 }
 .results dt {
-  font-size: 1.75rem;
+  font-size: 2em;
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.15;
@@ -626,7 +713,7 @@ a:hover {
 .results dd {
   margin: 0;
   color: var(--muted);
-  font-size: 0.875rem;
+  font-size: .85em;
 }
 
 /* 사이트 소개: 폴더 표 */
@@ -636,7 +723,7 @@ a:hover {
 .folder-table {
   width: 100%;
   border-collapse: collapse;
-  font-size: 0.8125rem;
+  font-size: .85em;
 }
 .folder-table thead {
   position: absolute;
@@ -669,7 +756,7 @@ a:hover {
   content: '의존: ';
 }
 .folder-table code {
-  font-size: 0.8125rem;
+  font-size: .85em;
 }
 @media (min-width: 640px) {
   .folder-table {
@@ -715,7 +802,7 @@ a:hover {
   background: var(--bg);
   border: 1px solid var(--line);
   border-radius: 10px;
-  font-size: 0.8125rem;
+  font-size: .85em;
   line-height: 1.7;
 }
 .terminal li {
@@ -728,23 +815,47 @@ a:hover {
 
 /* 시행착오 */
 .journal dl {
-  margin: 0.2rem 0 0;
+  margin: 0.2em 0 0;
   display: grid;
-  grid-template-columns: 2.4rem minmax(0, 1fr);
-  gap: 0.2rem 0.6rem;
+  gap: 0.35em;
+}
+.journal dl > div {
+  display: grid;
+  grid-template-columns: max-content minmax(0, 1fr);
+  gap: 0 0.7em;
 }
 .journal dt {
   font-weight: 700;
 }
 .journal dd {
   margin: 0;
-  font-size: 0.875rem;
 }
 .journal .tile > .entry-meta {
-  margin-bottom: 0.2rem;
+  margin-bottom: 0.2em;
+}
+/* 기록이 3개 이하인 장면: 기록 1개를 가로로 넓게 두고 문제, 원인, 해결을 세 칸으로 나눈다. */
+@media (min-width: 1024px) {
+  .tile-journal-wide dl {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 0 1.5em;
+  }
+  .tile-journal-wide dl > div {
+    display: block;
+  }
 }
 
 /* 연락처 */
+.tile-contact {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 1rem;
+}
+.contact-label {
+  margin: 0 0 0.3em;
+  color: var(--muted);
+  font-size: 0.8em;
+}
 .contact-email {
   margin: 0;
   font-size: clamp(1.5rem, 3.4vw, 2.75rem);
@@ -755,19 +866,123 @@ a:hover {
 }
 .contact-link {
   margin: 0;
-  font-size: 1.375rem;
+  font-size: 1.6em;
   font-weight: 700;
-  line-height: 1.3;
+  line-height: 1.25;
 }
 .contact-link a {
   display: inline-block;
-  padding: 0.2rem 0;
+  padding: 0.1em 0;
 }
 .contact-host {
-  margin: 0;
+  margin: 0.2em 0 0;
   color: var(--muted);
-  font-size: 0.8125rem;
+  font-size: 0.8em;
   overflow-wrap: anywhere;
+}
+@media (min-width: 1024px) and (min-height: 720px) {
+  html.snap .contact-email {
+    font-size: 2.9em;
+  }
+  html.snap .contact-link {
+    font-size: 2.4em;
+  }
+  html.snap .contact-label {
+    font-size: 0.95em;
+  }
+  html.snap .contact-host {
+    font-size: 0.95em;
+  }
+  html.snap .terminal {
+    padding: 0.9em 1.1em;
+    line-height: 2;
+  }
+  html.snap .tile-results {
+    display: flex;
+    flex-direction: column;
+  }
+  html.snap .tile-results .results {
+    flex: 1;
+    align-content: space-evenly;
+  }
+}
+
+/* 프로젝트 목록 타일: 이름, 기간, 기술, 한 줄 설명, 대표 결과 숫자 */
+.chip-plain {
+  color: var(--fg);
+}
+.project-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+  height: 100%;
+  box-sizing: border-box;
+  padding: 1.1rem 1.25rem;
+  color: var(--fg);
+  text-decoration: none;
+  border-radius: var(--radius-tile);
+}
+.project-card .project-row-name {
+  color: var(--fg);
+  font-size: 1.35em;
+}
+.project-card:hover .project-row-name {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+.project-result {
+  display: grid;
+  gap: 0;
+  margin-top: auto;
+  padding-top: 0.6em;
+}
+.project-card .chips {
+  display: flex;
+}
+.project-card .project-row-summary {
+  display: block;
+}
+.project-result-value {
+  color: var(--neon-green);
+  font-size: 2.2em;
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
+  font-variant-numeric: tabular-nums;
+}
+.project-result-label {
+  color: var(--muted);
+  font-size: 0.85em;
+}
+.project-card-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4em;
+}
+.project-first .project-row-name {
+  font-size: 1.9em;
+}
+.project-first .project-result-value {
+  font-size: 3.6em;
+}
+@media (min-width: 1024px) {
+  /* 첫 프로젝트: 왼쪽에 소개, 오른쪽에 큰 결과 숫자 */
+  .project-first .project-card {
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2em;
+  }
+  .project-first .project-card-main {
+    flex: 1 1 0;
+  }
+  .project-first .project-result {
+    margin-top: 0;
+    padding-top: 0;
+    flex: 0 0 auto;
+    text-align: right;
+  }
 }
 
 /* 장면 위치 표시 */

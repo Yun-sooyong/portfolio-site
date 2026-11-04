@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { portfolio } from '../content'
-import { MAX_FLAT_DOTS, buildScenePlan, flattenSceneIds } from '../domain/scenes'
+import { JOURNAL_PAGE_SIZE, MAX_FLAT_DOTS, buildScenePlan, flattenSceneIds, journalPageCount } from '../domain/scenes'
 
 const { profile, projects, contact, journal } = portfolio
 
@@ -62,21 +62,39 @@ describe('내용 형식', () => {
     expect(all).not.toMatch(/(로|길)\s?\d+(-\d+)?\s?번?길?/)
   })
 
-  it('큰 장면은 8개이고 하위 장면 id가 겹치지 않는다', () => {
+  it('큰 장면 7개, 장면 10개이고 하위 장면 id가 겹치지 않는다', () => {
     const plan = buildScenePlan(portfolio)
-    expect(plan).toHaveLength(8)
+    expect(plan.map((g) => g.id)).toEqual(['intro', 'skills', 'projects', 'project-detail', 'how-built', 'journal', 'contact'])
     const ids = flattenSceneIds(plan)
+    expect(ids).toHaveLength(6 + projects.length + journalPageCount(journal.length) - 1 + 0)
     expect(new Set(ids).size).toBe(ids.length)
     for (const g of plan) expect(g.scenes.length).toBeGreaterThan(0)
   })
 
-  it('프로젝트마다 화면 두 칸, 시행착오는 4개씩 한 칸이다', () => {
+  it('프로젝트마다 장면 1개, 시행착오는 6개씩 한 장면이다', () => {
     const plan = buildScenePlan(portfolio)
     const detail = plan.find((g) => g.id === 'project-detail')!
-    expect(detail.scenes).toHaveLength(projects.length * 2)
+    expect(detail.scenes).toHaveLength(projects.length)
     const j = plan.find((g) => g.id === 'journal')!
-    expect(j.scenes).toHaveLength(Math.max(1, Math.ceil(journal.length / 4)))
+    expect(j.scenes).toHaveLength(Math.max(1, Math.ceil(journal.length / 6)))
+    expect(JOURNAL_PAGE_SIZE).toBe(6)
     expect(MAX_FLAT_DOTS).toBe(12)
+  })
+
+  it('프로젝트 수와 기록 수가 달라지면 장면 수가 규칙대로 바뀐다', () => {
+    const p = projects[0]!
+    const mk = (nProjects: number, nJournal: number) =>
+      flattenSceneIds(
+        buildScenePlan({
+          projects: Array.from({ length: nProjects }, (_, i) => ({ ...p, id: `p${i}` })),
+          journal: Array.from({ length: nJournal }, () => journal[0]!),
+        }),
+      ).length
+    // 소개와 이력 + 기술 + 프로젝트 목록 + 프로젝트 N + 만든 방식 + 시행착오 쪽 수 + 연락처
+    expect(mk(3, 0)).toBe(3 + 3 + 1 + 1 + 1)
+    expect(mk(3, 6)).toBe(3 + 3 + 1 + 1 + 1)
+    expect(mk(3, 7)).toBe(3 + 3 + 1 + 2 + 1)
+    expect(mk(5, 12)).toBe(3 + 5 + 1 + 2 + 1)
   })
 })
 

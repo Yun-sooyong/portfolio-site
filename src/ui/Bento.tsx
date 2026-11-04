@@ -32,22 +32,28 @@ interface TileProps {
   strong?: boolean
   /** 안쪽 여백 없이 안의 링크가 칸 전체를 채우면 true */
   link?: boolean
+  /** 장면 안의 이동 대상이 되는 id */
+  id?: string
   className?: string
   children: ReactNode
 }
 
 /** 벤토 그리드의 칸 1개. 내용 덩어리 1개를 담는다. */
-export function Tile({ as: Tag = 'div', cols = 12, rows = 1, strong = false, link = false, className = '', children }: TileProps) {
+export function Tile({ as: Tag = 'div', cols = 12, rows = 1, strong = false, link = false, id, className = '', children }: TileProps) {
   const classes = ['tile', `tile-c${cols}`, `tile-r${rows}`, strong ? 'tile-strong' : '', link ? 'tile-link' : '', className]
     .filter(Boolean)
     .join(' ')
-  return <Tag className={classes}>{children}</Tag>
+  return (
+    <Tag id={id} className={classes}>
+      {children}
+    </Tag>
+  )
 }
 
-/** 기술 이름 칩. 기술 글자(JetBrains Mono)로 쓴다. */
-export function Chip({ children, icon }: { children: ReactNode; icon?: string | string[] }) {
+/** 기술 이름 칩. 기술 글자(JetBrains Mono)로 쓴다. plain이면 포인트 색 없이 본문 색으로 그린다(한 타일에 포인트 색 1가지). */
+export function Chip({ children, icon, plain = false }: { children: ReactNode; icon?: string | string[]; plain?: boolean }) {
   return (
-    <span className="chip font-mono">
+    <span className={`chip font-mono${plain ? ' chip-plain' : ''}`}>
       <TechIcons icon={icon} />
       {children}
     </span>

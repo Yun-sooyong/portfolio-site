@@ -84,4 +84,13 @@ export const journal: JournalEntry[] = [
     fix:
       '해당 목록에 list-style: decimal을 지정하고, 1280x720 캡처에서 번호가 보이는지 다시 확인했다.',
   },
+  {
+    date: '2026-11-05',
+    problem:
+      '벤토 장면의 행 높이를 minmax(min-content, 1fr)로 나눴더니 가장 큰 행에 맞춰 모든 행이 커져 아래 행이 화면 밖으로 밀렸다(만든 방식 장면에서 131px 초과).',
+    cause:
+      'grid의 fr 단위는 min-content가 가장 큰 행을 기준 삼아 1fr의 크기를 정하므로, 내용이 적은 행도 같은 높이를 받았다.',
+    fix:
+      '행 높이를 auto로 두고 남는 높이를 align-content: stretch로 나누었다. 장면마다 글자 크기를 따로 정해 1280x720과 1440x900에서 넘친 타일 0개를 확인했다.',
+  },
 ]

@@ -4,10 +4,10 @@ import type { Portfolio } from '../../domain/portfolio'
 import { SceneNav } from '../../ui/SceneNav'
 import { useActiveScene } from '../../ui/useActiveScene'
 import { IntroScene } from './IntroScene'
-import { BackgroundScene } from './BackgroundScene'
 import { SkillsScene } from './SkillsScene'
-import { ProjectDetailScenes, ProjectListScene } from './ProjectScenes'
-import { ContactScene, HowBuiltScenes, JournalScenes } from './TailScenes'
+import { ProjectListScene } from './ProjectListScene'
+import { ProjectDetailScenes } from './ProjectScenes'
+import { ContactScene, HowBuiltScene, JournalScenes } from './TailScenes'
 
 /** 상세본. 장면 계획에 따라 화면 한 칸씩 보인다. */
 export function DetailView({ data }: { data: Portfolio }) {
@@ -33,12 +33,11 @@ export function DetailView({ data }: { data: Portfolio }) {
       </a>
       <SceneNav groups={plan} activeId={active} maxFlatDots={MAX_FLAT_DOTS} />
       <main id="main" tabIndex={-1}>
-        <IntroScene profile={data.profile} stack={stack} id="intro" title={title('intro')} />
-        <BackgroundScene background={data.background} id="background" title={title('background')} />
+        <IntroScene profile={data.profile} background={data.background} stack={stack} id="intro" title={title('intro')} />
         <SkillsScene groups={data.skillGroups} id="skills" title={title('skills')} />
         <ProjectListScene projects={data.projects} id="projects" title={title('projects')} />
         <ProjectDetailScenes projects={data.projects} id="project-detail" title={title('project-detail')} />
-        <HowBuiltScenes data={data.howBuilt} />
+        <HowBuiltScene data={data.howBuilt} />
         <JournalScenes entries={data.journal} title={title('journal')} />
         <ContactScene contact={data.contact} id="contact" title={title('contact')} />
       </main>
