@@ -202,3 +202,23 @@ describe('제목 순서', () => {
     for (let i = 1; i < levels.length; i++) expect(levels[i]! - levels[i - 1]!).toBeLessThanOrEqual(1)
   })
 })
+
+describe('제목 중복', () => {
+  it('같은 장면 안에 같은 문구의 제목이 둘 나오지 않는다', () => {
+    renderAt('/')
+    for (const section of document.querySelectorAll('section.scene')) {
+      const texts = [...section.querySelectorAll('h1,h2,h3,h4')].map((h) => h.textContent?.trim())
+      expect(new Set(texts).size, `${section.id}: ${texts.join(' | ')}`).toBe(texts.length)
+    }
+  })
+
+  it('프로젝트 장면의 제목에 어느 프로젝트인지 드러난다', () => {
+    renderAt('/')
+    for (const p of portfolio.projects) {
+      for (const id of [`project-${p.id}`, `project-${p.id}-2`]) {
+        const h2 = document.getElementById(id)!.querySelector('h2')
+        expect(h2?.textContent).toBe(p.name)
+      }
+    }
+  })
+})

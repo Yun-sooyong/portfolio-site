@@ -90,8 +90,8 @@ export function ProjectDetailScenes({ projects, id, title }: { projects: Project
               </div>
             </Scene>
 
-            <Scene id={secondId} title="문제와 해결">
-              <p className="entry-meta project-meta">{p.name}</p>
+            <Scene id={secondId} title={p.name}>
+              <p className="entry-meta project-meta">문제와 해결, 배포, 결과</p>
               <div className="project">
                 <div className="project-side">
                   <h3 className="sub-title first">배포 방식</h3>
