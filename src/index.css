@@ -134,7 +134,7 @@ a:hover {
 
 /*
  * 한 칸씩 넘기기: 폭 1024px 이상이고 높이 720px 이상일 때만(720px 미만은 보통 스크롤).
- * 위아래 여백은 화면 높이의 4%다. 타일이 장면 높이를 채우고, 내용을 세로 가운데에 모으지 않는다.
+ * 위아래 여백은 화면 높이의 9%다. 타일이 장면 높이를 채우고, 내용을 세로 가운데에 모으지 않는다.
  * 내용을 자르거나 숨기지 않는다. 기준 글자는 13px 이상이다.
  */
 @media (min-width: 1024px) and (min-height: 720px) {
@@ -151,8 +151,8 @@ a:hover {
     height: 100svh;
     min-height: 0;
     align-items: stretch;
-    padding-top: 4svh;
-    padding-bottom: 4svh;
+    padding-top: 9svh;
+    padding-bottom: 9svh;
     scroll-snap-align: start;
     scroll-snap-stop: always;
     scroll-margin-top: 0;
@@ -185,7 +185,7 @@ a:hover {
     align-content: stretch;
   }
   html.snap .bento-intro {
-    --tf: clamp(14px, min(2.2svh, 1.3vw), 22px);
+    --tf: clamp(13px, min(2.0svh, 1.2vw), 22px);
   }
   html.snap .tile.tile-roomy-sm {
     font-size: calc(var(--tf, 1rem) * 1.06);
@@ -206,28 +206,28 @@ a:hover {
     align-items: center;
   }
   html.snap .bento-skills {
-    --tf: clamp(14px, min(2.55svh, 1.45vw), 24px);
+    --tf: clamp(13px, min(2.3svh, 1.35vw), 24px);
   }
   html.snap .bento-projects {
-    --tf: clamp(14px, min(2.6svh, 1.5vw), 24px);
+    --tf: clamp(13px, min(2.6svh, 1.5vw), 24px);
   }
   html.snap .bento-project {
-    --tf: clamp(14px, min(2.5svh, 1.42vw), 24px);
+    --tf: clamp(13px, min(2.1svh, 1.25vw), 24px);
   }
   html.snap .bento-how {
-    --tf: clamp(14px, min(1.95svh, 1.15vw), 20px);
+    --tf: clamp(13px, min(1.7svh, 1.05vw), 20px);
   }
   html.snap .bento-journal-5,
   html.snap .bento-journal-6 {
-    --tf: clamp(13px, min(2.15svh, 1.28vw), 21px);
+    --tf: clamp(13px, min(1.9svh, 1.15vw), 21px);
   }
   html.snap .bento-journal-4 {
-    --tf: clamp(13px, min(2.55svh, 1.5vw), 24px);
+    --tf: clamp(13px, min(2.25svh, 1.35vw), 24px);
   }
   html.snap .bento-journal-1,
   html.snap .bento-journal-2,
   html.snap .bento-journal-3 {
-    --tf: clamp(14px, min(2.6svh, 1.5vw), 24px);
+    --tf: clamp(13px, min(2.6svh, 1.5vw), 24px);
   }
   html.snap .bento-contact {
     --tf: clamp(16px, min(2.8svh, 1.6vw), 26px);
