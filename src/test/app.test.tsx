@@ -5,7 +5,7 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/routes'
-import { SCENES } from '../domain/scenes'
+import { MAX_FLAT_DOTS, buildScenePlan, flattenSceneIds } from '../domain/scenes'
 import { PrintSheet } from '../features/print/PrintSheet'
 import { portfolio } from '../content'
 
@@ -38,11 +38,17 @@ afterEach(() => {
 })
 
 describe('주소', () => {
-  it('/ 는 상세본이다. 장면 8개와 위치 표시 점 8개가 있다', () => {
+  it('/ 는 상세본이다. 장면 계획의 모든 칸이 있고 위치 표시가 있다', () => {
     const { container } = renderAt('/')
-    expect(container.querySelectorAll('section.scene')).toHaveLength(SCENES.length)
+    const plan = buildScenePlan(portfolio)
+    const ids = flattenSceneIds(plan)
+    expect(container.querySelectorAll('section.scene')).toHaveLength(ids.length)
+    for (const id of ids) expect(document.getElementById(id)).not.toBeNull()
     const nav = screen.getByRole('navigation', { name: '장면 위치' })
-    expect(within(nav).getAllByRole('button')).toHaveLength(8)
+    const total = ids.length
+    // 하위 장면이 많으면 큰 장면 8개만 큰 점이고, 지금 장면의 하위 점이 펼쳐진다.
+    const expected = total <= MAX_FLAT_DOTS ? total : 8 + (plan[0]!.scenes.length > 1 ? plan[0]!.scenes.length : 0)
+    expect(within(nav).getAllByRole('button')).toHaveLength(expected)
     expect(screen.getByRole('heading', { level: 1, name: '홍길동' })).toBeInTheDocument()
     expect(screen.getByText(/예시 내용입니다/)).toBeInTheDocument()
   })
@@ -51,6 +57,7 @@ describe('주소', () => {
     renderAt('/')
     expect(screen.getByRole('heading', { name: '시행착오' })).toBeInTheDocument()
     expect(screen.getByRole('heading', { name: '이 사이트를 만든 방식' })).toBeInTheDocument()
+    expect(screen.getByRole('heading', { name: '구조, 확장성, 보안' })).toBeInTheDocument()
   })
 
   it('/print 는 단축본이다. PDF로 저장 단추가 print를 부르고 noindex 이다', async () => {
@@ -113,7 +120,8 @@ describe('움직임', () => {
   it('움직임 줄이기가 꺼져 있으면 장면에 전환 클래스가 있다', () => {
     mockMatchMedia(false)
     const { container } = renderAt('/')
-    expect(container.querySelectorAll('.scene-motion')).toHaveLength(SCENES.length - 1)
+    const total = flattenSceneIds(buildScenePlan(portfolio)).length
+    expect(container.querySelectorAll('.scene-motion')).toHaveLength(total - 1)
     // 첫 장면은 로딩 직후 바로 보이도록 전환 클래스가 없다.
     expect(container.querySelector('#intro')).not.toHaveClass('scene-motion')
   })
@@ -121,7 +129,7 @@ describe('움직임', () => {
   it('reduced-motion 이면 장면에 전환 클래스가 없다', () => {
     mockMatchMedia(true)
     const { container } = renderAt('/')
-    expect(container.querySelectorAll('section.scene')).toHaveLength(SCENES.length)
+    expect(container.querySelectorAll('section.scene').length).toBeGreaterThan(8)
     expect(container.querySelector('.scene-motion')).toBeNull()
   })
 })
@@ -137,8 +145,8 @@ describe('빌드 입력', () => {
 
 describe('시행착오 장면', () => {
   it('기록이 없으면 빈 상태 문구를 보인다', async () => {
-    const { JournalScene } = await import('../features/detail/TailScenes')
-    render(<JournalScene entries={[]} id="journal" title="시행착오" />)
+    const { JournalScenes } = await import('../features/detail/TailScenes')
+    render(<JournalScenes entries={[]} title="시행착오" />)
     expect(screen.getByText(/아직 기록한 시행착오가 없습니다/)).toBeInTheDocument()
   })
 
@@ -148,6 +156,8 @@ describe('시행착오 장면', () => {
     expect(within(scene).getAllByText('원인').length).toBeGreaterThan(0)
     expect(within(scene).getAllByText('해결').length).toBeGreaterThan(0)
     expect(scene.querySelector('time')).toHaveAttribute('datetime', '2026-11-04')
+    // 시행착오는 4개씩 화면 한 칸에 담는다.
+    expect(scene.querySelectorAll('li > dl').length).toBeLessThanOrEqual(4)
   })
 })
 

@@ -1,4 +1,6 @@
+import { Fragment } from 'react'
 import type { Project } from '../../domain/portfolio'
+import { projectSceneIds } from '../../domain/scenes'
 import { Scene } from '../../ui/Scene'
 import { ExternalLink } from '../../ui/ExternalLink'
 import { EmptyNote } from '../../ui/EmptyNote'
@@ -27,84 +29,104 @@ export function ProjectListScene({ projects, id, title }: { projects: Project[];
   )
 }
 
-export function ProjectDetailScene({ projects, id, title }: { projects: Project[]; id: string; title: string }) {
+/** 프로젝트 1개를 화면 두 칸으로 나눈다. 첫 칸은 개요와 구성, 둘째 칸은 문제 해결과 결과다. */
+export function ProjectDetailScenes({ projects, id, title }: { projects: Project[]; id: string; title: string }) {
+  if (projects.length === 0) {
+    return (
+      <Scene id={id} title={title}>
+        <EmptyNote>등록한 프로젝트가 없습니다.</EmptyNote>
+      </Scene>
+    )
+  }
   return (
-    <Scene id={id} title={title} tall>
-      {projects.length === 0 ? <EmptyNote>등록한 프로젝트가 없습니다.</EmptyNote> : null}
-      {projects.map((p) => (
-        <article key={p.id} id={`project-${p.id}`} className="project">
-          <aside className="project-side">
-            <h3 className="project-name">{p.name}</h3>
-            <p className="entry-meta">
-              {p.kind}, {p.period}
-            </p>
+    <>
+      {projects.map((p) => {
+        const [firstId, secondId] = projectSceneIds(p.id)
+        return (
+          <Fragment key={p.id}>
+            <Scene id={firstId} title={p.name}>
+              <p className="entry-meta project-meta">
+                {p.kind}, {p.period}
+              </p>
+              <div className="project">
+                <div className="project-side">
+                  <h3 className="sub-title first">내 역할</h3>
+                  <p>{p.role}</p>
 
-            <h4 className="sub-title">내 역할</h4>
-            <p>{p.role}</p>
+                  <h3 className="sub-title">기술</h3>
+                  <p>{p.coreStack.join(', ')}</p>
 
-            <h4 className="sub-title">기술</h4>
-            <p>{p.coreStack.join(', ')}</p>
-
-            <h4 className="sub-title">링크</h4>
-            <ul className="plain-list">
-              {p.links.map((l) => (
-                <li key={l.url}>
-                  <ExternalLink href={l.url}>{l.label}</ExternalLink>
-                </li>
-              ))}
-            </ul>
-          </aside>
-
-          <div className="project-body">
-            <h4 className="sub-title first">개요</h4>
-            <p>{p.overview}</p>
-
-            <h4 className="sub-title">주요 기능</h4>
-            <ul className="plain-list">
-              {p.features.map((f) => (
-                <li key={f}>{f}</li>
-              ))}
-            </ul>
-
-            <h4 className="sub-title">구성도</h4>
-            <ol className="flow" aria-label={`${p.name} 요청 흐름`}>
-              {p.architecture.map((n) => (
-                <li key={n.label}>
-                  <strong>{n.label}</strong>
-                  <span>{n.note}</span>
-                </li>
-              ))}
-            </ol>
-
-            <h4 className="sub-title">문제와 해결</h4>
-            <dl className="problems">
-              {p.problems.map((ps) => (
-                <div key={ps.problem}>
-                  <dt>
-                    <span className="tag tag-lack">문제</span> {ps.problem}
-                  </dt>
-                  <dd>
-                    <span className="tag">해결</span> {ps.solution}
-                  </dd>
+                  <h3 className="sub-title">링크</h3>
+                  <ul className="plain-list">
+                    {p.links.map((l) => (
+                      <li key={l.url}>
+                        <ExternalLink href={l.url}>{l.label}</ExternalLink>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
-              ))}
-            </dl>
 
-            <h4 className="sub-title">배포 방식</h4>
-            <p>{p.deploy}</p>
+                <div className="project-body">
+                  <h3 className="sub-title first">개요</h3>
+                  <p>{p.overview}</p>
 
-            <h4 className="sub-title">결과</h4>
-            <dl className="results">
-              {p.results.map((r) => (
-                <div key={r.label}>
-                  <dt>{r.value}</dt>
-                  <dd>{r.label}</dd>
+                  <h3 className="sub-title">주요 기능</h3>
+                  <ul className="plain-list">
+                    {p.features.map((f) => (
+                      <li key={f}>{f}</li>
+                    ))}
+                  </ul>
+
+                  <h3 className="sub-title">구성도</h3>
+                  <ol className="flow" aria-label={`${p.name} 요청 흐름`}>
+                    {p.architecture.map((n) => (
+                      <li key={n.label}>
+                        <strong>{n.label}</strong>
+                        <span>{n.note}</span>
+                      </li>
+                    ))}
+                  </ol>
                 </div>
-              ))}
-            </dl>
-          </div>
-        </article>
-      ))}
-    </Scene>
+              </div>
+            </Scene>
+
+            <Scene id={secondId} title="문제와 해결">
+              <p className="entry-meta project-meta">{p.name}</p>
+              <div className="project">
+                <div className="project-side">
+                  <h3 className="sub-title first">배포 방식</h3>
+                  <p>{p.deploy}</p>
+                </div>
+                <div className="project-body">
+                  <h3 className="sub-title first">문제와 해결</h3>
+                  <dl className="problems">
+                    {p.problems.map((ps) => (
+                      <div key={ps.problem}>
+                        <dt>
+                          <span className="tag tag-lack">문제</span> {ps.problem}
+                        </dt>
+                        <dd>
+                          <span className="tag">해결</span> {ps.solution}
+                        </dd>
+                      </div>
+                    ))}
+                  </dl>
+
+                  <h3 className="sub-title">결과</h3>
+                  <dl className="results">
+                    {p.results.map((r) => (
+                      <div key={r.label}>
+                        <dt>{r.value}</dt>
+                        <dd>{r.label}</dd>
+                      </div>
+                    ))}
+                  </dl>
+                </div>
+              </div>
+            </Scene>
+          </Fragment>
+        )
+      })}
+    </>
   )
 }

@@ -1,19 +1,20 @@
-import { SCENES } from '../../domain/scenes'
+import { useMemo } from 'react'
+import { MAX_FLAT_DOTS, buildScenePlan, flattenSceneIds } from '../../domain/scenes'
 import type { Portfolio } from '../../domain/portfolio'
 import { SceneNav } from '../../ui/SceneNav'
 import { useActiveScene } from '../../ui/useActiveScene'
 import { IntroScene } from './IntroScene'
 import { BackgroundScene } from './BackgroundScene'
 import { SkillsScene } from './SkillsScene'
-import { ProjectDetailScene, ProjectListScene } from './ProjectScenes'
-import { ContactScene, HowBuiltScene, JournalScene } from './TailScenes'
+import { ProjectDetailScenes, ProjectListScene } from './ProjectScenes'
+import { ContactScene, HowBuiltScenes, JournalScenes } from './TailScenes'
 
-const SCENE_IDS = SCENES.map((s) => s.id)
-const title = (id: (typeof SCENES)[number]['id']) => SCENES.find((s) => s.id === id)!.title
-
-/** 상세본. 장면 8개를 순서대로 보인다. */
+/** 상세본. 장면 계획에 따라 화면 한 칸씩 보인다. */
 export function DetailView({ data }: { data: Portfolio }) {
-  const active = useActiveScene(SCENE_IDS)
+  const plan = useMemo(() => buildScenePlan(data), [data])
+  const ids = useMemo(() => flattenSceneIds(plan), [plan])
+  const active = useActiveScene(ids)
+  const title = (id: string) => plan.find((g) => g.id === id)?.title ?? id
 
   return (
     <>
@@ -21,15 +22,15 @@ export function DetailView({ data }: { data: Portfolio }) {
       <a href="#main" className="skip-link">
         본문으로 건너뛰기
       </a>
-      <SceneNav scenes={SCENES} activeId={active} />
+      <SceneNav groups={plan} activeId={active} maxFlatDots={MAX_FLAT_DOTS} />
       <main id="main" tabIndex={-1}>
         <IntroScene profile={data.profile} id="intro" title={title('intro')} />
         <BackgroundScene background={data.background} id="background" title={title('background')} />
         <SkillsScene groups={data.skillGroups} id="skills" title={title('skills')} />
         <ProjectListScene projects={data.projects} id="projects" title={title('projects')} />
-        <ProjectDetailScene projects={data.projects} id="project-detail" title={title('project-detail')} />
-        <HowBuiltScene data={data.howBuilt} id="how-built" title={title('how-built')} />
-        <JournalScene entries={data.journal} id="journal" title={title('journal')} />
+        <ProjectDetailScenes projects={data.projects} id="project-detail" title={title('project-detail')} />
+        <HowBuiltScenes data={data.howBuilt} />
+        <JournalScenes entries={data.journal} title={title('journal')} />
         <ContactScene contact={data.contact} id="contact" title={title('contact')} />
       </main>
     </>

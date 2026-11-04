@@ -1,12 +1,7 @@
 @import 'pretendard/dist/web/variable/pretendardvariable-dynamic-subset.css';
 @import 'tailwindcss';
 
-/* 색 토큰. 장면마다 --hue 만 바뀌고, 나머지 색은 hue에서 계산한다. */
-@property --hue {
-  syntax: '<number>';
-  inherits: true;
-  initial-value: 255;
-}
+/* 색 토큰. 사이트 전체가 밝음 1벌, 어두움 1벌의 고정 팔레트를 쓴다. 장면이 바뀌어도 색은 바뀌지 않는다. */
 
 @theme {
   --font-sans: 'Pretendard Variable', Pretendard, system-ui, -apple-system, 'Apple SD Gothic Neo', sans-serif;
@@ -21,54 +16,32 @@
 }
 
 :root {
-  --hue: 255;
   /* 쌓임 순서 토큰 */
   --z-backdrop: -1;
   --z-nav: 20;
   --z-skip: 50;
-  --bg: oklch(0.955 0.03 var(--hue));
-  --surface: oklch(0.985 0.012 var(--hue));
-  --fg: oklch(0.22 0.03 var(--hue));
-  --muted: oklch(0.42 0.04 var(--hue));
-  --accent: oklch(0.42 0.15 var(--hue));
-  --line: oklch(0.62 0.06 var(--hue));
+  --bg: oklch(0.955 0.03 255);
+  --surface: oklch(0.985 0.012 255);
+  --fg: oklch(0.22 0.03 255);
+  --muted: oklch(0.42 0.04 255);
+  --accent: oklch(0.42 0.15 255);
+  --line: oklch(0.62 0.06 255);
   color-scheme: light dark;
-  /* 장면이 바뀌면 배경 색조가 600ms 동안 바뀐다. */
-  transition: --hue 600ms ease;
 }
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --bg: oklch(0.21 0.04 var(--hue));
-    --surface: oklch(0.26 0.04 var(--hue));
-    --fg: oklch(0.95 0.015 var(--hue));
-    --muted: oklch(0.78 0.04 var(--hue));
-    --accent: oklch(0.82 0.11 var(--hue));
-    --line: oklch(0.52 0.06 var(--hue));
-  }
-}
-
-/* 장면별 색조 */
-:root[data-scene='intro'] { --hue: 255; }
-:root[data-scene='background'] { --hue: 225; }
-:root[data-scene='skills'] { --hue: 195; }
-:root[data-scene='projects'] { --hue: 165; }
-:root[data-scene='project-detail'] { --hue: 285; }
-:root[data-scene='how-built'] { --hue: 310; }
-:root[data-scene='journal'] { --hue: 15; }
-:root[data-scene='contact'] { --hue: 240; }
-
-@media (prefers-reduced-motion: reduce) {
-  :root {
-    transition: none;
+    --bg: oklch(0.21 0.04 255);
+    --surface: oklch(0.26 0.04 255);
+    --fg: oklch(0.95 0.015 255);
+    --muted: oklch(0.78 0.04 255);
+    --accent: oklch(0.82 0.11 255);
+    --line: oklch(0.52 0.06 255);
   }
 }
 
 html {
   scroll-padding-top: 1rem;
-}
-html.snap {
-  scroll-snap-type: y proximity;
 }
 
 body {
@@ -137,21 +110,16 @@ a:hover {
   z-index: var(--z-backdrop);
   background: var(--bg);
 }
-/* 장면. 바깥 폭은 최대 1280px이다. */
+/* 장면. 바깥 폭은 최대 1280px이다. 기본은 보통 스크롤이고, 큰 화면에서만 한 칸씩 맞춘다. */
 .scene {
   --gutter: clamp(1.25rem, 5vw, 4rem);
   min-height: 100svh;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 10svh var(--gutter);
-  scroll-snap-align: start;
+  padding: clamp(2rem, 8svh, 5rem) var(--gutter);
   scroll-margin-top: 1rem;
   box-sizing: border-box;
-}
-.scene-tall {
-  align-items: flex-start;
-  scroll-snap-align: none;
 }
 /* 768px 이상: 오른쪽에 장면 위치 점(폭 2.75rem)을 둘 자리를 비운다. */
 @media (min-width: 768px) {
@@ -162,6 +130,46 @@ a:hover {
 .scene-inner {
   width: 100%;
   max-width: 1280px;
+}
+
+/* 한 칸씩 넘기기: 폭 1024px 이상이고 높이 640px 이상일 때만. 브라우저 기본 snap만 쓴다. */
+@media (min-width: 1024px) and (min-height: 640px) {
+  html.snap {
+    scroll-snap-type: y mandatory;
+    scroll-padding-top: 0;
+    /* 화면이 낮을수록 글자와 간격을 줄여 한 칸 안에 담는다(rem 기준 배치). */
+    font-size: clamp(13px, 1.9svh, 16px);
+  }
+  html.snap body {
+    line-height: 1.6;
+  }
+  html.snap .scene-title {
+    margin-bottom: 1rem;
+    font-size: clamp(1.75rem, 3.6vw, 3.25rem);
+  }
+  html.snap .sub-title {
+    margin-top: 1.25rem;
+  }
+  html.snap .cols {
+    column-gap: clamp(1.5rem, 3vw, 3rem);
+  }
+  html.snap .skills > div {
+    margin-bottom: 0.8rem;
+  }
+  html.snap .journal li {
+    margin-bottom: 1rem;
+  }
+  html.snap .lead {
+    margin-bottom: 1rem;
+  }
+  html.snap .scene {
+    height: 100svh;
+    min-height: 0;
+    overflow: hidden;
+    scroll-snap-align: start;
+    scroll-snap-stop: always;
+    scroll-margin-top: 0;
+  }
 }
 
 /* 열 배치. 768px 미만 1단, 768px 이상 2단, 1024px 이상 지정한 단 수. */
@@ -187,15 +195,12 @@ a:hover {
   }
 }
 
-/* 들어올 때 한 번 나타난다. scene-motion 클래스는 움직임 줄이기가 꺼졌을 때만 붙는다. */
+/* 처음 보일 때 한 번, 투명도만 짧게 바뀐다. scene-motion 클래스는 움직임 줄이기가 꺼졌을 때만 붙는다. */
 .scene-motion .reveal {
-  transition:
-    opacity 500ms ease,
-    transform 500ms ease;
+  transition: opacity 150ms ease;
 }
 .scene-motion:not([data-seen]) .reveal {
   opacity: 0;
-  transform: translateY(12px);
 }
 
 .scene-title {
@@ -410,18 +415,13 @@ h4.sub-title {
   max-width: 30em;
 }
 
-/* 프로젝트 상세. 1024px 이상에서 왼쪽 4열(고정), 오른쪽 8열. */
+/* 프로젝트 상세. 1024px 이상에서 왼쪽 4열, 오른쪽 8열. 프로젝트 1개는 화면 두 칸이다. */
 .project {
   display: grid;
   grid-template-columns: minmax(0, 1fr);
   gap: 0 3rem;
-  padding: 2rem 0 3.5rem;
-  margin-bottom: 1.5rem;
   border-top: 2px solid var(--fg);
-  scroll-margin-top: 1rem;
-}
-.project:last-child {
-  margin-bottom: 0;
+  padding-top: 1.5rem;
 }
 @media (min-width: 1024px) {
   .project {
@@ -429,9 +429,6 @@ h4.sub-title {
   }
   .project-side {
     grid-column: 1 / 5;
-    align-self: start;
-    position: sticky;
-    top: 2rem;
   }
   .project-body {
     grid-column: 5 / 13;
@@ -440,8 +437,8 @@ h4.sub-title {
 .project-body {
   min-width: 0;
 }
-.project-side > .sub-title:first-of-type {
-  margin-top: 1.5rem;
+.project-meta {
+  margin: -0.75rem 0 1.25rem;
 }
 .project p {
   max-width: 36em;
@@ -695,7 +692,6 @@ h4.sub-title {
   margin-right: 1rem;
   border-radius: 50%;
   border: 1.5px solid var(--fg);
-  transition: background-color 200ms ease, transform 200ms ease;
 }
 .scene-dot[aria-current='true'] .scene-dot-mark {
   background: var(--fg);
@@ -719,11 +715,6 @@ h4.sub-title {
 .scene-dot:hover .scene-dot-label,
 .scene-dot:focus-visible .scene-dot-label {
   opacity: 1;
-}
-@media (prefers-reduced-motion: reduce) {
-  .scene-dot-mark {
-    transition: none;
-  }
 }
 
 /* 없는 주소 */
@@ -929,4 +920,37 @@ h4.sub-title {
 }
 main:focus:not(:focus-visible) {
   outline: none;
+}
+
+/* 하위 장면 작은 점. 지금 장면이 속한 묶음에서만 펼친다. */
+.scene-subdots {
+  margin-bottom: 0.25rem;
+}
+.scene-subdot {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  width: 2.75rem;
+  height: 1.5rem;
+  padding: 0;
+  background: none;
+  border: 0;
+  cursor: pointer;
+  color: var(--fg);
+}
+.scene-subdot-mark {
+  width: 0.375rem;
+  height: 0.375rem;
+  margin-right: 1.2rem;
+  border-radius: 50%;
+  border: 1.5px solid var(--fg);
+}
+.scene-subdot[aria-current='true'] .scene-subdot-mark,
+.scene-subdot:hover .scene-subdot-mark {
+  background: var(--fg);
+}
+.scene-subdot:hover .scene-dot-label,
+.scene-subdot:focus-visible .scene-dot-label {
+  opacity: 1;
 }

@@ -1,7 +1,7 @@
 import { readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { portfolio } from '../content'
-import { SCENES } from '../domain/scenes'
+import { MAX_FLAT_DOTS, buildScenePlan, flattenSceneIds } from '../domain/scenes'
 
 const { profile, projects, contact, journal } = portfolio
 
@@ -62,8 +62,21 @@ describe('내용 형식', () => {
     expect(all).not.toMatch(/(로|길)\s?\d+(-\d+)?\s?번?길?/)
   })
 
-  it('장면이 8개이다', () => {
-    expect(SCENES).toHaveLength(8)
+  it('큰 장면은 8개이고 하위 장면 id가 겹치지 않는다', () => {
+    const plan = buildScenePlan(portfolio)
+    expect(plan).toHaveLength(8)
+    const ids = flattenSceneIds(plan)
+    expect(new Set(ids).size).toBe(ids.length)
+    for (const g of plan) expect(g.scenes.length).toBeGreaterThan(0)
+  })
+
+  it('프로젝트마다 화면 두 칸, 시행착오는 4개씩 한 칸이다', () => {
+    const plan = buildScenePlan(portfolio)
+    const detail = plan.find((g) => g.id === 'project-detail')!
+    expect(detail.scenes).toHaveLength(projects.length * 2)
+    const j = plan.find((g) => g.id === 'journal')!
+    expect(j.scenes).toHaveLength(Math.max(1, Math.ceil(journal.length / 4)))
+    expect(MAX_FLAT_DOTS).toBe(12)
   })
 })
 
