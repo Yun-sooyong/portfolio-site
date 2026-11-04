@@ -16,6 +16,7 @@ export const howBuilt: HowBuilt = {
     { folder: 'src/ui', role: '공용 화면 부품과 장면 전환 훅', dependsOn: '없음' },
     { folder: 'src/app', role: '라우터와 페이지 조립', dependsOn: '모두' },
   ],
+  ciSteps: ['npm ci', 'npm run lint', 'npm run typecheck', 'npm test', 'npm run build', 'npm audit --audit-level=high'],
   groups: [
     {
       title: '구조',

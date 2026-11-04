@@ -222,3 +222,39 @@ describe('제목 중복', () => {
     }
   })
 })
+
+describe('벤토 그리드', () => {
+  it('기술 이름 칩이 mono 글꼴 class 안에 렌더된다', () => {
+    renderAt('/')
+    for (const p of portfolio.projects) {
+      for (const name of p.coreStack) {
+        const nodes = screen.getAllByText(name, { selector: '.chip' })
+        expect(nodes.length).toBeGreaterThan(0)
+        for (const node of nodes) expect(node.closest('.font-mono')).not.toBeNull()
+      }
+    }
+    // 기술 장면의 기술 이름도 mono 글꼴이다.
+    for (const g of portfolio.skillGroups) {
+      for (const s of g.skills) {
+        const dt = screen.getByText(s.name, { selector: 'dt' })
+        expect(dt).toHaveClass('font-mono')
+      }
+    }
+  })
+
+  it('장면마다 강조 타일이 1개 이하이고 style 속성이 없다', () => {
+    const { container } = renderAt('/')
+    const scenes = container.querySelectorAll('section.scene')
+    expect(scenes.length).toBeGreaterThan(8)
+    for (const scene of scenes) {
+      expect(scene.querySelectorAll('.tile-strong').length, scene.id).toBeLessThanOrEqual(1)
+    }
+    expect(container.querySelector('[style]')).toBeNull()
+  })
+
+  it('CI 단계가 .github/workflows/ci.yml 의 실제 run 명령과 같다', () => {
+    const yml = readFileSync(resolve(process.cwd(), '.github/workflows/ci.yml'), 'utf8')
+    const runs = [...yml.matchAll(/^\s*- run: (.+)$/gm)].map((m) => m[1])
+    expect(portfolio.howBuilt.ciSteps).toEqual(runs)
+  })
+})

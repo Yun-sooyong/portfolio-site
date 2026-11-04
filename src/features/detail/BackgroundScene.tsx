@@ -2,6 +2,7 @@ import type { ReactNode } from 'react'
 import type { Background } from '../../domain/portfolio'
 import { Scene } from '../../ui/Scene'
 import { EmptyNote } from '../../ui/EmptyNote'
+import { Bento, Tile } from '../../ui/Bento'
 
 /** 항목 목록. 비었으면 안내 문구를 보인다. */
 function Entries<T>({ items, render }: { items: T[]; render: (item: T) => ReactNode }) {
@@ -9,13 +10,14 @@ function Entries<T>({ items, render }: { items: T[]; render: (item: T) => ReactN
   return <ul className="entries">{items.map(render)}</ul>
 }
 
+/** 경력과 학력 장면. 경력 타일이 강조 타일이다. */
 export function BackgroundScene({ background, id, title }: { background: Background; id: string; title: string }) {
   const { careers, educations, trainings, certificates } = background
   return (
     <Scene id={id} title={title}>
-      <div className="cols cols-3">
-        <div>
-          <h3 className="sub-title">경력</h3>
+      <Bento>
+        <Tile cols={7} strong>
+          <h3 className="tile-title">경력</h3>
           <Entries
             items={careers}
             render={(c) => (
@@ -28,9 +30,9 @@ export function BackgroundScene({ background, id, title }: { background: Backgro
               </li>
             )}
           />
-        </div>
-        <div>
-          <h3 className="sub-title">학력</h3>
+        </Tile>
+        <Tile cols={5}>
+          <h3 className="tile-title">학력</h3>
           <Entries
             items={educations}
             render={(e) => (
@@ -42,7 +44,9 @@ export function BackgroundScene({ background, id, title }: { background: Backgro
               </li>
             )}
           />
-          <h3 className="sub-title">교육 이력</h3>
+        </Tile>
+        <Tile cols={6}>
+          <h3 className="tile-title">교육 이력</h3>
           <Entries
             items={trainings}
             render={(t) => (
@@ -54,9 +58,9 @@ export function BackgroundScene({ background, id, title }: { background: Backgro
               </li>
             )}
           />
-        </div>
-        <div>
-          <h3 className="sub-title">자격증</h3>
+        </Tile>
+        <Tile cols={6}>
+          <h3 className="tile-title">자격증</h3>
           <Entries
             items={certificates}
             render={(c) => (
@@ -68,8 +72,8 @@ export function BackgroundScene({ background, id, title }: { background: Backgro
               </li>
             )}
           />
-        </div>
-      </div>
+        </Tile>
+      </Bento>
     </Scene>
   )
 }

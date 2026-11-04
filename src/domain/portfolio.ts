@@ -52,6 +52,8 @@ export interface Background {
 /** 기술 한 항목. 점수와 막대 대신 문장으로 쓴다. */
 export interface Skill {
   name: string
+  /** 아이콘 키(선택). 이름에 기술이 둘 이상이면 배열. 키는 src/ui/techIcons.ts 에 있어야 한다. 없으면 글자만 보인다 */
+  icon?: string | string[]
   /** 할 수 있는 것 */
   can: string
   /** 아직 부족한 것 */
@@ -94,6 +96,8 @@ export interface Project {
   period: string
   /** 핵심 기술 1~2개 */
   coreStack: string[]
+  /** 핵심 기술 이름 -> 아이콘 키(선택). 키는 src/ui/techIcons.ts 에 있어야 한다. 없으면 글자만 보인다 */
+  coreStackIcons?: Record<string, string>
   /** 목록에 보이는 한 줄 설명 */
   summary: string
   overview: string
@@ -133,6 +137,8 @@ export interface HowBuilt {
   lead: string
   folders: FolderRule[]
   groups: HowBuiltGroup[]
+  /** CI가 위에서 아래로 실행하는 명령. .github/workflows/ci.yml 의 run 항목과 같다 */
+  ciSteps: string[]
 }
 
 export interface JournalEntry {

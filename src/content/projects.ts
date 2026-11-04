@@ -10,6 +10,7 @@ export const projects: Project[] = [
     kind: '개인',
     period: '2025.08 – 2025.10',
     coreStack: ['Kotlin', 'PostgreSQL'],
+    coreStackIcons: { Kotlin: 'kotlin', PostgreSQL: 'postgresql' },
     summary: '지출 내역을 기록하고 월별로 모아 보여 주는 개인용 가계부 API 서버.',
     overview:
       '엑셀로 쓰던 가계부를 API 서버로 옮겼다. 지출 등록, 분류별 월 합계, 예산 초과 알림 조회를 제공한다.',
@@ -48,6 +49,7 @@ export const projects: Project[] = [
     kind: '팀',
     period: '2025.03 – 2025.05, 4인',
     coreStack: ['Spring Boot', 'MySQL'],
+    coreStackIcons: { 'Spring Boot': 'springboot', MySQL: 'mysql' },
     summary: '동네 책방 3곳의 입고, 판매, 재고를 한 곳에서 보는 웹 서비스.',
     overview:
       '책방마다 따로 적던 재고 장부를 하나의 서비스로 합쳤다. 입고와 판매를 기록하면 재고가 자동으로 맞춰진다.',
@@ -82,6 +84,7 @@ export const projects: Project[] = [
     kind: '개인',
     period: '2026.11, 1일',
     coreStack: ['React', 'TypeScript'],
+    coreStackIcons: { React: 'react', TypeScript: 'typescript' },
     summary: '내용과 화면을 나누고 보안 헤더와 CI를 갖춘 정적 포트폴리오.',
     overview:
       '노션 포트폴리오를 대신하는 정적 사이트다. 상세본과 A4 단축본이 같은 내용 파일을 읽는다.',

@@ -14,6 +14,15 @@ export function DetailView({ data }: { data: Portfolio }) {
   const plan = useMemo(() => buildScenePlan(data), [data])
   const ids = useMemo(() => flattenSceneIds(plan), [plan])
   const active = useActiveScene(ids)
+  const stack = useMemo(() => {
+    const byName = new Map<string, { name: string; icon?: string }>()
+    for (const p of data.projects) {
+      for (const name of p.coreStack) {
+        if (!byName.has(name)) byName.set(name, { name, icon: p.coreStackIcons?.[name] })
+      }
+    }
+    return [...byName.values()]
+  }, [data.projects])
   const title = (id: string) => plan.find((g) => g.id === id)?.title ?? id
 
   return (
@@ -24,7 +33,7 @@ export function DetailView({ data }: { data: Portfolio }) {
       </a>
       <SceneNav groups={plan} activeId={active} maxFlatDots={MAX_FLAT_DOTS} />
       <main id="main" tabIndex={-1}>
-        <IntroScene profile={data.profile} id="intro" title={title('intro')} />
+        <IntroScene profile={data.profile} stack={stack} id="intro" title={title('intro')} />
         <BackgroundScene background={data.background} id="background" title={title('background')} />
         <SkillsScene groups={data.skillGroups} id="skills" title={title('skills')} />
         <ProjectListScene projects={data.projects} id="projects" title={title('projects')} />

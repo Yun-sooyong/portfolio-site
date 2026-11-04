@@ -75,4 +75,13 @@ export const journal: JournalEntry[] = [
     fix:
       '화면 높이에 맞춰 기준 글자 크기를 줄이고(13~16px) 제목과 간격을 줄였다. 6개 화면 크기에서 모든 장면의 scrollHeight가 창 높이 이하임을 확인했다.',
   },
+  {
+    date: '2026-11-05',
+    problem:
+      '벤토 그리드의 "문제와 해결" 타일에 번호 목록(ol)을 썼는데 화면에 번호가 보이지 않았다.',
+    cause:
+      'Tailwind의 기본 초기화(preflight)가 목록의 list-style을 none으로 바꾸어, ol에도 번호가 붙지 않았다.',
+    fix:
+      '해당 목록에 list-style: decimal을 지정하고, 1280x720 캡처에서 번호가 보이는지 다시 확인했다.',
+  },
 ]

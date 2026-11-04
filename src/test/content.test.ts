@@ -96,3 +96,21 @@ describe('시행착오 기록', () => {
     for (const e of journal) expect(e.date).toMatch(/^\d{4}-\d{2}-\d{2}$/)
   })
 })
+
+describe('기술 아이콘', () => {
+  it('내용의 모든 icon 키가 techIcons.ts 에 있다', async () => {
+    const { techIcons } = await import('../ui/techIcons')
+    const keys = [
+      ...portfolio.skillGroups.flatMap((g) => g.skills.flatMap((s) => (s.icon === undefined ? [] : [s.icon].flat()))),
+      ...projects.flatMap((p) => Object.values(p.coreStackIcons ?? {})),
+    ]
+    expect(keys.length).toBeGreaterThan(0)
+    for (const k of keys) expect(techIcons[k], k).toBeDefined()
+  })
+
+  it('coreStackIcons 의 이름이 coreStack 에 있다', () => {
+    for (const p of projects) {
+      for (const name of Object.keys(p.coreStackIcons ?? {})) expect(p.coreStack).toContain(name)
+    }
+  })
+})
