@@ -1,10 +1,15 @@
 import type { Project } from '../../domain/portfolio'
 import { Scene } from '../../ui/Scene'
+import { ExternalLink } from '../../ui/ExternalLink'
+import { EmptyNote } from '../../ui/EmptyNote'
 
 export function ProjectListScene({ projects, id, title }: { projects: Project[]; id: string; title: string }) {
   return (
     <Scene id={id} title={title}>
-      <ul className="project-list">
+      {projects.length === 0 ? (
+        <EmptyNote>등록한 프로젝트가 없습니다. src/content/projects.ts 에 항목을 더합니다.</EmptyNote>
+      ) : null}
+      <ul className="project-list cols cols-3">
         {projects.map((p) => (
           <li key={p.id}>
             <a href={`#project-${p.id}`} className="project-row">
@@ -25,73 +30,79 @@ export function ProjectListScene({ projects, id, title }: { projects: Project[];
 export function ProjectDetailScene({ projects, id, title }: { projects: Project[]; id: string; title: string }) {
   return (
     <Scene id={id} title={title} tall>
+      {projects.length === 0 ? <EmptyNote>등록한 프로젝트가 없습니다.</EmptyNote> : null}
       {projects.map((p) => (
         <article key={p.id} id={`project-${p.id}`} className="project">
-          <h3 className="project-name">{p.name}</h3>
-          <p className="entry-meta">
-            {p.kind}, {p.period}. 기술: {p.coreStack.join(', ')}
-          </p>
+          <aside className="project-side">
+            <h3 className="project-name">{p.name}</h3>
+            <p className="entry-meta">
+              {p.kind}, {p.period}
+            </p>
 
-          <h4 className="sub-title">개요</h4>
-          <p>{p.overview}</p>
+            <h4 className="sub-title">내 역할</h4>
+            <p>{p.role}</p>
 
-          <h4 className="sub-title">내 역할</h4>
-          <p>{p.role}</p>
+            <h4 className="sub-title">기술</h4>
+            <p>{p.coreStack.join(', ')}</p>
 
-          <h4 className="sub-title">주요 기능</h4>
-          <ul className="plain-list">
-            {p.features.map((f) => (
-              <li key={f}>{f}</li>
-            ))}
-          </ul>
+            <h4 className="sub-title">링크</h4>
+            <ul className="plain-list">
+              {p.links.map((l) => (
+                <li key={l.url}>
+                  <ExternalLink href={l.url}>{l.label}</ExternalLink>
+                </li>
+              ))}
+            </ul>
+          </aside>
 
-          <h4 className="sub-title">구성도</h4>
-          <ol className="flow" aria-label={`${p.name} 요청 흐름`}>
-            {p.architecture.map((n) => (
-              <li key={n.label}>
-                <strong>{n.label}</strong>
-                <span>{n.note}</span>
-              </li>
-            ))}
-          </ol>
+          <div className="project-body">
+            <h4 className="sub-title first">개요</h4>
+            <p>{p.overview}</p>
 
-          <h4 className="sub-title">문제와 해결</h4>
-          <dl className="problems">
-            {p.problems.map((ps) => (
-              <div key={ps.problem}>
-                <dt>
-                  <span className="tag tag-lack">문제</span> {ps.problem}
-                </dt>
-                <dd>
-                  <span className="tag">해결</span> {ps.solution}
-                </dd>
-              </div>
-            ))}
-          </dl>
+            <h4 className="sub-title">주요 기능</h4>
+            <ul className="plain-list">
+              {p.features.map((f) => (
+                <li key={f}>{f}</li>
+              ))}
+            </ul>
 
-          <h4 className="sub-title">배포 방식</h4>
-          <p>{p.deploy}</p>
+            <h4 className="sub-title">구성도</h4>
+            <ol className="flow" aria-label={`${p.name} 요청 흐름`}>
+              {p.architecture.map((n) => (
+                <li key={n.label}>
+                  <strong>{n.label}</strong>
+                  <span>{n.note}</span>
+                </li>
+              ))}
+            </ol>
 
-          <h4 className="sub-title">결과</h4>
-          <dl className="results">
-            {p.results.map((r) => (
-              <div key={r.label}>
-                <dt>{r.value}</dt>
-                <dd>{r.label}</dd>
-              </div>
-            ))}
-          </dl>
+            <h4 className="sub-title">문제와 해결</h4>
+            <dl className="problems">
+              {p.problems.map((ps) => (
+                <div key={ps.problem}>
+                  <dt>
+                    <span className="tag tag-lack">문제</span> {ps.problem}
+                  </dt>
+                  <dd>
+                    <span className="tag">해결</span> {ps.solution}
+                  </dd>
+                </div>
+              ))}
+            </dl>
 
-          <h4 className="sub-title">링크</h4>
-          <ul className="plain-list">
-            {p.links.map((l) => (
-              <li key={l.url}>
-                <a href={l.url} target="_blank" rel="noopener noreferrer">
-                  {l.label}
-                </a>
-              </li>
-            ))}
-          </ul>
+            <h4 className="sub-title">배포 방식</h4>
+            <p>{p.deploy}</p>
+
+            <h4 className="sub-title">결과</h4>
+            <dl className="results">
+              {p.results.map((r) => (
+                <div key={r.label}>
+                  <dt>{r.value}</dt>
+                  <dd>{r.label}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
         </article>
       ))}
     </Scene>

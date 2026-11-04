@@ -2,6 +2,14 @@ import { Link } from 'react-router-dom'
 import type { Contact, HowBuilt, JournalEntry } from '../../domain/portfolio'
 import { Scene } from '../../ui/Scene'
 import { ObfuscatedEmail } from '../../ui/ObfuscatedEmail'
+import { ExternalLink } from '../../ui/ExternalLink'
+
+const dateFormat = new Intl.DateTimeFormat('ko-KR', { dateStyle: 'long' })
+/** YYYY-MM-DD 를 사용자 언어 형식으로 바꾼다. 시간대 영향이 없게 연월일로 만든다. */
+function formatDate(iso: string): string {
+  const [y, m, d] = iso.split('-').map(Number)
+  return dateFormat.format(new Date(y ?? 1970, (m ?? 1) - 1, d ?? 1))
+}
 
 export function HowBuiltScene({ data, id, title }: { data: HowBuilt; id: string; title: string }) {
   return (
@@ -21,7 +29,7 @@ export function HowBuiltScene({ data, id, title }: { data: HowBuilt; id: string;
             {data.folders.map((f) => (
               <tr key={f.folder}>
                 <th scope="row">
-                  <code>{f.folder}</code>
+                  <code translate="no">{f.folder}</code>
                 </th>
                 <td>{f.role}</td>
                 <td>{f.dependsOn}</td>
@@ -30,19 +38,21 @@ export function HowBuiltScene({ data, id, title }: { data: HowBuilt; id: string;
           </tbody>
         </table>
       </div>
-      {data.groups.map((g) => (
-        <div key={g.title}>
-          <h3 className="sub-title">{g.title}</h3>
-          <dl className="skills">
-            {g.items.map((i) => (
-              <div key={i.title}>
-                <dt>{i.title}</dt>
-                <dd>{i.body}</dd>
-              </div>
-            ))}
-          </dl>
-        </div>
-      ))}
+      <div className="cols cols-3">
+        {data.groups.map((g) => (
+          <div key={g.title}>
+            <h3 className="sub-title">{g.title}</h3>
+            <dl className="skills">
+              {g.items.map((i) => (
+                <div key={i.title}>
+                  <dt>{i.title}</dt>
+                  <dd>{i.body}</dd>
+                </div>
+              ))}
+            </dl>
+          </div>
+        ))}
+      </div>
     </Scene>
   )
 }
@@ -55,11 +65,11 @@ export function JournalScene({ entries, id, title }: { entries: JournalEntry[]; 
       ) : (
         <>
           <p className="lead">이 사이트를 만들며 실제로 겪은 문제만 적었다.</p>
-          <ul className="journal">
+          <ul className="journal cols cols-2">
             {entries.map((e) => (
               <li key={`${e.date}-${e.problem}`}>
                 <p className="entry-meta">
-                  <time dateTime={e.date}>{e.date}</time>
+                  <time dateTime={e.date}>{formatDate(e.date)}</time>
                 </p>
                 <dl>
                   <dt>문제</dt>
@@ -81,24 +91,20 @@ export function JournalScene({ entries, id, title }: { entries: JournalEntry[]; 
 export function ContactScene({ contact, id, title }: { contact: Contact; id: string; title: string }) {
   return (
     <Scene id={id} title={title}>
-      <ul className="contact-list">
+      <p className="contact-email">
+        <ObfuscatedEmail user={contact.email.user} domain={contact.email.domain} />
+      </p>
+      <ul className="contact-links">
         <li>
-          <span className="tag">이메일</span> <ObfuscatedEmail user={contact.email.user} domain={contact.email.domain} />
+          <ExternalLink href={contact.github}>
+            <span translate="no">GitHub</span>
+          </ExternalLink>
         </li>
         <li>
-          <span className="tag">GitHub</span>{' '}
-          <a href={contact.github} target="_blank" rel="noopener noreferrer">
-            {contact.github}
-          </a>
+          <ExternalLink href={contact.blog}>블로그</ExternalLink>
         </li>
         <li>
-          <span className="tag">블로그</span>{' '}
-          <a href={contact.blog} target="_blank" rel="noopener noreferrer">
-            {contact.blog}
-          </a>
-        </li>
-        <li>
-          <span className="tag">PDF 단축본</span> <Link to="/print">A4 2쪽 단축본 열기</Link>
+          <Link to="/print">PDF 단축본 (A4 2쪽)</Link>
         </li>
       </ul>
     </Scene>

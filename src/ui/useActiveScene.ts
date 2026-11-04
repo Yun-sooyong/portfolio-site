@@ -34,9 +34,7 @@ export function useActiveScene(ids: readonly string[]): string {
       io.disconnect()
       delete root.dataset.scene
     }
-    // ids는 모듈 상수 배열이므로 한 번만 연결한다.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [ids])
 
   return active
 }

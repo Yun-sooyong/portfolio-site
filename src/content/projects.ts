@@ -40,7 +40,7 @@ export const projects: Project[] = [
       { value: '82%', label: '시험 코드 줄 커버리지' },
       { value: '27개', label: 'API 엔드포인트' },
     ],
-    links: [{ label: '저장소 (예시)', url: 'https://github.com/example/moasseugi' }],
+    links: [{ label: '모아쓰기 저장소 (예시)', url: 'https://github.com/example/moasseugi' }],
   },
   {
     id: 'bookshop-stock',
@@ -74,7 +74,7 @@ export const projects: Project[] = [
       { value: '주 5건 → 1건', label: '팀원의 API 사용법 질문' },
       { value: '0건', label: '동시성 시험 100회 중 음수 재고' },
     ],
-    links: [{ label: '저장소 (예시)', url: 'https://github.com/example/bookshop-stock' }],
+    links: [{ label: '동네책방 재고 관리 저장소 (예시)', url: 'https://github.com/example/bookshop-stock' }],
   },
   {
     id: 'this-portfolio',
@@ -108,6 +108,6 @@ export const projects: Project[] = [
       { value: '6단계', label: 'push마다 CI가 돌리는 검사 (설치, lint, 타입 검사, 시험, 빌드, 취약점 검사)' },
       { value: '1곳', label: '내용을 고치는 폴더 (src/content). 상세본과 단축본이 함께 읽는다' },
     ],
-    links: [{ label: '저장소 (예시)', url: 'https://github.com/example/portfolio' }],
+    links: [{ label: '포트폴리오 사이트 저장소 (예시)', url: 'https://github.com/example/portfolio' }],
   },
 ]

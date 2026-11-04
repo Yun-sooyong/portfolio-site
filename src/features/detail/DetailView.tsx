@@ -18,11 +18,11 @@ export function DetailView({ data }: { data: Portfolio }) {
   return (
     <>
       <div className="backdrop" aria-hidden="true" />
-      <a href="#intro" className="skip-link">
+      <a href="#main" className="skip-link">
         본문으로 건너뛰기
       </a>
       <SceneNav scenes={SCENES} activeId={active} />
-      <main>
+      <main id="main" tabIndex={-1}>
         <IntroScene profile={data.profile} id="intro" title={title('intro')} />
         <BackgroundScene background={data.background} id="background" title={title('background')} />
         <SkillsScene groups={data.skillGroups} id="skills" title={title('skills')} />

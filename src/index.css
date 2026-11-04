@@ -22,12 +22,16 @@
 
 :root {
   --hue: 255;
+  /* 쌓임 순서 토큰 */
+  --z-backdrop: -1;
+  --z-nav: 20;
+  --z-skip: 50;
   --bg: oklch(0.955 0.03 var(--hue));
   --surface: oklch(0.985 0.012 var(--hue));
   --fg: oklch(0.22 0.03 var(--hue));
   --muted: oklch(0.42 0.04 var(--hue));
   --accent: oklch(0.42 0.15 var(--hue));
-  --line: oklch(0.74 0.05 var(--hue));
+  --line: oklch(0.62 0.06 var(--hue));
   color-scheme: light dark;
   /* 장면이 바뀌면 배경 색조가 600ms 동안 바뀐다. */
   transition: --hue 600ms ease;
@@ -40,7 +44,7 @@
     --fg: oklch(0.95 0.015 var(--hue));
     --muted: oklch(0.78 0.04 var(--hue));
     --accent: oklch(0.82 0.11 var(--hue));
-    --line: oklch(0.42 0.05 var(--hue));
+    --line: oklch(0.52 0.06 var(--hue));
   }
 }
 
@@ -79,6 +83,26 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+h1,
+h2,
+h3,
+h4 {
+  text-wrap: balance;
+}
+a,
+button {
+  touch-action: manipulation;
+  -webkit-tap-highlight-color: transparent;
+}
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+
 a {
   color: var(--accent);
   text-underline-offset: 0.2em;
@@ -96,7 +120,7 @@ a:hover {
   position: fixed;
   left: 1rem;
   top: -4rem;
-  z-index: 50;
+  z-index: var(--z-skip);
   background: var(--fg);
   color: var(--bg);
   padding: 0.5rem 0.9rem;
@@ -110,34 +134,57 @@ a:hover {
 .backdrop {
   position: fixed;
   inset: 0;
-  z-index: -1;
+  z-index: var(--z-backdrop);
   background: var(--bg);
 }
-/* 장면 */
+/* 장면. 바깥 폭은 최대 1280px이다. */
 .scene {
+  --gutter: clamp(1.25rem, 5vw, 4rem);
   min-height: 100svh;
   display: flex;
+  justify-content: center;
   align-items: center;
-  padding: 10svh 4.5rem 10svh clamp(1.25rem, 8vw, 8rem);
+  padding: 10svh var(--gutter);
   scroll-snap-align: start;
+  scroll-margin-top: 1rem;
   box-sizing: border-box;
 }
 .scene-tall {
   align-items: flex-start;
   scroll-snap-align: none;
 }
-@media (max-width: 767px) {
+/* 768px 이상: 오른쪽에 장면 위치 점(폭 2.75rem)을 둘 자리를 비운다. */
+@media (min-width: 768px) {
   .scene {
-    padding-right: 1.25rem;
-  }
-  /* 좁은 화면에서는 위치 표시 점이 본문과 겹치므로 숨긴다. */
-  .scene-nav {
-    display: none;
+    padding-right: calc(var(--gutter) + 2.5rem);
   }
 }
 .scene-inner {
   width: 100%;
-  max-width: 44rem;
+  max-width: 1280px;
+}
+
+/* 열 배치. 768px 미만 1단, 768px 이상 2단, 1024px 이상 지정한 단 수. */
+.cols {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 3rem;
+}
+.cols > * {
+  min-width: 0;
+}
+.cols > div > .sub-title:first-child {
+  margin-top: 0;
+}
+@media (min-width: 768px) {
+  .cols {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+@media (min-width: 1024px) {
+  .cols-3 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
 }
 
 /* 들어올 때 한 번 나타난다. scene-motion 클래스는 움직임 줄이기가 꺼졌을 때만 붙는다. */
@@ -153,29 +200,21 @@ a:hover {
 
 .scene-title {
   margin: 0 0 1.5rem;
-  font-size: clamp(2rem, 5.2vw, 3.5rem);
+  font-size: clamp(2rem, 5.2vw, 4rem);
+  text-wrap: balance;
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.15;
 }
-#intro-title {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-  clip-path: inset(50%);
-  white-space: nowrap;
-}
-
 .hero-role {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: clamp(1.25rem, 2vw, 1.75rem);
   font-weight: 600;
   color: var(--accent);
 }
 .hero-name {
   margin: 0.25rem 0 0;
-  font-size: clamp(3.5rem, 13vw, 9rem);
+  font-size: clamp(4rem, 12vw, 12rem);
   font-weight: 800;
   letter-spacing: -0.04em;
   line-height: 1;
@@ -185,6 +224,31 @@ a:hover {
   color: var(--muted);
 }
 
+.intro-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 2.5rem 3rem;
+}
+@media (min-width: 768px) {
+  .intro-grid {
+    grid-template-columns: minmax(0, 7fr) minmax(0, 5fr);
+    align-items: center;
+  }
+}
+@media (min-width: 1024px) {
+  .intro-grid {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .intro-main {
+    grid-column: 1 / 8;
+  }
+  .intro-side {
+    grid-column: 9 / 13;
+  }
+}
+.intro-side .sub-title {
+  margin-top: 0;
+}
 .prose-block p,
 .lead {
   max-width: 34em;
@@ -201,10 +265,14 @@ a:hover {
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.35;
+  text-wrap: balance;
 }
 h4.sub-title {
   margin-top: 1.5rem;
   font-size: 1.0625rem;
+}
+.sub-title.first {
+  margin-top: 0;
 }
 
 .strengths {
@@ -212,17 +280,19 @@ h4.sub-title {
   margin: 0;
   padding: 0;
   display: grid;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 .strengths li {
   display: grid;
   gap: 0.1rem;
   padding-left: 1rem;
   border-left: 3px solid var(--accent);
-  max-width: 34em;
+  max-width: 30em;
 }
 .strengths strong {
+  font-size: 1.1875rem;
   font-weight: 700;
+  letter-spacing: -0.01em;
 }
 .strengths span {
   color: var(--muted);
@@ -272,6 +342,7 @@ h4.sub-title {
 .entry-meta {
   color: var(--muted);
   font-size: 0.9375rem;
+  font-variant-numeric: tabular-nums;
 }
 
 .tag {
@@ -303,68 +374,74 @@ h4.sub-title {
   max-width: 36em;
 }
 
-/* 프로젝트 목록 */
+/* 프로젝트 목록. 카드 대신 위쪽 선으로 나눈다. */
 .project-list {
-  display: grid;
-  gap: 0;
+  gap: 2rem 3rem;
 }
 .project-row {
   display: grid;
-  grid-template-columns: 1fr auto;
-  gap: 0.15rem 1rem;
-  padding: 1.1rem 0;
-  border-top: 1.5px solid var(--line);
+  align-content: start;
+  gap: 0.35rem;
+  height: 100%;
+  padding: 1rem 0 0.5rem;
+  border-top: 2px solid var(--fg);
   color: var(--fg);
   text-decoration: none;
 }
-.project-list li:last-child .project-row {
-  border-bottom: 1.5px solid var(--line);
+.project-row-name {
+  font-size: 1.5rem;
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 1.3;
 }
 .project-row:hover .project-row-name {
+  color: var(--accent);
   text-decoration: underline;
   text-decoration-thickness: 2px;
-}
-.project-row-name {
-  font-size: 1.375rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  text-underline-offset: 0.2em;
 }
 .project-row-meta,
 .project-row-stack {
   color: var(--muted);
   font-size: 0.9375rem;
-  text-align: right;
-}
-.project-row-stack {
-  grid-column: 2;
-  grid-row: 2;
 }
 .project-row-summary {
-  grid-column: 1;
-  grid-row: 2;
-  max-width: 32em;
-}
-@media (max-width: 640px) {
-  .project-row {
-    grid-template-columns: 1fr;
-  }
-  .project-row-meta,
-  .project-row-stack,
-  .project-row-summary {
-    grid-column: 1;
-    grid-row: auto;
-    text-align: left;
-  }
+  margin-top: 0.4rem;
+  max-width: 30em;
 }
 
-/* 프로젝트 상세 */
+/* 프로젝트 상세. 1024px 이상에서 왼쪽 4열(고정), 오른쪽 8열. */
 .project {
-  padding-bottom: 3.5rem;
-  margin-bottom: 3rem;
-  border-bottom: 1.5px solid var(--line);
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0 3rem;
+  padding: 2rem 0 3.5rem;
+  margin-bottom: 1.5rem;
+  border-top: 2px solid var(--fg);
+  scroll-margin-top: 1rem;
 }
 .project:last-child {
-  border-bottom: 0;
+  margin-bottom: 0;
+}
+@media (min-width: 1024px) {
+  .project {
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+  }
+  .project-side {
+    grid-column: 1 / 5;
+    align-self: start;
+    position: sticky;
+    top: 2rem;
+  }
+  .project-body {
+    grid-column: 5 / 13;
+  }
+}
+.project-body {
+  min-width: 0;
+}
+.project-side > .sub-title:first-of-type {
+  margin-top: 1.5rem;
 }
 .project p {
   max-width: 36em;
@@ -372,10 +449,11 @@ h4.sub-title {
 }
 .project-name {
   margin: 0;
-  font-size: clamp(1.5rem, 3.4vw, 2.1rem);
+  font-size: clamp(1.5rem, 3vw, 2.25rem);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1.25;
+  text-wrap: balance;
 }
 
 .flow {
@@ -383,8 +461,8 @@ h4.sub-title {
   margin: 0;
   padding: 0;
   display: flex;
-  flex-wrap: wrap;
-  gap: 0.6rem 2.2rem;
+  flex-direction: column;
+  gap: 1.6rem;
 }
 .flow li {
   position: relative;
@@ -400,23 +478,24 @@ h4.sub-title {
 .flow li:not(:last-child)::after {
   content: '';
   position: absolute;
-  left: 100%;
-  top: 50%;
-  width: 2.2rem;
-  border-top: 1.5px solid var(--fg);
+  left: 1.5rem;
+  top: 100%;
+  height: 1.6rem;
+  border-left: 1.5px solid var(--fg);
 }
-@media (max-width: 640px) {
+@media (min-width: 640px) {
   .flow {
-    flex-direction: column;
-    gap: 1.6rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 0.6rem 2.2rem;
   }
   .flow li:not(:last-child)::after {
-    left: 1.5rem;
-    top: 100%;
-    width: 0;
-    height: 1.6rem;
-    border-top: 0;
-    border-left: 1.5px solid var(--fg);
+    left: 100%;
+    top: 50%;
+    width: 2.2rem;
+    height: 0;
+    border-left: 0;
+    border-top: 1.5px solid var(--fg);
   }
 }
 
@@ -433,7 +512,7 @@ h4.sub-title {
 
 .results {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(11rem, 1fr));
+  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
   gap: 1rem 1.5rem;
   margin: 0;
 }
@@ -442,6 +521,7 @@ h4.sub-title {
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.2;
+  font-variant-numeric: tabular-nums;
 }
 .results dd {
   margin: 0.1rem 0 0;
@@ -451,59 +531,90 @@ h4.sub-title {
 
 /* 사이트 소개 표 */
 .table-wrap {
-  max-width: 100%;
+  max-width: 64rem;
+  margin-bottom: 2.5rem;
 }
 .folder-table {
   width: 100%;
   border-collapse: collapse;
   font-size: 0.9375rem;
 }
+.folder-table thead {
+  position: absolute;
+  clip-path: inset(50%);
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+}
+.folder-table,
+.folder-table tbody,
+.folder-table tr,
 .folder-table th,
 .folder-table td {
-  padding: 0.55rem 0.75rem 0.55rem 0;
-  text-align: left;
-  vertical-align: top;
+  display: block;
+}
+.folder-table tr {
+  padding: 0.5rem 0;
   border-bottom: 1.5px solid var(--line);
 }
-.folder-table thead th {
+.folder-table th,
+.folder-table td {
+  border: 0;
+  padding: 0;
+  text-align: left;
+}
+.folder-table td:last-child {
   color: var(--muted);
-  font-weight: 600;
+}
+.folder-table td:last-child::before {
+  content: '의존: ';
 }
 .folder-table code {
   font-size: 0.875rem;
 }
-@media (max-width: 640px) {
-  .folder-table thead {
-    position: absolute;
-    clip-path: inset(50%);
-    width: 1px;
-    height: 1px;
-    overflow: hidden;
+@media (min-width: 640px) {
+  .folder-table {
+    display: table;
   }
-  .folder-table,
-  .folder-table tbody,
-  .folder-table tr,
-  .folder-table th,
-  .folder-table td {
-    display: block;
+  .folder-table thead {
+    position: static;
+    clip-path: none;
+    width: auto;
+    height: auto;
+    overflow: visible;
+  }
+  .folder-table tbody {
+    display: table-row-group;
+  }
+  .folder-table thead {
+    display: table-header-group;
   }
   .folder-table tr {
-    padding: 0.5rem 0;
-    border-bottom: 1.5px solid var(--line);
+    display: table-row;
   }
   .folder-table th,
   .folder-table td {
-    border: 0;
-    padding: 0;
+    display: table-cell;
+    padding: 0.55rem 0.75rem 0.55rem 0;
+    vertical-align: top;
+    border-bottom: 1.5px solid var(--line);
   }
-  .folder-table td:last-child {
+  .folder-table tr {
+    padding: 0;
+    border-bottom: 0;
+  }
+  .folder-table thead th {
     color: var(--muted);
+    font-weight: 600;
   }
   .folder-table td:last-child::before {
-    content: '의존: ';
+    content: none;
   }
 }
 
+.journal {
+  gap: 0.5rem 3rem;
+}
 .journal li {
   margin-bottom: 1.75rem;
   padding-left: 1rem;
@@ -512,7 +623,7 @@ h4.sub-title {
 .journal dl {
   margin: 0.2rem 0 0;
   display: grid;
-  grid-template-columns: 3rem 1fr;
+  grid-template-columns: 3rem minmax(0, 1fr);
   gap: 0.25rem 0.75rem;
   max-width: 38em;
 }
@@ -523,20 +634,42 @@ h4.sub-title {
   margin: 0;
 }
 
-.contact-list {
-  display: grid;
-  gap: 0.9rem;
-  font-size: 1.25rem;
+.contact-email {
+  margin: 0 0 1.5rem;
+  font-size: clamp(1.75rem, 6vw, 4.5rem);
+  font-weight: 800;
+  letter-spacing: -0.03em;
+  line-height: 1.15;
   overflow-wrap: anywhere;
+}
+.contact-links {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 2.5rem;
+  font-size: 1.25rem;
+}
+.contact-links a {
+  display: inline-block;
+  padding: 0.5rem 0;
 }
 
 /* 장면 위치 표시 */
 .scene-nav {
+  /* 768px 미만에서는 위치 표시 점이 본문과 겹치므로 숨긴다. */
+  display: none;
   position: fixed;
-  right: 0.5rem;
+  right: max(0.5rem, env(safe-area-inset-right));
   top: 50%;
   transform: translateY(-50%);
-  z-index: 20;
+  z-index: var(--z-nav);
+}
+@media (min-width: 768px) {
+  .scene-nav {
+    display: block;
+  }
 }
 .scene-nav ul {
   list-style: none;
@@ -548,8 +681,8 @@ h4.sub-title {
   display: flex;
   align-items: center;
   justify-content: flex-end;
-  width: 2.25rem;
-  height: 1.75rem;
+  width: 2.75rem;
+  height: 2.75rem;
   padding: 0;
   background: none;
   border: 0;
@@ -559,7 +692,7 @@ h4.sub-title {
 .scene-dot-mark {
   width: 0.625rem;
   height: 0.625rem;
-  margin-right: 0.8rem;
+  margin-right: 1rem;
   border-radius: 50%;
   border: 1.5px solid var(--fg);
   transition: background-color 200ms ease, transform 200ms ease;
@@ -570,7 +703,7 @@ h4.sub-title {
 }
 .scene-dot-label {
   position: absolute;
-  right: 2.1rem;
+  right: 2.6rem;
   padding: 0.1rem 0.5rem;
   font-size: 0.8125rem;
   white-space: nowrap;
@@ -579,6 +712,9 @@ h4.sub-title {
   border-radius: 3px;
   opacity: 0;
   pointer-events: none;
+}
+.scene-dot:hover .scene-dot-mark {
+  background: var(--fg);
 }
 .scene-dot:hover .scene-dot-label,
 .scene-dot:focus-visible .scene-dot-label {
@@ -606,6 +742,10 @@ h4.sub-title {
 .notfound p {
   max-width: 30em;
   margin: 0 0 1.5rem;
+}
+.notfound-link:hover,
+.print-button:hover {
+  background: var(--accent);
 }
 .notfound-link {
   display: inline-block;
@@ -753,4 +893,40 @@ h4.sub-title {
     transform: none !important;
     transition: none !important;
   }
+}
+
+/* 눌림과 올림 상태. 속성을 하나씩 적고, 움직임 줄이기에서는 끈다. */
+.project-row-name,
+.notfound-link,
+.print-button {
+  transition: color 150ms ease, background-color 150ms ease;
+}
+.notfound-link:active,
+.print-button:active {
+  opacity: 0.85;
+}
+@media (prefers-reduced-motion: reduce) {
+  .project-row-name,
+  .notfound-link,
+  .print-button {
+    transition: none;
+  }
+}
+
+.project-side .plain-list a {
+  display: inline-block;
+  padding: 0.5rem 0;
+  overflow-wrap: anywhere;
+}
+.empty-note {
+  margin: 0;
+  color: var(--muted);
+}
+.route-loading {
+  margin: 0;
+  padding: 12svh clamp(1.25rem, 5vw, 4rem);
+  color: var(--muted);
+}
+main:focus:not(:focus-visible) {
+  outline: none;
 }

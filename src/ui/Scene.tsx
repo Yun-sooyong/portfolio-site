@@ -9,13 +9,15 @@ interface SceneProps {
   tall?: boolean
   /** 첫 장면처럼 로딩 직후 바로 보여야 하면 true. 나타나는 효과를 쓰지 않는다. */
   instant?: boolean
+  /** true이면 h2를 그리지 않는다. 장면 안의 h1이 제목 역할을 한다. */
+  hideTitle?: boolean
 }
 
 /**
  * 장면 한 개. 화면 높이(100svh) 이상이다.
  * 처음 보일 때 한 번만 나타난다. 움직임 줄이기를 켜면 전환 클래스를 붙이지 않는다.
  */
-export function Scene({ id, title, children, tall = false, instant = false }: SceneProps) {
+export function Scene({ id, title, children, tall = false, instant = false, hideTitle = false }: SceneProps) {
   const ref = useRef<HTMLElement>(null)
   const reduced = useReducedMotion()
   // IntersectionObserver가 없는 환경에서는 처음부터 보이는 것으로 본다.
@@ -44,14 +46,17 @@ export function Scene({ id, title, children, tall = false, instant = false }: Sc
     <section
       ref={ref}
       id={id}
-      aria-labelledby={`${id}-title`}
+      aria-labelledby={hideTitle ? undefined : `${id}-title`}
+      aria-label={hideTitle ? title : undefined}
       className={classes}
       data-seen={seen ? '' : undefined}
     >
       <div className="scene-inner reveal">
-        <h2 id={`${id}-title`} className="scene-title">
-          {title}
-        </h2>
+        {hideTitle ? null : (
+          <h2 id={`${id}-title`} className="scene-title">
+            {title}
+          </h2>
+        )}
         {children}
       </div>
     </section>
