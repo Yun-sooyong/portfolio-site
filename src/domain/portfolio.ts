@@ -9,9 +9,7 @@ export interface EmailParts {
 export interface Profile {
   name: string
   role: string
-  /** 시 단위까지만 쓴다. */
-  region: string
-  /** 소개 문장. 4~5줄. */
+  /** 소개 문장. 3~5줄. */
   intro: string[]
   /** 강점 2~3개. 강점마다 근거 1줄. */
   strengths: { title: string; evidence: string }[]
@@ -34,12 +32,20 @@ export interface Training {
   name: string
   org: string
   period: string
+  /** 배운 기술 목록. 영문 기술 이름으로 쓴다 */
+  stack: string[]
+  /** 무엇을 배웠는지 한 줄 */
+  summary: string
+  /** 스터디 경험 한 줄(선택) */
+  study?: string
 }
 
 export interface Certificate {
   name: string
   issuer: string
   date: string
+  /** 진행 상태(선택). 예: "필기 합격". 없으면 취득한 자격증이다 */
+  status?: string
 }
 
 export interface Background {
@@ -56,8 +62,8 @@ export interface Skill {
   icon?: string | string[]
   /** 할 수 있는 것 */
   can: string
-  /** 아직 부족한 것 */
-  lacks: string
+  /** 아직 부족한 것(선택). 쓸 내용이 있을 때만 적는다 */
+  lacks?: string
 }
 
 export interface SkillGroup {
@@ -67,26 +73,10 @@ export interface SkillGroup {
 
 export type ProjectKind = '개인' | '팀'
 
-export interface ArchitectureNode {
-  label: string
-  note: string
-}
-
-export interface ProblemSolution {
-  problem: string
-  solution: string
-}
-
 export interface Result {
   /** 숫자를 포함한 값. 예: "45ms" */
   value: string
   label: string
-}
-
-export interface ProjectLink {
-  label: string
-  /** https:// 로 시작해야 한다. */
-  url: string
 }
 
 export interface Project {
@@ -100,21 +90,25 @@ export interface Project {
   coreStackIcons?: Record<string, string>
   /** 목록에 보이는 한 줄 설명 */
   summary: string
+  /** 소개. 장면에서 간단한 설명 아래에 보인다 */
   overview: string
-  /** 내 역할 */
+  /** 맡은 역할 */
   role: string
-  features: string[]
-  architecture: ArchitectureNode[]
-  problems: ProblemSolution[]
-  deploy: string
+  /** 성과. 숫자를 포함한다 */
   results: Result[]
-  links: ProjectLink[]
+  /** GitHub 저장소 주소(선택). https:// 로 시작한다 */
+  githubUrl?: string
+  /** 데모 주소(선택). https:// 로 시작한다 */
+  demoUrl?: string
+  /** 노션 상세 페이지 주소(선택). 구성도와 문제 해결 같은 자세한 내용은 여기로 넘긴다. https:// 로 시작한다 */
+  notionUrl?: string
 }
 
 export interface Contact {
   email: EmailParts
   github: string
-  blog: string
+  /** 블로그 주소(선택). 없으면 화면에서 숨긴다 */
+  blog?: string
 }
 
 export interface HowBuiltItem {
@@ -122,23 +116,17 @@ export interface HowBuiltItem {
   body: string
 }
 
-export interface HowBuiltGroup {
-  title: string
-  items: HowBuiltItem[]
-}
-
-export interface FolderRule {
-  folder: string
-  role: string
-  dependsOn: string
-}
-
+/** "이 사이트와 기록" 장면의 사이트 소개 부분 */
 export interface HowBuilt {
   lead: string
-  folders: FolderRule[]
-  groups: HowBuiltGroup[]
+  /** 구조와 보안 요점. 3~4개, 항목마다 1줄 */
+  points: HowBuiltItem[]
   /** CI가 위에서 아래로 실행하는 명령. .github/workflows/ci.yml 의 run 항목과 같다 */
   ciSteps: string[]
+  /** 전체 기록을 보는 곳. 주소는 https:// 로 시작한다 */
+  readmeUrl: string
+  /** 노션 기록 주소(선택) */
+  notionUrl?: string
 }
 
 export interface JournalEntry {

@@ -1,9 +1,9 @@
 import type { ReactNode } from 'react'
 import type { Background, Profile } from '../../domain/portfolio'
 import { Scene } from '../../ui/Scene'
-import { ExampleBadge } from '../../ui/ExampleBadge'
 import { EmptyNote } from '../../ui/EmptyNote'
 import { Bento, Chip, Tile } from '../../ui/Bento'
+import { MonoText } from '../../ui/MonoText'
 
 /** 근거 문장의 숫자(예: 120ms, 32개)를 포인트 색 span으로 감싼다. 영문자 바로 뒤의 숫자(p95)는 건드리지 않는다. */
 function highlightNumbers(text: string): ReactNode[] {
@@ -22,8 +22,9 @@ function highlightNumbers(text: string): ReactNode[] {
 interface HistoryItem {
   key: string
   main: string
-  meta: string
-  note?: string
+  meta: ReactNode
+  /** 항목 아래에 한 줄씩 보이는 설명 */
+  notes?: ReactNode[]
 }
 
 /** 경력, 학력, 교육, 자격증 항목 목록. 항목이 없으면 안내 문구를 보인다. */
@@ -37,7 +38,9 @@ function HistoryList({ items }: { items: HistoryItem[] }) {
             <strong>{it.main}</strong>
           </p>
           <p className="entry-meta">{it.meta}</p>
-          {it.note ? <p>{it.note}</p> : null}
+          {it.notes?.map((n, i) => (
+            <p key={i}>{n}</p>
+          ))}
         </li>
       ))}
     </ul>
@@ -64,13 +67,11 @@ export function IntroScene({
         <Tile cols={7} rows={2} strong className="intro-main">
           <p className="hero-role">{profile.role}</p>
           <h1 className="hero-name">{profile.name}</h1>
-          <p className="hero-region">{profile.region}</p>
           <div className="prose-block">
             {profile.intro.map((line) => (
               <p key={line}>{line}</p>
             ))}
           </div>
-          <ExampleBadge />
         </Tile>
         <Tile cols={5}>
           <h2 className="tile-title">강점</h2>
@@ -93,24 +94,47 @@ export function IntroScene({
             ))}
           </ul>
         </Tile>
-        <Tile cols={5}>
+        <Tile cols={3} className="tile-career">
           <h2 className="tile-title">경력</h2>
           <HistoryList
-            items={background.careers.map((c) => ({ key: `${c.org}-${c.period}`, main: `${c.org} ${c.role}`, meta: c.period, note: c.summary }))}
+            items={background.careers.map((c) => ({ key: `${c.org}-${c.period}`, main: `${c.org} ${c.role}`, meta: c.period, notes: [c.summary] }))}
           />
         </Tile>
-        <Tile cols={4}>
+        <Tile cols={6}>
           <h2 className="tile-title">학력과 교육 이력</h2>
           <HistoryList
             items={[
               ...background.educations.map((e) => ({ key: e.school, main: `${e.school} ${e.major}`, meta: e.period })),
-              ...background.trainings.map((t) => ({ key: t.name, main: `${t.name} ${t.org}`, meta: t.period })),
+              ...background.trainings.map((t) => ({
+                key: t.name,
+                main: `${t.name} ${t.org}`,
+                meta: t.period,
+                notes: [
+                  t.summary,
+                  <>
+                    <span className="note-label">배운 기술</span> <MonoText>{t.stack.join(', ')}</MonoText>
+                  </>,
+                  ...(t.study ? [<><span className="note-label">스터디</span> {t.study}</>] : []),
+                ],
+              })),
             ]}
           />
         </Tile>
         <Tile cols={3}>
           <h2 className="tile-title">자격증</h2>
-          <HistoryList items={background.certificates.map((c) => ({ key: c.name, main: `${c.name} ${c.issuer}`, meta: c.date }))} />
+          <HistoryList
+            items={background.certificates.map((c) => ({
+              key: c.name,
+              main: `${c.name} ${c.issuer}`,
+              meta: c.status ? (
+                <>
+                  {c.date} <span className="tag">{c.status}</span>
+                </>
+              ) : (
+                c.date
+              ),
+            }))}
+          />
         </Tile>
       </Bento>
     </Scene>

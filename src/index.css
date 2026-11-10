@@ -121,6 +121,12 @@ a:hover {
   scroll-margin-top: 1rem;
   box-sizing: border-box;
 }
+/* 768px 미만: 좌우 여백을 16px로 한다. */
+@media (max-width: 767px) {
+  .scene {
+    --gutter: 1rem;
+  }
+}
 /* 768px 이상: 오른쪽에 장면 위치 점(폭 2.75rem)을 둘 자리를 비운다. */
 @media (min-width: 768px) {
   .scene {
@@ -185,7 +191,7 @@ a:hover {
     align-content: stretch;
   }
   html.snap .bento-intro {
-    --tf: clamp(13px, min(2.0svh, 1.2vw), 22px);
+    --tf: clamp(13px, min(1.9svh, 1.13vw), 20px);
   }
   html.snap .tile.tile-roomy-sm {
     font-size: calc(var(--tf, 1rem) * 1.06);
@@ -193,41 +199,62 @@ a:hover {
   html.snap .tile.tile-roomy-lg {
     font-size: calc(var(--tf, 1rem) * 1.28);
   }
+  html.snap .tile.tile-career {
+    font-size: calc(var(--tf, 1rem) * 1.2);
+  }
   html.snap .tile.tile-roomy {
     font-size: calc(var(--tf, 1rem) * 1.14);
-  }
-  html.snap .tile-flow {
-    display: flex;
-    flex-direction: column;
-  }
-  html.snap .tile-flow .flow {
-    flex: 1;
-    align-content: center;
-    align-items: center;
   }
   html.snap .bento-skills {
     --tf: clamp(13px, min(2.3svh, 1.35vw), 24px);
   }
   html.snap .bento-projects {
-    --tf: clamp(13px, min(2.6svh, 1.5vw), 24px);
+    --tf: clamp(13px, min(2.2svh, 1.3vw), 20px);
   }
   html.snap .bento-project {
-    --tf: clamp(13px, min(2.1svh, 1.25vw), 24px);
+    --tf: clamp(13px, min(2.4svh, 1.45vw), 20px);
   }
-  html.snap .bento-how {
-    --tf: clamp(13px, min(1.7svh, 1.05vw), 20px);
+  /* 프로젝트 장면: 위 줄(소개, 링크)이 조금 더 높고 아래 줄(역할, 성과)이 그 다음이다. */
+  html.snap .bento-project {
+    grid-template-rows: minmax(0, 11fr) minmax(0, 9fr);
   }
-  html.snap .bento-journal-5,
-  html.snap .bento-journal-6 {
-    --tf: clamp(13px, min(1.9svh, 1.15vw), 21px);
+  html.snap .bento-project .project-lead {
+    font-size: 1.7em;
   }
-  html.snap .bento-journal-4 {
-    --tf: clamp(13px, min(2.25svh, 1.35vw), 24px);
+  html.snap .bento-project .project-overview {
+    font-size: 1.25em;
   }
-  html.snap .bento-journal-1,
-  html.snap .bento-journal-2,
-  html.snap .bento-journal-3 {
-    --tf: clamp(13px, min(2.6svh, 1.5vw), 24px);
+  html.snap .bento-project .tile-role p {
+    font-size: 1.45em;
+    line-height: 1.5;
+  }
+  html.snap .bento-project .project-links-lg a {
+    font-size: 1.5em;
+  }
+  html.snap .bento-project .tile-links .project-links {
+    flex: 1;
+  }
+  html.snap .bento-project .tile-links .project-links li {
+    flex: 1;
+    display: flex;
+    align-items: center;
+  }
+  html.snap .bento-project .results dt {
+    font-size: 2em;
+  }
+  html.snap .bento-project .results > div {
+    min-width: 0;
+  }
+  html.snap .bento-project .results dd {
+    font-size: 0.95em;
+  }
+  html.snap .bento-project .tile-results .results {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    flex: 1;
+    align-content: center;
+  }
+  html.snap .bento-site {
+    --tf: clamp(13px, min(1.6svh, 1vw), 20px);
   }
   html.snap .bento-contact {
     --tf: clamp(16px, min(2.8svh, 1.6vw), 26px);
@@ -419,10 +446,6 @@ a:hover {
   letter-spacing: -0.04em;
   line-height: 1.05;
 }
-.hero-region {
-  margin: 0.4rem 0 1rem;
-  color: var(--muted);
-}
 .prose-block p {
   max-width: 40em;
 }
@@ -451,15 +474,6 @@ a:hover {
   font-weight: 700;
 }
 
-.example-badge {
-  display: inline-block;
-  margin: 0.6rem 0 0;
-  padding: 0.2rem 0.6rem;
-  border: 1px dashed var(--muted);
-  border-radius: var(--radius-chip);
-  font-size: .8em;
-  color: var(--muted);
-}
 
 .entries,
 .plain-list {
@@ -572,16 +586,6 @@ a:hover {
 .mono-term {
   font-size: 0.92em;
 }
-.tile-three-col .skills {
-  display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
-  gap: 0 1.5rem;
-}
-.tile-two-col .skills {
-  display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
-  gap: 0 1.5rem;
-}
 .tile-title-gap {
   margin-top: 0.9rem;
 }
@@ -617,85 +621,6 @@ a:hover {
   font-size: 0.9em;
 }
 
-.link-list a {
-  display: inline-block;
-  padding: 0.2rem 0;
-  overflow-wrap: anywhere;
-}
-
-/* 구성도: 노드를 선으로 잇는다. 기술 글자. */
-.flow {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 1.1em;
-}
-.flow li {
-  position: relative;
-  display: grid;
-  padding: 0.45em 0.8em;
-  background: var(--bg);
-  border: 1px solid var(--line);
-  border-radius: var(--radius-chip);
-  font-size: .85em;
-}
-.flow li span {
-  color: var(--muted);
-  font-size: .78em;
-}
-.flow li:not(:last-child)::after {
-  content: '';
-  position: absolute;
-  left: 1.5rem;
-  top: 100%;
-  height: 1.1em;
-  border-left: 1px solid var(--muted);
-}
-@media (min-width: 640px) {
-  .flow {
-    flex-direction: row;
-    flex-wrap: nowrap;
-    gap: 0.6em 1.6em;
-  }
-  .flow li {
-    flex: 1 1 0;
-    min-width: 0;
-  }
-
-  .flow li:not(:last-child)::after {
-    left: 100%;
-    top: 50%;
-    width: 1.6em;
-    height: 0;
-    border-left: 0;
-    border-top: 1px solid var(--muted);
-  }
-}
-
-/* 문제와 해결. 실제 순서가 있어 번호를 쓴다. */
-.problems {
-  margin: 0;
-  padding: 0 0 0 1.6rem;
-  list-style: decimal;
-}
-.problems li {
-  margin-bottom: 0.9rem;
-  padding-left: 0.2rem;
-  max-width: 44em;
-}
-.problems li::marker {
-  color: var(--muted);
-  font-weight: 700;
-}
-.problems li:last-child {
-  margin-bottom: 0;
-}
-.problems p {
-  margin-bottom: 0.25rem;
-}
-
 /* 결과: 숫자를 크게 */
 .results {
   display: grid;
@@ -716,84 +641,6 @@ a:hover {
   font-size: .85em;
 }
 
-/* 사이트 소개: 폴더 표 */
-.table-wrap {
-  max-width: 100%;
-}
-.folder-table {
-  width: 100%;
-  border-collapse: collapse;
-  font-size: .85em;
-}
-.folder-table thead {
-  position: absolute;
-  clip-path: inset(50%);
-  width: 1px;
-  height: 1px;
-  overflow: hidden;
-}
-.folder-table,
-.folder-table tbody,
-.folder-table tr,
-.folder-table th,
-.folder-table td {
-  display: block;
-}
-.folder-table tr {
-  padding: 0.5rem 0;
-  border-bottom: 1px solid var(--line);
-}
-.folder-table th,
-.folder-table td {
-  border: 0;
-  padding: 0;
-  text-align: left;
-}
-.folder-table td:last-child {
-  color: var(--muted);
-}
-.folder-table td:last-child::before {
-  content: '의존: ';
-}
-.folder-table code {
-  font-size: .85em;
-}
-@media (min-width: 640px) {
-  .folder-table {
-    display: table;
-  }
-  .folder-table thead {
-    position: static;
-    clip-path: none;
-    width: auto;
-    height: auto;
-    overflow: visible;
-    display: table-header-group;
-  }
-  .folder-table tbody {
-    display: table-row-group;
-  }
-  .folder-table tr {
-    display: table-row;
-    padding: 0;
-    border-bottom: 0;
-  }
-  .folder-table th,
-  .folder-table td {
-    display: table-cell;
-    padding: 0.45rem 0.75rem 0.45rem 0;
-    vertical-align: top;
-    border-bottom: 1px solid var(--line);
-  }
-  .folder-table thead th {
-    color: var(--muted);
-    font-weight: 600;
-  }
-  .folder-table td:last-child::before {
-    content: none;
-  }
-}
-
 /* 터미널 모양 블록. 지어낸 출력은 넣지 않고 실제 명령만 적는다. */
 .terminal {
   margin: 0.4rem 0 0;
@@ -811,37 +658,6 @@ a:hover {
 .terminal li::before {
   content: '$ ';
   color: var(--neon-green);
-}
-
-/* 시행착오 */
-.journal dl {
-  margin: 0.2em 0 0;
-  display: grid;
-  gap: 0.35em;
-}
-.journal dl > div {
-  display: grid;
-  grid-template-columns: max-content minmax(0, 1fr);
-  gap: 0 0.7em;
-}
-.journal dt {
-  font-weight: 700;
-}
-.journal dd {
-  margin: 0;
-}
-.journal .tile > .entry-meta {
-  margin-bottom: 0.2em;
-}
-/* 기록이 3개 이하인 장면: 기록 1개를 가로로 넓게 두고 문제, 원인, 해결을 세 칸으로 나눈다. */
-@media (min-width: 1024px) {
-  .tile-journal-wide dl {
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 0 1.5em;
-  }
-  .tile-journal-wide dl > div {
-    display: block;
-  }
 }
 
 /* 연락처 */
@@ -1171,13 +987,6 @@ a:hover {
 .sheet li {
   margin-bottom: 1.5pt;
 }
-.sheet-example {
-  margin: 4pt 0 0;
-  padding: 1pt 5pt;
-  border-color: #000;
-  color: #000;
-  font-size: 8pt;
-}
 .sheet-project {
   margin-bottom: 7pt;
   break-inside: avoid;
@@ -1240,11 +1049,6 @@ a:hover {
   }
 }
 
-.project-side .plain-list a {
-  display: inline-block;
-  padding: 0.5rem 0;
-  overflow-wrap: anywhere;
-}
 .empty-note {
   margin: 0;
   color: var(--muted);
@@ -1294,4 +1098,145 @@ main:focus:not(:focus-visible) {
 /* 단축본은 포인트 색 없이 검은색 초점 표시를 쓴다. */
 .print-page :focus-visible {
   outline-color: #000;
+}
+
+/* 프로젝트 링크(GitHub, 데모, 노션에서 자세히). 값이 있는 것만 그린다. */
+.project-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.2em 1.25em;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.project-links a {
+  display: inline-block;
+  padding: 0.35em 0;
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+.project-links-lg {
+  gap: 0.4em 2em;
+}
+.project-links-lg a {
+  font-size: 1.25em;
+  font-weight: 700;
+}
+
+/* 프로젝트 목록 카드: 이름 링크가 카드 전체를 덮고, 바깥 링크는 그 위에 놓는다. */
+.project-card {
+  position: relative;
+}
+.project-card-link {
+  color: var(--fg);
+  text-decoration: none;
+}
+.project-card-link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--radius-tile);
+}
+.project-card:hover .project-card-link {
+  text-decoration: underline;
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.2em;
+}
+.project-card .project-links {
+  position: relative;
+  z-index: 1;
+  margin-top: 0.2em;
+}
+.project-card-link:focus-visible {
+  outline: none;
+}
+.project-card-link:focus-visible::after {
+  outline: 3px solid var(--neon-blue);
+  outline-offset: 3px;
+}
+
+/* 프로젝트 장면 */
+.project-lead {
+  font-size: 1.3em;
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1.4;
+}
+.tile-intro .chips {
+  margin-top: auto;
+  padding-top: 0.6em;
+}
+.project-links-stack {
+  flex-direction: column;
+  gap: 0;
+}
+.project-links-stack li + li {
+  border-top: 1px solid var(--line);
+}
+.project-links-stack a {
+  display: block;
+  padding: 0.55em 0;
+}
+.tile-intro,
+.tile-role,
+.tile-links {
+  display: flex;
+  flex-direction: column;
+}
+
+/* 소개: 교육 이력의 배운 기술과 스터디 한 줄 */
+.note-label {
+  color: var(--muted);
+  font-size: 0.9em;
+}
+
+/* 이 사이트와 기록 */
+.recent-journal {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.9rem 1.5rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.recent-journal dl {
+  margin: 0.2em 0 0;
+  display: grid;
+  gap: 0.35em;
+}
+.recent-journal dt {
+  font-weight: 700;
+}
+.recent-journal dd {
+  margin: 0;
+}
+.recent-journal .entry-meta {
+  margin-bottom: 0.1em;
+}
+@media (min-width: 1024px) {
+  .recent-journal {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .recent-journal li + li {
+    padding-left: 1.5rem;
+    border-left: 1px solid var(--line);
+  }
+}
+.sheet-link {
+  overflow-wrap: anywhere;
+}
+.site-more {
+  margin-top: 0.5em;
+  padding-top: 0.2em;
+  border-top: 1px solid var(--line);
+}
+.tile-recent {
+  display: flex;
+  flex-direction: column;
+}
+.tile-recent .recent-journal {
+  flex: 1;
+}
+.site-more a {
+  padding: 0.15em 0;
 }

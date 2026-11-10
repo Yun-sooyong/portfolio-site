@@ -1,19 +1,24 @@
 import type { Project } from '../../domain/portfolio'
+import { projectLinkItems } from '../../domain/links'
 import { projectSceneId } from '../../domain/scenes'
 import { Scene } from '../../ui/Scene'
-import { ExternalLink } from '../../ui/ExternalLink'
 import { EmptyNote } from '../../ui/EmptyNote'
-import { MonoText } from '../../ui/MonoText'
 import { Bento, Chip, Tile } from '../../ui/Bento'
+import { ProjectLinks } from './ProjectLinks'
 
-/** 프로젝트 1개 = 장면 1개. 개요 타일이 강조 타일이다. */
+/**
+ * 프로젝트 1개 = 장면 1개. 요약만 둔다: 간단한 설명, 소개, 기술, 성과, 맡은 역할, 링크.
+ * 구성도와 문제 해결 같은 자세한 내용은 노션 링크로 넘긴다. 소개 타일이 강조 타일이다.
+ */
 function ProjectScene({ p }: { p: Project }) {
+  const hasLinks = projectLinkItems(p).length > 0
   return (
     <Scene id={projectSceneId(p.id)} title={p.name} aside={`${p.kind}, ${p.period}`}>
-      <Bento className={`bento-project ${p.problems.length < 2 ? 'bento-project-p1' : ''}`}>
-        <Tile cols={5} strong>
-          <h3 className="tile-title">개요</h3>
-          <p>{p.overview}</p>
+      <Bento className="bento-project">
+        <Tile cols={hasLinks ? 8 : 12} strong className="tile-intro">
+          <h3 className="tile-title">소개</h3>
+          <p className="project-lead">{p.summary}</p>
+          <p className="project-overview">{p.overview}</p>
           <ul className="chips" aria-label="핵심 기술">
             {p.coreStack.map((s) => (
               <li key={s}>
@@ -22,19 +27,18 @@ function ProjectScene({ p }: { p: Project }) {
             ))}
           </ul>
         </Tile>
-        <Tile cols={4}>
-          <h3 className="tile-title">내 역할</h3>
+        {hasLinks ? (
+          <Tile cols={4} className="tile-links">
+            <h3 className="tile-title">링크</h3>
+            <ProjectLinks project={p} className="project-links-lg project-links-stack" />
+          </Tile>
+        ) : null}
+        <Tile cols={4} className="tile-role">
+          <h3 className="tile-title">맡은 역할</h3>
           <p>{p.role}</p>
-          <ul className="plain-list link-list">
-            {p.links.map((l) => (
-              <li key={l.url}>
-                <ExternalLink href={l.url}>{l.label}</ExternalLink>
-              </li>
-            ))}
-          </ul>
         </Tile>
-        <Tile cols={3} rows={2} className="tile-results">
-          <h3 className="tile-title">결과</h3>
+        <Tile cols={8} className="tile-results">
+          <h3 className="tile-title">성과</h3>
           <dl className="results">
             {p.results.map((r) => (
               <div key={r.label}>
@@ -43,50 +47,6 @@ function ProjectScene({ p }: { p: Project }) {
               </div>
             ))}
           </dl>
-        </Tile>
-        <Tile cols={3} className={p.features.length < 4 ? 'tile-roomy' : ''}>
-          <h3 className="tile-title">주요 기능</h3>
-          <ul className="plain-list">
-            {p.features.map((f) => (
-              <li key={f}>{f}</li>
-            ))}
-          </ul>
-        </Tile>
-        <Tile cols={6} className="tile-flow">
-          <h3 className="tile-title">구성도</h3>
-          <ol className="flow" aria-label={`${p.name} 요청 흐름`}>
-            {p.architecture.map((n) => (
-              <li key={n.label}>
-                <strong>
-                  <MonoText>{n.label}</MonoText>
-                </strong>
-                <span>
-                  <MonoText>{n.note}</MonoText>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </Tile>
-        <Tile cols={9} className={p.problems.length < 2 ? 'tile-roomy-lg' : ''}>
-          <h3 className="tile-title">문제와 해결</h3>
-          <ol className="problems">
-            {p.problems.map((ps) => (
-              <li key={ps.problem}>
-                <p>
-                  <span className="tag tag-lack">문제</span> {ps.problem}
-                </p>
-                <p>
-                  <span className="tag">해결</span> {ps.solution}
-                </p>
-              </li>
-            ))}
-          </ol>
-        </Tile>
-        <Tile cols={3} className={p.deploy.length < 60 ? 'tile-roomy' : 'tile-roomy-sm'}>
-          <h3 className="tile-title">배포 방식</h3>
-          <p>
-            <MonoText>{p.deploy}</MonoText>
-          </p>
         </Tile>
       </Bento>
     </Scene>

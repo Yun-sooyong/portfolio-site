@@ -1,6 +1,6 @@
 import type { Portfolio } from './portfolio'
 
-// 상세본 장면 계획. 큰 장면(그룹) 5개가 있고, 프로젝트와 시행착오가 늘면 하위 장면이 늘어난다.
+// 상세본 장면 계획. 큰 장면(그룹) 6개가 있고, 프로젝트가 늘면 하위 장면이 늘어난다.
 // 한 하위 장면이 화면 한 칸(100svh)이다.
 
 /** 한 칸짜리 장면 */
@@ -17,18 +17,22 @@ export interface SceneGroup {
   scenes: SceneUnit[]
 }
 
-/** 시행착오 장면 하나에 보이는 최대 항목 수 */
-export const JOURNAL_PAGE_SIZE = 6
+/** "이 사이트와 기록" 장면에 보이는 최근 시행착오 개수 */
+export const RECENT_JOURNAL_COUNT = 3
 
 /** 장면 위치 점을 전부 따로 보이는 최대 개수. 넘으면 큰 장면 단위로 묶는다. */
 export const MAX_FLAT_DOTS = 12
 
-export function journalPageCount(entryCount: number): number {
-  return Math.max(1, Math.ceil(entryCount / JOURNAL_PAGE_SIZE))
-}
+/** "이 사이트와 기록" 장면 id */
+export const SITE_SCENE_ID = 'site'
 
-export function journalSceneId(page: number): string {
-  return page === 0 ? 'journal' : `journal-${page + 1}`
+/** 날짜가 늦은 순서로 최근 기록 count개를 돌려준다. 날짜가 같으면 배열에서 뒤에 있는 것이 더 최근이다. */
+export function recentJournal<T extends { date: string }>(entries: readonly T[], count: number = RECENT_JOURNAL_COUNT): T[] {
+  return entries
+    .map((entry, index) => ({ entry, index }))
+    .sort((a, b) => (a.entry.date === b.entry.date ? b.index - a.index : a.entry.date < b.entry.date ? 1 : -1))
+    .slice(0, count)
+    .map((x) => x.entry)
 }
 
 /** 프로젝트 1개는 장면 1개다. */
@@ -37,28 +41,21 @@ export function projectSceneId(projectId: string): string {
 }
 
 /**
- * 내용에서 장면 계획을 만든다. 예시 내용 기준 장면 10개다.
- * 소개와 이력 / 기술 / 프로젝트 목록 / 프로젝트마다 1개 / 만든 방식 / 시행착오(6개씩) / 연락처.
+ * 내용에서 장면 계획을 만든다. 큰 장면 6개, 프로젝트가 4개이면 장면 9개다.
+ * 소개와 이력 / 기술 / 프로젝트 목록 / 프로젝트마다 1개 / 이 사이트와 기록 / 연락처.
  */
-export function buildScenePlan(data: Pick<Portfolio, 'projects' | 'journal'>): SceneGroup[] {
+export function buildScenePlan(data: Pick<Portfolio, 'projects'>): SceneGroup[] {
   const projectScenes: SceneUnit[] =
     data.projects.length === 0
       ? [{ id: 'project-detail', label: '프로젝트 상세' }]
       : data.projects.map((p) => ({ id: projectSceneId(p.id), label: p.name }))
-
-  const pages = journalPageCount(data.journal.length)
-  const journalScenes: SceneUnit[] = Array.from({ length: pages }, (_, i) => ({
-    id: journalSceneId(i),
-    label: pages === 1 ? '시행착오' : `시행착오 ${i + 1}/${pages}`,
-  }))
 
   return [
     { id: 'intro', title: '소개와 이력', scenes: [{ id: 'intro', label: '소개와 이력' }] },
     { id: 'skills', title: '기술', scenes: [{ id: 'skills', label: '기술' }] },
     { id: 'projects', title: '프로젝트 목록', scenes: [{ id: 'projects', label: '프로젝트 목록' }] },
     { id: 'project-detail', title: '프로젝트 상세', scenes: projectScenes },
-    { id: 'how-built', title: '이 사이트를 만든 방식', scenes: [{ id: 'how-built', label: '이 사이트를 만든 방식' }] },
-    { id: 'journal', title: '시행착오', scenes: journalScenes },
+    { id: SITE_SCENE_ID, title: '이 사이트와 기록', scenes: [{ id: SITE_SCENE_ID, label: '이 사이트와 기록' }] },
     { id: 'contact', title: '연락처', scenes: [{ id: 'contact', label: '연락처' }] },
   ]
 }

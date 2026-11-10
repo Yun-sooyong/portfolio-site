@@ -4,7 +4,7 @@ import { DetailView } from '../features/detail/DetailView'
 import { useDocumentTitle } from './pageHooks'
 
 export function DetailPage() {
-  useDocumentTitle(`${portfolio.profile.name} 포트폴리오 (예시)`)
+  useDocumentTitle(`${portfolio.profile.name} 포트폴리오`)
   useEffect(() => {
     document.documentElement.classList.add('snap')
     return () => document.documentElement.classList.remove('snap')

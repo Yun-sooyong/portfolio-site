@@ -1,116 +1,82 @@
 import type { Project } from '../domain/portfolio'
 
-// 예시 내용이다. 프로젝트를 더하려면 배열에 항목 1개를 추가한다.
-// 단축본(/print)은 앞의 3개만 보인다.
+// 실제 프로젝트 4개다. 프로젝트를 더하려면 배열에 항목 1개를 추가한다.
+// 구성도, 문제와 해결, 배포 같은 자세한 설명은 사이트에 싣지 않고 노션 페이지(notionUrl)로 넘긴다.
+// githubUrl, demoUrl, notionUrl 은 선택이다. 없는 링크는 화면에 보이지 않는다. 주소는 https:// 로 시작한다.
+// 노션 페이지는 아직 비공개라 notionUrl 을 넣지 않았다. 단축본(/print)은 프로젝트 앞의 4개만 보인다.
+// 숫자는 각 저장소 README 에 적힌 값만 쓴다.
 
 export const projects: Project[] = [
   {
-    id: 'moasseugi',
-    name: '모아쓰기 (가계부 API)',
-    kind: '개인',
-    period: '2025.08 – 2025.10',
-    coreStack: ['Kotlin', 'PostgreSQL'],
-    coreStackIcons: { Kotlin: 'kotlin', PostgreSQL: 'postgresql' },
-    summary: '지출 내역을 기록하고 월별로 모아 보여 주는 개인용 가계부 API 서버.',
-    overview:
-      '엑셀로 쓰던 가계부를 API 서버로 옮겼다. 지출 등록, 분류별 월 합계, 예산 초과 알림 조회를 제공한다.',
-    role: '기획, 설계, 구현, 배포를 혼자 맡았다. ERD 설계부터 CI 구성까지 직접 했다.',
-    features: [
-      '지출 등록, 수정, 삭제와 분류 관리',
-      '월별·분류별 합계 조회',
-      '분류별 예산을 넘으면 조회 응답에 경고 표시',
-    ],
-    architecture: [
-      { label: '클라이언트', note: 'HTTP 요청' },
-      { label: 'Spring Boot API', note: '인증, 검증, 집계' },
-      { label: 'PostgreSQL', note: '지출·분류·예산' },
-    ],
-    problems: [
-      {
-        problem: '지출이 5만 건일 때 월별 목록 조회가 p95 120ms로 느렸다.',
-        solution: '날짜와 분류를 묶은 복합 인덱스를 추가하고 N+1 조회를 한 번의 조인으로 바꿨다.',
-      },
-      {
-        problem: '시간대 때문에 월말 지출이 다음 달 합계에 들어갔다.',
-        solution: '저장은 UTC, 집계는 사용자 시간대로 바꾸고 경계 날짜 시험 6개를 추가했다.',
-      },
-    ],
-    deploy: 'Docker 이미지를 GitHub Actions에서 빌드하고, 시험이 통과하면 개인 서버에 배포한다.',
-    results: [
-      { value: '45ms', label: '월별 목록 조회 p95 (이전 120ms)' },
-      { value: '82%', label: '시험 코드 줄 커버리지' },
-      { value: '27개', label: 'API 엔드포인트' },
-    ],
-    links: [{ label: '모아쓰기 저장소 (예시)', url: 'https://github.com/example/moasseugi' }],
-  },
-  {
-    id: 'bookshop-stock',
-    name: '동네책방 재고 관리',
+    id: 'empatho',
+    name: 'EMPATHO (유방암 검진 경로 CDSS)',
     kind: '팀',
-    period: '2025.03 – 2025.05, 4인',
-    coreStack: ['Spring Boot', 'MySQL'],
-    coreStackIcons: { 'Spring Boot': 'springboot', MySQL: 'mysql' },
-    summary: '동네 책방 3곳의 입고, 판매, 재고를 한 곳에서 보는 웹 서비스.',
+    period: '2026.08 – 2026.10, 5인',
+    coreStack: ['FastAPI', 'Docker'],
+    coreStackIcons: { FastAPI: 'fastapi', Docker: 'docker' },
+    summary: '유방 영상과 병리 슬라이드의 AI 판독을 돕는 병원용 웹 서비스.',
     overview:
-      '책방마다 따로 적던 재고 장부를 하나의 서비스로 합쳤다. 입고와 판매를 기록하면 재고가 자동으로 맞춰진다.',
-    role: '백엔드 담당 2명 중 1명. 재고 도메인과 주문 API, DB 설계, API 명세 32개를 맡았다.',
-    features: [
-      '입고·판매 기록과 실시간 재고 계산',
-      '재고 부족 도서 목록',
-      '책방별 권한 구분',
-    ],
-    architecture: [
-      { label: 'React 화면', note: '팀원 담당' },
-      { label: 'Spring Boot API', note: '재고·주문' },
-      { label: 'MySQL', note: '도서·재고·기록' },
-    ],
-    problems: [
-      {
-        problem: '두 책방이 같은 도서를 동시에 판매하면 재고가 음수가 됐다.',
-        solution: '재고 행에 낙관적 락을 걸고, 충돌 시 한 번 재시도하도록 바꿨다. 동시 요청 시험으로 확인했다.',
-      },
-    ],
-    deploy: '팀 공용 클라우드 VM에 Docker Compose로 배포했다. 배포 순서는 README에 적었다.',
+      '맘모그래피, 초음파, MRI, 병리 영상을 판독하고 소견문 초안을 만든다. AI 결과는 제안이고 최종 판정은 의사가 한다.',
+    role: '팀장으로 통합 추론 서버, 판독 파이프라인, 인프라, 자동 배포를 맡았다. 병리 sTIL 추론과 소견문 서버, 환자 앱도 만들었다.',
     results: [
-      { value: '32개', label: '작성한 API 명세' },
-      { value: '주 5건 → 1건', label: '팀원의 API 사용법 질문' },
-      { value: '0건', label: '동시성 시험 100회 중 음수 재고' },
+      { value: '13,602 → 4,148MiB', label: '영상 종류별 모델을 백본 1벌 + LoRA 교체로 합친 뒤 GPU 메모리 (약 70% 감소)' },
+      { value: '0.06~0.28초', label: 'LoRA 어댑터 교체 시간. 교체 전후 결과가 비트 단위로 같다' },
+      { value: '50회 중 50회', label: '같은 입력으로 소견문을 생성했을 때 같은 결과 (판독 수치 150개 보존)' },
     ],
-    links: [{ label: '동네책방 재고 관리 저장소 (예시)', url: 'https://github.com/example/bookshop-stock' }],
+    githubUrl: 'https://github.com/Yun-sooyong/empatho',
   },
   {
-    id: 'this-portfolio',
-    name: '이 포트폴리오 사이트',
-    kind: '개인',
-    period: '2026.11, 1일',
-    coreStack: ['React', 'TypeScript'],
-    coreStackIcons: { React: 'react', TypeScript: 'typescript' },
-    summary: '내용과 화면을 나누고 보안 헤더와 CI를 갖춘 정적 포트폴리오.',
+    id: 'pathology-cdss',
+    name: '병리영상 분석 CDSS',
+    kind: '팀',
+    period: '2026.07, 5인',
+    coreStack: ['Django', 'Google Cloud'],
+    coreStackIcons: { Django: 'django', 'Google Cloud': 'googlecloud' },
+    summary: '병리 이미지의 sTIL 비율을 계산하고 불확실하면 판정을 유보한다.',
     overview:
-      '노션 포트폴리오를 대신하는 정적 사이트다. 상세본과 A4 단축본이 같은 내용 파일을 읽는다.',
-    role: '설계, 구현, 시험, 배포 설정을 혼자 맡았다. 설계 문서를 먼저 쓰고 그대로 구현했다.',
-    features: [
-      '장면 10개로 나눈 상세본과 A4 2쪽 단축본',
-      '한 칸씩 넘어가는 장면 전환과 reduced-motion 대응',
-      '내용 형식을 검사하는 시험',
-    ],
-    architecture: [
-      { label: 'src/content', note: '내용 데이터' },
-      { label: 'features, ui', note: '장면 화면 부품' },
-      { label: 'Vercel', note: '정적 배포와 보안 헤더' },
-    ],
-    problems: [
-      {
-        problem: '이메일을 화면에서 조립하는 컴포넌트가 lint 규칙(effect 안 setState)에 걸렸다.',
-        solution: 'useSyncExternalStore로 바꿨다. 서버 렌더링 값은 null이라 HTML 원문에 주소가 남지 않는다. 시험으로 확인했다.',
-      },
-    ],
-    deploy: 'GitHub에 push하면 Vercel이 배포한다. CI는 lint, 타입 검사, 시험, 빌드, 취약점 검사를 돈다.',
+      '이미지를 서명 URL로 GCS에 바로 올리고, Cloud Tasks가 워커와 GPU 추론을 잇는다.',
+    role: 'Django REST API와 GCP 인프라를 맡았다. API는 Cloud Run 서울 리전에 배포했다.',
     results: [
-      { value: '0개', label: '외부 도메인 요청 (글꼴·스크립트 모두 자체 제공)' },
-      { value: '6단계', label: 'push마다 CI가 돌리는 검사 (설치, lint, 타입 검사, 시험, 빌드, 취약점 검사)' },
-      { value: '1곳', label: '내용을 고치는 폴더 (src/content). 상세본과 단축본이 함께 읽는다' },
+      { value: '54장', label: '32MB를 넘는 이미지도 업로드 (실측 151장, 최대 141.1MB)' },
+      { value: '7개', label: '프런트, 워커, DB 사이 계약을 묶은 DRF API 경로' },
+      { value: '5단계', label: '이미지 1장마다 추적하는 처리 상태' },
     ],
-    links: [{ label: '포트폴리오 사이트 저장소 (예시)', url: 'https://github.com/example/portfolio' }],
+    githubUrl: 'https://github.com/Yun-sooyong/pathology-cdss',
+  },
+  {
+    id: 'cdss-tablet-app',
+    name: '의료영상 분석 플랫폼 태블릿 앱',
+    kind: '팀',
+    period: '2026.08, 5인',
+    coreStack: ['Flutter', 'Firebase'],
+    coreStackIcons: { Flutter: 'flutter', Firebase: 'firebase' },
+    summary: '의료진이 태블릿에서 병리 이미지 분석을 요청하고 결과를 확인하는 앱.',
+    overview:
+      '환자 선택, 이미지 업로드, 분석 진행, 결과 확인과 판정 유보 확정을 한 흐름으로 묶었다. 분석이 끝나면 푸시 알림(FCM)으로 알린다.',
+    role: '의료진 태블릿 앱 전체와 앱 공유 패키지를 혼자 맡았다. 화면, 상태 관리, API 클라이언트, 업로드, 푸시 알림을 만들었다.',
+    results: [
+      { value: '9개', label: '화면 (로그인, 배치 목록과 상세, 판독 결과, 새 분석, QR 환자 확인, 알림, 채팅)' },
+      { value: '5개', label: '상태 관리(Riverpod) provider (인증, 업로드, 배치 목록, 알림, 환자 검색)' },
+      { value: '1번', label: '동시에 401 응답이 와도 토큰 갱신 횟수' },
+    ],
+    githubUrl: 'https://github.com/Yun-sooyong/cdss-tablet-app',
+  },
+  {
+    id: 'recare-dm',
+    name: 'ReCare-DM (당뇨 재입원 관리)',
+    kind: '팀',
+    period: '2026.06, 5인',
+    coreStack: ['Django', 'LightGBM'],
+    coreStackIcons: { Django: 'django' },
+    summary: '당뇨 환자의 재입원 위험과 퇴원 준비 점수를 보는 대시보드.',
+    overview:
+      '재입원 확률 옆에 위험 요인과 보호 요인을 SHAP 값으로 함께 보여 준다. 퇴원 뒤 재방문 정보를 넣으면 위험을 다시 계산한다.',
+    role: '퇴원 관리 앱(discharge), 환자 모델 수정, 재방문 재예측, 앱 통합을 맡았다. 5일 동안 팀 커밋 116개 중 53개를 썼다.',
+    results: [
+      { value: '5개 × 20점', label: '퇴원 준비 점수 항목과 배점 (100점 만점)' },
+      { value: '53 / 116개', label: '팀 전체 커밋 중 내 커밋' },
+      { value: '5개 + 5개', label: '예측마다 보여 주는 SHAP 위험 요인과 보호 요인' },
+    ],
+    githubUrl: 'https://github.com/Yun-sooyong/recare-dm',
   },
 ]

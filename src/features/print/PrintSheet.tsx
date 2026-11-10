@@ -1,11 +1,11 @@
 import type { Portfolio } from '../../domain/portfolio'
 import { ObfuscatedEmail } from '../../ui/ObfuscatedEmail'
-import { ExampleBadge } from '../../ui/ExampleBadge'
+import { projectLinkItems } from '../../domain/links'
 
-/** 단축본(A4). 소개, 경력·학력, 기술 요약, 프로젝트 상위 3개, 연락처. */
+/** 단축본(A4). 소개, 경력·학력, 기술 요약, 프로젝트 상위 4개, 연락처. */
 export function PrintSheet({ data }: { data: Portfolio }) {
   const { profile, background, skillGroups, projects, contact } = data
-  const top = projects.slice(0, 3)
+  const top = projects.slice(0, 4)
 
   return (
     <main className="print-page" id="main" tabIndex={-1}>
@@ -19,17 +19,13 @@ export function PrintSheet({ data }: { data: Portfolio }) {
       <article className="sheet">
         <header className="sheet-header">
           <h1>{profile.name}</h1>
-          <p>
-            {profile.role}, {profile.region}
-          </p>
+          <p>{profile.role}</p>
           <p>
             <ObfuscatedEmail user={contact.email.user} domain={contact.email.domain} />
             {' / '}
             {contact.github.replace('https://', '')}
           </p>
         </header>
-
-        <ExampleBadge className="sheet-example" />
 
         <section>
           <h2>소개</h2>
@@ -58,11 +54,13 @@ export function PrintSheet({ data }: { data: Portfolio }) {
             ))}
             {background.trainings.map((t) => (
               <li key={t.name}>
-                <strong>{t.name}</strong> {t.org}, {t.period}
+                <strong>{t.name}</strong> {t.org}, {t.period}. {t.summary} 배운 기술: {t.stack.join(', ')}.
+                {t.study ? ` 스터디: ${t.study}` : ''}
               </li>
             ))}
             <li>
-              <strong>자격증</strong> {background.certificates.map((c) => `${c.name}(${c.date})`).join(', ')}
+              <strong>자격증</strong>{' '}
+              {background.certificates.map((c) => `${c.name}(${c.date}${c.status ? `, ${c.status}` : ''})`).join(', ')}
             </li>
           </ul>
         </section>
@@ -80,30 +78,49 @@ export function PrintSheet({ data }: { data: Portfolio }) {
 
         <section>
           <h2>프로젝트</h2>
-          {top.map((p) => (
-            <article key={p.id} className="sheet-project">
-              <h3>
-                {p.name} <span>{p.kind}, {p.period}</span>
-              </h3>
-              <dl>
-                <dt>개요</dt>
-                <dd>{p.summary}</dd>
-                <dt>역할</dt>
-                <dd>{p.role}</dd>
-                <dt>문제 해결</dt>
-                <dd>{p.problems[0] ? `${p.problems[0].problem} ${p.problems[0].solution}` : '해당 없음'}</dd>
-                <dt>결과</dt>
-                <dd>{p.results.map((r) => `${r.value} ${r.label}`).join(', ')}</dd>
-              </dl>
-            </article>
-          ))}
+          {top.map((p) => {
+            const links = projectLinkItems(p)
+            return (
+              <article key={p.id} className="sheet-project">
+                <h3>
+                  {p.name} <span>{p.kind}, {p.period}</span>
+                </h3>
+                <dl>
+                  <dt>개요</dt>
+                  <dd>{p.summary}</dd>
+                  <dt>소개</dt>
+                  <dd>{p.overview}</dd>
+                  <dt>기술</dt>
+                  <dd>{p.coreStack.join(', ')}</dd>
+                  <dt>역할</dt>
+                  <dd>{p.role}</dd>
+                  <dt>성과</dt>
+                  <dd>{p.results.map((r) => `${r.value} ${r.label}`).join(', ')}</dd>
+                  {links.length > 0 ? (
+                    <>
+                      <dt>링크</dt>
+                      <dd>
+                        {/* 인쇄에서 주소가 보이도록 링크 글자에 주소를 그대로 쓴다. */}
+                        {links.map((l, i) => (
+                          <span key={l.kind} className="sheet-link">
+                            {i > 0 ? ' / ' : ''}
+                            {l.label}: <a href={l.url}>{l.url.replace('https://', '')}</a>
+                          </span>
+                        ))}
+                      </dd>
+                    </>
+                  ) : null}
+                </dl>
+              </article>
+            )
+          })}
         </section>
 
         <section>
           <h2>연락처</h2>
           <p>
-            <ObfuscatedEmail user={contact.email.user} domain={contact.email.domain} />, GitHub {contact.github.replace('https://', '')}, 블로그{' '}
-            {contact.blog.replace('https://', '')}
+            <ObfuscatedEmail user={contact.email.user} domain={contact.email.domain} />, GitHub {contact.github.replace('https://', '')}
+            {contact.blog ? `, 블로그 ${contact.blog.replace('https://', '')}` : ''}
           </p>
         </section>
       </article>

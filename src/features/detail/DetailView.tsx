@@ -1,5 +1,5 @@
 import { useMemo } from 'react'
-import { MAX_FLAT_DOTS, buildScenePlan, flattenSceneIds } from '../../domain/scenes'
+import { MAX_FLAT_DOTS, SITE_SCENE_ID, buildScenePlan, flattenSceneIds } from '../../domain/scenes'
 import type { Portfolio } from '../../domain/portfolio'
 import { SceneNav } from '../../ui/SceneNav'
 import { useActiveScene } from '../../ui/useActiveScene'
@@ -7,7 +7,7 @@ import { IntroScene } from './IntroScene'
 import { SkillsScene } from './SkillsScene'
 import { ProjectListScene } from './ProjectListScene'
 import { ProjectDetailScenes } from './ProjectScenes'
-import { ContactScene, HowBuiltScene, JournalScenes } from './TailScenes'
+import { ContactScene, SiteScene } from './TailScenes'
 
 /** 상세본. 장면 계획에 따라 화면 한 칸씩 보인다. */
 export function DetailView({ data }: { data: Portfolio }) {
@@ -37,8 +37,7 @@ export function DetailView({ data }: { data: Portfolio }) {
         <SkillsScene groups={data.skillGroups} id="skills" title={title('skills')} />
         <ProjectListScene projects={data.projects} id="projects" title={title('projects')} />
         <ProjectDetailScenes projects={data.projects} id="project-detail" title={title('project-detail')} />
-        <HowBuiltScene data={data.howBuilt} />
-        <JournalScenes entries={data.journal} title={title('journal')} />
+        <SiteScene data={data.howBuilt} journal={data.journal} id={SITE_SCENE_ID} title={title(SITE_SCENE_ID)} />
         <ContactScene contact={data.contact} id="contact" title={title('contact')} />
       </main>
     </>
