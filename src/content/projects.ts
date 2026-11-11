@@ -3,7 +3,7 @@ import type { Project } from '../domain/portfolio'
 // 실제 프로젝트 4개다. 프로젝트를 더하려면 배열에 항목 1개를 추가한다.
 // 구성도, 문제와 해결, 배포 같은 자세한 설명은 사이트에 싣지 않고 노션 페이지(notionUrl)로 넘긴다.
 // githubUrl, demoUrl, notionUrl 은 선택이다. 없는 링크는 화면에 보이지 않는다. 주소는 https:// 로 시작한다.
-// 노션 페이지는 아직 비공개라 notionUrl 을 넣지 않았다. 단축본(/print)은 프로젝트 앞의 4개만 보인다.
+// 노션 페이지는 yun-sooyong.notion.site 에 게시했다. 단축본(/print)은 프로젝트 앞의 4개만 보인다.
 // 숫자는 각 저장소 README 에 적힌 값만 쓴다.
 
 export const projects: Project[] = [
@@ -24,6 +24,7 @@ export const projects: Project[] = [
       { value: '50회 중 50회', label: '같은 입력으로 소견문을 생성했을 때 같은 결과 (판독 수치 150개 보존)' },
     ],
     githubUrl: 'https://github.com/Yun-sooyong/empatho',
+    notionUrl: 'https://yun-sooyong.notion.site/40f258595efe81c3ba39f8391b97bc77',
   },
   {
     id: 'pathology-cdss',
@@ -42,6 +43,7 @@ export const projects: Project[] = [
       { value: '5단계', label: '이미지 1장마다 추적하는 처리 상태' },
     ],
     githubUrl: 'https://github.com/Yun-sooyong/pathology-cdss',
+    notionUrl: 'https://yun-sooyong.notion.site/414258595efe815abec9d3e2a104879e',
   },
   {
     id: 'cdss-tablet-app',
@@ -60,6 +62,7 @@ export const projects: Project[] = [
       { value: '1번', label: '동시에 401 응답이 와도 토큰 갱신 횟수' },
     ],
     githubUrl: 'https://github.com/Yun-sooyong/cdss-tablet-app',
+    notionUrl: 'https://yun-sooyong.notion.site/414258595efe81e8b1ddc784f4a32744',
   },
   {
     id: 'recare-dm',
@@ -78,5 +81,6 @@ export const projects: Project[] = [
       { value: '5개 + 5개', label: '예측마다 보여 주는 SHAP 위험 요인과 보호 요인' },
     ],
     githubUrl: 'https://github.com/Yun-sooyong/recare-dm',
+    notionUrl: 'https://yun-sooyong.notion.site/414258595efe814289fdf7614f238287',
   },
 ]

@@ -89,9 +89,9 @@ describe('주소', () => {
       if (p.notionUrl) expect(text).toContain(p.notionUrl.replace('https://', ''))
       if (p.demoUrl) expect(text).toContain(p.demoUrl.replace('https://', ''))
     }
-    // "데모:" 는 데모가 있는 프로젝트 수만큼만 나온다(지금은 0개).
+    // "데모 " 는 데모가 있는 프로젝트 수만큼만 나온다(지금은 0개).
     const demoCount = portfolio.projects.slice(0, 4).filter((p) => p.demoUrl).length
-    expect(text.match(/데모: /g) ?? []).toHaveLength(demoCount)
+    expect(text.match(/데모 /g) ?? []).toHaveLength(demoCount)
     // 구성도, 문제 해결은 단축본에서도 뺀다.
     expect(text).not.toContain('문제 해결')
     // 교육 이력의 배운 기술, 스터디, 자격증 진행 상태

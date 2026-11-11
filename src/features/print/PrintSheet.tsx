@@ -2,6 +2,8 @@ import type { Portfolio } from '../../domain/portfolio'
 import { ObfuscatedEmail } from '../../ui/ObfuscatedEmail'
 import { projectLinkItems } from '../../domain/links'
 
+const shortLabel = { github: 'GitHub', demo: '데모', notion: '노션' } as const
+
 /** 단축본(A4). 소개, 경력·학력, 기술 요약, 프로젝트 상위 4개, 연락처. */
 export function PrintSheet({ data }: { data: Portfolio }) {
   const { profile, background, skillGroups, projects, contact } = data
@@ -100,11 +102,11 @@ export function PrintSheet({ data }: { data: Portfolio }) {
                     <>
                       <dt>링크</dt>
                       <dd>
-                        {/* 인쇄에서 주소가 보이도록 링크 글자에 주소를 그대로 쓴다. */}
+                        {/* 한 줄로 합친다. 인쇄에서 주소가 보이도록 https:// 만 빼고 주소를 글자로 쓴다. */}
                         {links.map((l, i) => (
                           <span key={l.kind} className="sheet-link">
-                            {i > 0 ? ' / ' : ''}
-                            {l.label}: <a href={l.url}>{l.url.replace('https://', '')}</a>
+                            {i > 0 ? ' · ' : ''}
+                            {shortLabel[l.kind]} <a href={l.url}>{l.url.replace('https://', '')}</a>
                           </span>
                         ))}
                       </dd>

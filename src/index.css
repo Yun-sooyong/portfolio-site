@@ -942,8 +942,8 @@ a:hover {
   padding: 14mm;
   background: #fff;
   color: #000;
-  font-size: 10.5pt;
-  line-height: 1.5;
+  font-size: 9.5pt;
+  line-height: 1.42;
   word-break: keep-all;
   box-shadow: 0 0 0 1px rgb(0 0 0 / 0.15);
 }
@@ -958,7 +958,7 @@ a:hover {
   line-height: 1.15;
 }
 .sheet h2 {
-  margin: 12pt 0 3pt;
+  margin: 9pt 0 3pt;
   padding-bottom: 2pt;
   font-size: 12pt;
   font-weight: 800;
@@ -968,7 +968,7 @@ a:hover {
 }
 .sheet h3 {
   margin: 0 0 2pt;
-  font-size: 10.5pt;
+  font-size: 10pt;
   font-weight: 700;
 }
 .sheet h3 span {
@@ -988,7 +988,7 @@ a:hover {
   margin-bottom: 1.5pt;
 }
 .sheet-project {
-  margin-bottom: 7pt;
+  margin-bottom: 5pt;
   break-inside: avoid;
 }
 .sheet-project dl {
