@@ -2,7 +2,9 @@ import { existsSync, readdirSync, readFileSync } from 'node:fs'
 import { resolve } from 'node:path'
 import { portfolio } from '../content'
 import { projectLinkItems } from '../domain/links'
-import { MAX_FLAT_DOTS, RECENT_JOURNAL_COUNT, buildScenePlan, flattenSceneIds, recentJournal } from '../domain/scenes'
+import { RECENT_JOURNAL_COUNT, recentJournal } from '../domain/journal'
+import { SECTIONS, SECTION_IDS } from '../domain/sections'
+import { buildCareerPath } from '../domain/career'
 
 const { profile, projects, contact, journal, howBuilt, background } = portfolio
 
@@ -139,41 +141,46 @@ describe('내용 형식', () => {
     }
   })
 
-  it('큰 장면 6개이고 하위 장면 id가 겹치지 않는다. 시행착오는 따로 장면을 만들지 않는다', () => {
-    const plan = buildScenePlan(portfolio)
-    expect(plan.map((g) => g.id)).toEqual(['intro', 'skills', 'projects', 'project-detail', 'site', 'contact'])
-    expect(plan.find((g) => g.id === 'site')?.title).toBe('이 사이트와 기록')
-    const ids = flattenSceneIds(plan)
-    expect(ids).toHaveLength(5 + projects.length)
-    expect(new Set(ids).size).toBe(ids.length)
-    expect(ids.some((id) => id.startsWith('journal'))).toBe(false)
-    for (const g of plan) expect(g.scenes.length).toBeGreaterThan(0)
+  it('구역은 6개이고 번호와 id가 겹치지 않으며 순서가 소개, 기술, 프로젝트, 이력, 기록, 연락처이다', () => {
+    expect(SECTION_IDS).toEqual(['about', 'skills', 'projects', 'career', 'record', 'contact'])
+    expect(SECTIONS.map((s) => s.no)).toEqual(['01', '02', '03', '04', '05', '06'])
+    expect(SECTIONS.map((s) => s.label)).toEqual(['소개', '기술', '프로젝트', '이력', '기록', '연락처'])
+    expect(new Set(SECTION_IDS).size).toBe(SECTION_IDS.length)
   })
 
-  it('프로젝트마다 장면 1개이고, 장면 순서는 소개, 기술, 목록, 프로젝트들, 사이트와 기록, 연락처이다', () => {
-    const plan = buildScenePlan(portfolio)
-    const detail = plan.find((g) => g.id === 'project-detail')!
-    expect(detail.scenes.map((s) => s.id)).toEqual(projects.map((p) => `project-${p.id}`))
-    expect(flattenSceneIds(plan)).toEqual([
-      'intro',
-      'skills',
-      'projects',
-      ...projects.map((p) => `project-${p.id}`),
-      'site',
-      'contact',
-    ])
-    expect(MAX_FLAT_DOTS).toBe(12)
+  it('성과 숫자는 6개이고 강조 칸과 최근 결과 칸이 1개씩이다', () => {
+    const { highlights } = portfolio
+    expect(highlights).toHaveLength(6)
+    expect(new Set(highlights.map((h) => h.id)).size).toBe(6)
+    expect(highlights.filter((h) => h.accent)).toHaveLength(1)
+    expect(highlights.filter((h) => h.award)).toHaveLength(1)
   })
 
-  it('프로젝트 수만 장면 수를 바꾼다. 시행착오 수는 영향이 없다', () => {
-    const p = projects[0]!
-    const mk = (nProjects: number) =>
-      flattenSceneIds(buildScenePlan({ projects: Array.from({ length: nProjects }, (_, i) => ({ ...p, id: `p${i}` })) })).length
-    // 소개와 이력 + 기술 + 프로젝트 목록 + 프로젝트 N + 이 사이트와 기록 + 연락처
-    expect(mk(3)).toBe(5 + 3)
-    expect(mk(5)).toBe(5 + 5)
-    // 프로젝트가 없으면 빈 상태 장면 1개가 남는다.
-    expect(mk(0)).toBe(5 + 1)
+  it('성과 숫자의 출처가 있고, 프로젝트가 출처이면 그 숫자가 프로젝트 results 에도 있다', () => {
+    for (const h of portfolio.highlights) {
+      if (h.source === 'profile') {
+        expect(profile.intro.join(' ')).toContain(h.value)
+        continue
+      }
+      const p = projects.find((x) => x.id === h.source)
+      expect(p, `${h.id} 의 출처 ${h.source}`).toBeDefined()
+      const resultText = p!.results.map((r) => `${r.value} ${r.label}`).join(' ') + ' ' + p!.role
+      for (const num of h.value.match(/\d[\d,.]*/g) ?? []) expect(resultText, `${h.id}: ${num}`).toContain(num)
+    }
+  })
+
+  it('첫 화면 문구는 큰 제목 3줄이고 띠 3칸의 출처가 있다', () => {
+    expect(portfolio.home.headline).toHaveLength(3)
+    expect(portfolio.home.band).toHaveLength(3)
+    for (const b of portfolio.home.band) expect(projects.some((p) => p.id === b.source)).toBe(true)
+  })
+
+  it('경력 경로는 시기 순서이고 마지막 단계만 current 이다', () => {
+    const path = buildCareerPath(background)
+    const starts = path.map((s) => s.start)
+    expect(starts).toEqual([...starts].sort((a, b) => a - b))
+    expect(path.filter((s) => s.current)).toHaveLength(1)
+    expect(path.at(-1)?.current).toBe(true)
   })
 })
 

@@ -1,45 +1,41 @@
-import { useMemo } from 'react'
-import { MAX_FLAT_DOTS, SITE_SCENE_ID, buildScenePlan, flattenSceneIds } from '../../domain/scenes'
 import type { Portfolio } from '../../domain/portfolio'
-import { SceneNav } from '../../ui/SceneNav'
-import { useActiveScene } from '../../ui/useActiveScene'
-import { IntroScene } from './IntroScene'
-import { SkillsScene } from './SkillsScene'
-import { ProjectListScene } from './ProjectListScene'
-import { ProjectDetailScenes } from './ProjectScenes'
-import { ContactScene, SiteScene } from './TailScenes'
+import { SECTION_IDS } from '../../domain/sections'
+import { useActiveSection } from '../../ui/useActiveSection'
+import { Header } from './Header'
+import { Hero } from './Hero'
+import { AboutSection } from './AboutSection'
+import { SkillsSection } from './SkillsSection'
+import { ProjectsSection } from './ProjectsSection'
+import { CareerSection } from './CareerSection'
+import { RecordSection } from './RecordSection'
+import { ContactSection } from './ContactSection'
 
-/** 상세본. 장면 계획에 따라 화면 한 칸씩 보인다. */
+/** 상세본. 보통 스크롤 한 페이지다. 첫 화면 다음에 구역 6개가 이어진다. */
 export function DetailView({ data }: { data: Portfolio }) {
-  const plan = useMemo(() => buildScenePlan(data), [data])
-  const ids = useMemo(() => flattenSceneIds(plan), [plan])
-  const active = useActiveScene(ids)
-  const stack = useMemo(() => {
-    const byName = new Map<string, { name: string; icon?: string }>()
-    for (const p of data.projects) {
-      for (const name of p.coreStack) {
-        if (!byName.has(name)) byName.set(name, { name, icon: p.coreStackIcons?.[name] })
-      }
-    }
-    return [...byName.values()]
-  }, [data.projects])
-  const title = (id: string) => plan.find((g) => g.id === id)?.title ?? id
-
+  const active = useActiveSection(SECTION_IDS)
   return (
     <>
-      <div className="backdrop" aria-hidden="true" />
       <a href="#main" className="skip-link">
         본문으로 건너뛰기
       </a>
-      <SceneNav groups={plan} activeId={active} maxFlatDots={MAX_FLAT_DOTS} />
+      <Header name={data.profile.name} activeId={active} />
       <main id="main" tabIndex={-1}>
-        <IntroScene profile={data.profile} background={data.background} stack={stack} id="intro" title={title('intro')} />
-        <SkillsScene groups={data.skillGroups} id="skills" title={title('skills')} />
-        <ProjectListScene projects={data.projects} id="projects" title={title('projects')} />
-        <ProjectDetailScenes projects={data.projects} id="project-detail" title={title('project-detail')} />
-        <SiteScene data={data.howBuilt} journal={data.journal} id={SITE_SCENE_ID} title={title(SITE_SCENE_ID)} />
-        <ContactScene contact={data.contact} id="contact" title={title('contact')} />
+        <Hero data={data} />
+        <AboutSection data={data} />
+        <SkillsSection groups={data.skillGroups} />
+        <ProjectsSection projects={data.projects} />
+        <CareerSection background={data.background} />
+        <RecordSection data={data.howBuilt} journal={data.journal} />
+        <ContactSection contact={data.contact} />
       </main>
+      <footer className="site-footer">
+        <div className="wrap footer-row">
+          <p>
+            {data.profile.name} · {data.profile.role}
+          </p>
+          <a href="#top">맨 위로</a>
+        </div>
+      </footer>
     </>
   )
 }

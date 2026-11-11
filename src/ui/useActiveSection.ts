@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 
-/** 화면 가운데 선을 지나는 장면을 지금 장면으로 정한다. */
-export function useActiveScene(ids: readonly string[]): string {
-  const [active, setActive] = useState(ids[0] ?? '')
+/** 화면 가운데 선을 지나는 구역을 지금 구역으로 정한다. 첫 화면에서는 빈 글자다. */
+export function useActiveSection(ids: readonly string[]): string {
+  const [active, setActive] = useState('')
 
   useEffect(() => {
     if (typeof IntersectionObserver === 'undefined') return

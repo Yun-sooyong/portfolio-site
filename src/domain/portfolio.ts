@@ -137,6 +137,30 @@ export interface JournalEntry {
   fix: string
 }
 
+/** 성과 숫자 칸 1개. 숫자는 프로젝트와 프로필에 적힌 사실만 쓴다. */
+export interface Highlight {
+  id: string
+  /** 큰 글자로 보이는 값. 예: "0.06~0.28" */
+  value: string
+  /** 값 뒤에 작게 붙는 단위(선택). 예: "초" */
+  unit?: string
+  /** 짧은 설명 */
+  caption: string
+  /** 출처. 프로젝트 id 이거나 'profile' */
+  source: string
+  /** 강조색으로 채우는 칸이면 true. 1개만 둔다 */
+  accent?: boolean
+  /** 첫 화면 카드의 "최근 결과"에 쓰는 칸이면 true. 1개만 둔다 */
+  award?: boolean
+}
+
+/** 첫 화면의 큰 제목과 3칸 띠 */
+export interface HomeCopy {
+  /** 큰 제목 3줄. 마지막 줄만 강조색 */
+  headline: [string, string, string]
+  band: { label: string; line: string; source: string }[]
+}
+
 export interface Portfolio {
   profile: Profile
   background: Background
@@ -145,4 +169,6 @@ export interface Portfolio {
   contact: Contact
   howBuilt: HowBuilt
   journal: JournalEntry[]
+  highlights: Highlight[]
+  home: HomeCopy
 }
