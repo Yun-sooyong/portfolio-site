@@ -29,9 +29,9 @@ export const background: Background = {
   careers: [
     {
       org: '탄동농업협동조합',
-      role: '주임 (식품·음료 판매)',
+      role: '주임 (과일 판매)',
       period: '2024.02 – 2026.02',
-      summary: '식품·음료 재고 관리와 발주, 입출고와 물류, 고객 응대를 맡았다.',
+      summary: '과일 재고 관리와 발주, 입출고와 물류, 고객 응대를 맡았다.',
     },
   ],
   educations: [

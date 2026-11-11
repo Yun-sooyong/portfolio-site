@@ -72,7 +72,7 @@ export function PrintSheet({ data }: { data: Portfolio }) {
           <ul>
             {skillGroups.map((g) => (
               <li key={g.title}>
-                <strong>{g.title}.</strong> {g.skills.map((s) => s.name).join(', ')}
+                <strong>{g.title}.</strong> {g.skills.map((s) => s.printName ?? s.techs.map((t) => t.name).join(' / ')).join(', ')}
               </li>
             ))}
           </ul>

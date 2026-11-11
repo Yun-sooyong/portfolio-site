@@ -1,4 +1,4 @@
-import { TechIcons } from '../../ui/TechIcon'
+import { Chip } from '../../ui/Chip'
 import { EmptyNote } from '../../ui/EmptyNote'
 import type { SkillGroup } from '../../domain/portfolio'
 import { SectionHead } from './SectionHead'
@@ -16,10 +16,13 @@ export function SkillsSection({ groups }: { groups: SkillGroup[] }) {
               <h3 className="card-title">{g.title}</h3>
               <dl className="skill-list">
                 {g.skills.map((s) => (
-                  <div key={s.name}>
-                    <dt className="chip font-mono">
-                      <TechIcons icon={s.icon} />
-                      {s.name}
+                  <div key={s.techs.map((t) => t.name).join('/')}>
+                    <dt className="chip-row">
+                      {s.techs.map((t) => (
+                        <Chip key={t.name} icon={t.icon}>
+                          {t.name}
+                        </Chip>
+                      ))}
                     </dt>
                     <dd>{s.can}</dd>
                     {s.lacks ? <dd>아직 부족한 것: {s.lacks}</dd> : null}

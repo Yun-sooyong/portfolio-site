@@ -4,13 +4,13 @@ import { ExternalLink } from '../../ui/ExternalLink'
 import { ObfuscatedEmail } from '../../ui/ObfuscatedEmail'
 import { SectionHead } from './SectionHead'
 
-/** 06 연락처. 큰 문장 1개, 이메일, GitHub, 단축본 PDF 링크. */
+/** 연락처(번호 없음). 제목 "연락처" 1개, 이메일, GitHub, 단축본 PDF 링크. */
 export function ContactSection({ contact }: { contact: Contact }) {
   const host = (url: string) => url.replace(/^https:\/\//, '')
   return (
-    <section className="section" id="contact" aria-labelledby="contact-title">
+    <section className="section section-contact" id="contact" aria-labelledby="contact-title">
       <div className="wrap">
-        <SectionHead id="contact" title="의료 AI 서비스를 함께 만들 팀을 찾습니다." large />
+        <SectionHead id="contact" title="연락처" />
         <ul className="contact-list">
           <li>
             <p className="contact-label label-mono">이메일</p>

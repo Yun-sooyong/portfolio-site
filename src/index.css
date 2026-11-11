@@ -28,6 +28,12 @@
   --accent-fill: #c8d8a4;
   --on-accent: #1f3326;
   --header-bg: rgb(243 244 238 / 0.86);
+  /* 연락처 구역과 바닥글의 반전 색. 밝은 테마에서는 짙은 바탕이다. */
+  --inv-bg: #1f3326;
+  --inv-fg: #f3f4ee;
+  --inv-sub: #cdd5c1;
+  --inv-line: #5d7262;
+  --inv-accent: #c8d8a4;
   --radius-card: 8px;
   --radius-chip: 6px;
   --z-header: 20;
@@ -48,6 +54,11 @@
   --accent-fill: #3d5230;
   --on-accent: #eef3e4;
   --header-bg: rgb(19 23 18 / 0.86);
+  --inv-bg: #e5eadc;
+  --inv-fg: #131712;
+  --inv-sub: #3a4636;
+  --inv-line: #8d9a82;
+  --inv-accent: #3d5230;
   color-scheme: dark;
 }
 @media (min-width: 768px) {
@@ -369,7 +380,6 @@ main:focus:not(:focus-visible) {
 }
 @media (min-width: 768px) {
   .hero-card {
-    rotate: -2deg;
     padding: 1.5rem;
     max-width: 30rem;
     justify-self: start;
@@ -761,11 +771,16 @@ main:focus:not(:focus-visible) {
   border: 1px solid var(--line);
   border-radius: var(--radius-chip);
 }
+.chip-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
 .mono-term {
   font-size: 0.92em;
 }
 .tech-icons {
-  display: inline-flex;
+  display: inline-block;
   gap: 0.25rem;
   margin-right: 0.4em;
   vertical-align: -0.12em;
@@ -906,6 +921,30 @@ main:focus:not(:focus-visible) {
   }
   .project-col-results {
     grid-column: auto;
+  }
+}
+.section-note {
+  max-width: 40em;
+  margin: calc(-1 * clamp(1rem, 2vw, 2rem)) 0 clamp(1.5rem, 3vw, 2.5rem);
+  font-size: 1rem;
+  line-height: 1.7;
+}
+.project-body-ai {
+  padding-top: 1.5rem;
+  border-top: 1px solid var(--line);
+  margin-inline: 0;
+}
+@media (min-width: 768px) {
+  .project-body-ai {
+    margin-left: 5.5rem;
+    padding-left: 0;
+    margin-right: 0.25rem;
+    padding-right: 0;
+  }
+}
+@media (min-width: 768px) and (max-width: 1023px) {
+  .project-body-ai {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 .project-col p {
@@ -1230,11 +1269,49 @@ main:focus:not(:focus-visible) {
   color: var(--body);
 }
 
+/* 연락처 구역과 바닥글은 색을 반전한다. 두 곳이 한 덩어리로 이어진다. */
+.section-contact,
+.site-footer-contact {
+  background: var(--inv-bg);
+  color: var(--inv-sub);
+}
+.section-contact {
+  border-top: 0;
+}
+.section-contact :focus-visible,
+.site-footer-contact :focus-visible {
+  outline-color: var(--inv-fg);
+}
+.section-contact a,
+.site-footer-contact a {
+  color: var(--inv-fg);
+  text-decoration-color: var(--inv-accent);
+}
+.section-contact .section-title,
+.section-contact .contact-value,
+.section-contact .contact-label {
+  color: var(--inv-fg);
+}
+.section-contact .contact-host,
+.section-contact .label-mono {
+  color: var(--inv-sub);
+}
+.section-contact .contact-list,
+.section-contact .contact-list li {
+  border-color: var(--inv-line);
+}
+.section-head-plain {
+  margin-bottom: clamp(1.5rem, 3vw, 2.5rem);
+}
+
 /* ---------- 바닥글 ---------- */
 .site-footer {
   padding: 1.75rem 0 2.5rem;
   border-top: 1px solid var(--line);
   font-size: 0.875rem;
+}
+.site-footer-contact {
+  border-top: 0;
 }
 .footer-row {
   display: flex;

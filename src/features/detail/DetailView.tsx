@@ -6,11 +6,12 @@ import { Hero } from './Hero'
 import { AboutSection } from './AboutSection'
 import { SkillsSection } from './SkillsSection'
 import { ProjectsSection } from './ProjectsSection'
+import { AiProjectsSection } from './AiProjectsSection'
 import { CareerSection } from './CareerSection'
 import { RecordSection } from './RecordSection'
 import { ContactSection } from './ContactSection'
 
-/** 상세본. 보통 스크롤 한 페이지다. 첫 화면 다음에 구역 6개가 이어진다. */
+/** 상세본. 보통 스크롤 한 페이지다. 첫 화면 다음에 구역 6개와 연락처가 이어진다. */
 export function DetailView({ data }: { data: Portfolio }) {
   const active = useActiveSection(SECTION_IDS)
   return (
@@ -24,11 +25,12 @@ export function DetailView({ data }: { data: Portfolio }) {
         <AboutSection data={data} />
         <SkillsSection groups={data.skillGroups} />
         <ProjectsSection projects={data.projects} />
+        <AiProjectsSection projects={data.aiProjects} />
         <CareerSection background={data.background} />
         <RecordSection data={data.howBuilt} journal={data.journal} />
         <ContactSection contact={data.contact} />
       </main>
-      <footer className="site-footer">
+      <footer className="site-footer site-footer-contact">
         <div className="wrap footer-row">
           <p>
             {data.profile.name} · {data.profile.role}

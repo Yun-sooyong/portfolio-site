@@ -39,7 +39,7 @@ afterEach(() => {
 })
 
 describe('주소', () => {
-  it('/ 는 상세본이다. 첫 화면과 구역 6개가 한 페이지에 이어진다', () => {
+  it('/ 는 상세본이다. 첫 화면과 구역 7개가 한 페이지에 이어진다', () => {
     const { container } = renderAt('/')
     expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('의료 AI 모델을 서비스로 잇는 백엔드를 만듭니다.')
     expect(document.getElementById('top')).not.toBeNull()
@@ -51,11 +51,12 @@ describe('주소', () => {
     expect(document.documentElement.classList.contains('snap')).toBe(false)
   })
 
-  it('헤더에 구역 링크 6개와 다크 모드 단추가 있다', () => {
+  it('헤더에 구역 링크 7개와 다크 모드 단추가 있다', () => {
     renderAt('/')
     const nav = screen.getByRole('navigation', { name: '구역 이동' })
     const links = within(nav).getAllByRole('link')
-    expect(links.map((a) => a.textContent)).toEqual(['소개', '기술', '프로젝트', '이력', '기록', '연락처'])
+    expect(links.map((a) => a.textContent)).toEqual(['소개', '기술', '프로젝트', 'AI 프로젝트', '이력', '기록', '연락처'])
+    expect(links).toHaveLength(7)
     links.forEach((a, i) => expect(a).toHaveAttribute('href', `#${SECTIONS[i]!.id}`))
     expect(screen.getByRole('button', { name: '다크 모드' })).toBeInTheDocument()
   })
@@ -73,11 +74,20 @@ describe('주소', () => {
   it('큰 번호는 SECTIONS 표를 따르고 보조 기술에서 숨겨진다', () => {
     renderAt('/')
     const nums = [...document.querySelectorAll('.section-num')]
-    expect(nums.map((n) => n.textContent)).toEqual(SECTIONS.map((s) => s.no))
+    expect(nums.map((n) => n.textContent)).toEqual(SECTIONS.flatMap((s) => (s.no ? [s.no] : [])))
     for (const n of nums) expect(n).toHaveAttribute('aria-hidden', 'true')
     for (const s of SECTIONS) {
       expect(within(document.getElementById(s.id)!).getByRole('heading', { level: 2 })).toBeInTheDocument()
     }
+  })
+
+  it('연락처 구역에는 큰 번호와 작은 라벨이 없고 제목은 "연락처" 하나다', () => {
+    renderAt('/')
+    const contact = document.getElementById('contact')!
+    expect(contact.querySelector('.section-num')).toBeNull()
+    expect(contact.querySelector('.section-label')).toBeNull()
+    expect(within(contact).getByRole('heading', { level: 2 })).toHaveTextContent(/^연락처$/)
+    expect(contact.textContent).not.toContain('함께 만들 팀')
   })
 
   it('/print 는 단축본이다. PDF로 저장 단추가 print를 부르고 noindex 이다', async () => {
@@ -375,6 +385,7 @@ describe('이력 구역', () => {
     }
     for (const c of portfolio.background.certificates) {
       expect(career.textContent).toContain(c.name)
+      expect(career.textContent).not.toContain(c.issuer)
       if (c.status) expect(within(career).getByText(c.status)).toBeInTheDocument()
     }
     expect(career.querySelector('a')).toBeNull()
@@ -471,11 +482,29 @@ describe('글꼴과 스타일', () => {
     }
     for (const g of portfolio.skillGroups) {
       for (const s of g.skills) {
-        const dt = [...document.querySelectorAll('#skills dt')].find((d) => d.textContent === s.name)
-        expect(dt, s.name).toBeDefined()
-        expect(dt!.classList.contains('font-mono'), s.name).toBe(true)
+        const names = s.techs.map((t) => t.name).join('')
+        const dt = [...document.querySelectorAll('#skills dt')].find((d) => d.textContent === names)
+        expect(dt, names).toBeDefined()
+        const chips = dt!.querySelectorAll('.chip')
+        expect(chips).toHaveLength(s.techs.length)
+        for (const c of chips) expect(c.classList.contains('font-mono'), names).toBe(true)
       }
     }
+  })
+
+  it('기술 칩은 칩마다 아이콘이 최대 1개이고 아이콘이 없는 기술은 이름만 보인다', () => {
+    renderAt('/')
+    const chips = [...document.querySelectorAll('#skills .chip')]
+    expect(chips.length).toBe(portfolio.skillGroups.flatMap((g) => g.skills.flatMap((s) => s.techs)).length)
+    for (const c of chips) expect(c.querySelectorAll('svg.tech-icon').length).toBeLessThanOrEqual(1)
+    const drf = chips.find((c) => c.textContent === 'DRF')!
+    expect(drf.querySelector('svg')).toBeNull()
+    expect(chips.find((c) => c.textContent === 'Python')!.querySelectorAll('svg')).toHaveLength(1)
+  })
+
+  it('/print 의 기술 요약 글자는 기술 이름을 " / " 로 이어 쓴다', async () => {
+    renderAt('/print')
+    expect(await screen.findByText(/Python \/ Django \/ DRF \/ PostgreSQL/)).toBeInTheDocument()
   })
 
   it('기술 구역은 영역마다 카드 1개이고 할 수 있는 일 문장이 있다', () => {
@@ -507,5 +536,40 @@ describe('글꼴과 스타일', () => {
     const text = document.body.textContent ?? ''
     expect(text).not.toMatch(/\b01[016789]-?\d{3,4}-?\d{4}\b/)
     expect(text).not.toMatch(/생년월일|거주/)
+  })
+})
+
+describe('AI 프로젝트 구역', () => {
+  it('프로젝트 앞에서 이력 앞까지 구역이 있고 기본은 모두 접혀 있다', () => {
+    renderAt('/')
+    const section = document.getElementById('ai-projects')!
+    expect(within(section).getByRole('heading', { level: 2 })).toHaveTextContent('AI로 만든 프로젝트')
+    const buttons = within(section).getAllByRole('button')
+    expect(buttons).toHaveLength(portfolio.aiProjects.length)
+    for (const b of buttons) expect(b).toHaveAttribute('aria-expanded', 'false')
+    expect(buttons[0]!.textContent).toContain('A/01')
+  })
+
+  it('단추를 누르면 3열 두 줄이 보이고 링크는 있는 것만 보인다', async () => {
+    renderAt('/')
+    const section = document.getElementById('ai-projects')!
+    const buttons = within(section).getAllByRole('button')
+    for (const b of buttons) await userEvent.click(b)
+    portfolio.aiProjects.forEach((p, i) => {
+      expect(buttons[i]).toHaveAttribute('aria-expanded', 'true')
+      const panel = document.getElementById(`ai-project-panel-${p.id}`)!
+      for (const label of ['개요', '맡은 일', '결과', 'AI를 쓴 방식', '진행 방식', '중점적으로 본 것']) {
+        expect(within(panel).getByText(label)).toBeInTheDocument()
+      }
+      expect(panel.querySelectorAll('.project-body')).toHaveLength(2)
+      expect(panel.querySelectorAll('a')).toHaveLength(p.githubUrl ? 1 : 0)
+    })
+  })
+
+  it('/print 에는 AI 프로젝트가 없다', async () => {
+    renderAt('/print')
+    await screen.findByRole('button', { name: 'PDF로 저장' })
+    expect(document.body.textContent).not.toContain('AI로 만든 프로젝트')
+    expect(document.body.textContent).not.toContain(portfolio.aiProjects[0]!.name)
   })
 })

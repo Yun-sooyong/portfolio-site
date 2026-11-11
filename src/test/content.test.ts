@@ -107,9 +107,24 @@ describe('내용 형식', () => {
     for (const s of profile.strengths) expect(s.evidence.trim()).not.toBe('')
   })
 
+  it('AI 프로젝트는 aiUsage, process, focus 가 각각 1개 이상이고 단축본용 projects 에 섞이지 않는다', () => {
+    expect(portfolio.aiProjects.length).toBeGreaterThan(0)
+    for (const p of portfolio.aiProjects) {
+      expect(p.aiUsage.length, p.id).toBeGreaterThanOrEqual(1)
+      expect(p.process.length, p.id).toBeGreaterThanOrEqual(1)
+      expect(p.focus.length, p.id).toBeGreaterThanOrEqual(1)
+      expect(projects.map((x) => x.id)).not.toContain(p.id)
+    }
+  })
+
   it('기술은 점수와 막대 대신 문장으로 쓴다', () => {
     for (const g of portfolio.skillGroups) {
       for (const s of g.skills) {
+        expect(s.techs.length).toBeGreaterThan(0)
+        for (const t of s.techs) {
+          expect(t.name.trim()).not.toBe('')
+          expect(typeof t.icon === 'string' || t.icon === undefined).toBe(true)
+        }
         expect(s.can.trim()).not.toBe('')
         if (s.lacks !== undefined) expect(s.lacks.trim()).not.toBe('')
       }
@@ -123,7 +138,9 @@ describe('내용 형식', () => {
   })
 
   it('내용에 생년월일, 나이, 지역, 사진 주소, 예시 표시가 없다', () => {
-    const all = JSON.stringify({ ...portfolio, howBuilt: {}, journal: [] })
+    // AI 프로젝트의 결과 문구에 "전화번호와 주소가 없는지 검사"라는 설명이 있어 따로 검사한다.
+    const all = JSON.stringify({ ...portfolio, aiProjects: [], howBuilt: {}, journal: [] })
+    expect(JSON.stringify(portfolio.aiProjects)).not.toMatch(/생년월일|만\s?\d+세|거주/)
     expect(all).not.toMatch(/(19|20)\d{2}[.\-/]\d{1,2}[.\-/]\d{1,2}\s*생/)
     expect(all).not.toMatch(/생년월일|만\s?\d+세|\d+세\b|거주|주소/)
     expect(all).not.toMatch(/홍길동|예시|가상|example\.com/)
@@ -141,10 +158,10 @@ describe('내용 형식', () => {
     }
   })
 
-  it('구역은 6개이고 번호와 id가 겹치지 않으며 순서가 소개, 기술, 프로젝트, 이력, 기록, 연락처이다', () => {
-    expect(SECTION_IDS).toEqual(['about', 'skills', 'projects', 'career', 'record', 'contact'])
-    expect(SECTIONS.map((s) => s.no)).toEqual(['01', '02', '03', '04', '05', '06'])
-    expect(SECTIONS.map((s) => s.label)).toEqual(['소개', '기술', '프로젝트', '이력', '기록', '연락처'])
+  it('구역은 7개이고 id가 겹치지 않으며 연락처만 번호가 없다', () => {
+    expect(SECTION_IDS).toEqual(['about', 'skills', 'projects', 'ai-projects', 'career', 'record', 'contact'])
+    expect(SECTIONS.map((s) => s.no)).toEqual(['01', '02', '03', '04', '05', '06', undefined])
+    expect(SECTIONS.map((s) => s.label)).toEqual(['소개', '기술', '프로젝트', 'AI 프로젝트', '이력', '기록', '연락처'])
     expect(new Set(SECTION_IDS).size).toBe(SECTION_IDS.length)
   })
 
@@ -231,15 +248,15 @@ describe('기술 아이콘', () => {
   it('내용의 모든 icon 키가 techIcons.ts 에 있다', async () => {
     const { techIcons } = await import('../ui/techIcons')
     const keys = [
-      ...portfolio.skillGroups.flatMap((g) => g.skills.flatMap((s) => (s.icon === undefined ? [] : [s.icon].flat()))),
-      ...projects.flatMap((p) => Object.values(p.coreStackIcons ?? {})),
+      ...portfolio.skillGroups.flatMap((g) => g.skills.flatMap((s) => s.techs.flatMap((t) => (t.icon === undefined ? [] : [t.icon])))),
+      ...[...projects, ...portfolio.aiProjects].flatMap((p) => Object.values(p.coreStackIcons ?? {})),
     ]
     expect(keys.length).toBeGreaterThan(0)
     for (const k of keys) expect(techIcons[k], k).toBeDefined()
   })
 
   it('coreStackIcons 의 이름이 coreStack 에 있다', () => {
-    for (const p of projects) {
+    for (const p of [...projects, ...portfolio.aiProjects]) {
       for (const name of Object.keys(p.coreStackIcons ?? {})) expect(p.coreStack).toContain(name)
     }
   })

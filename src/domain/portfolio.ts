@@ -55,11 +55,19 @@ export interface Background {
   certificates: Certificate[]
 }
 
+/** 기술 칩 1개. 아이콘 1개와 이름 1개다. */
+export interface Tech {
+  name: string
+  /** 아이콘 키(선택). 키는 src/ui/techIcons.ts 에 있어야 한다. 없으면 이름만 보인다 */
+  icon?: string
+}
+
 /** 기술 한 항목. 점수와 막대 대신 문장으로 쓴다. */
 export interface Skill {
-  name: string
-  /** 아이콘 키(선택). 이름에 기술이 둘 이상이면 배열. 키는 src/ui/techIcons.ts 에 있어야 한다. 없으면 글자만 보인다 */
-  icon?: string | string[]
+  /** 칩으로 보이는 기술 목록. 기술마다 칩 1개 */
+  techs: Tech[]
+  /** 단축본에 보이는 글자(선택). 없으면 기술 이름을 " / " 로 이어 쓴다 */
+  printName?: string
   /** 할 수 있는 것 */
   can: string
   /** 아직 부족한 것(선택). 쓸 내용이 있을 때만 적는다 */
@@ -102,6 +110,16 @@ export interface Project {
   demoUrl?: string
   /** 노션 상세 페이지 주소(선택). 구성도와 문제 해결 같은 자세한 내용은 여기로 넘긴다. https:// 로 시작한다 */
   notionUrl?: string
+}
+
+/** AI로 만든 프로젝트. 프로젝트 필드에 AI를 쓴 방식을 더한다. */
+export interface AiProject extends Project {
+  /** AI를 쓴 방식 */
+  aiUsage: string[]
+  /** 바이브 코딩 진행 방식 */
+  process: string[]
+  /** 중점적으로 본 것 */
+  focus: string[]
 }
 
 export interface Contact {
@@ -166,6 +184,7 @@ export interface Portfolio {
   background: Background
   skillGroups: SkillGroup[]
   projects: Project[]
+  aiProjects: AiProject[]
   contact: Contact
   howBuilt: HowBuilt
   journal: JournalEntry[]

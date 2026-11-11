@@ -19,7 +19,12 @@ import {
   siPostgresql,
   siPython,
   siPytorch,
+  siReact,
   siRedis,
+  siSqlite,
+  siTypescript,
+  siVite,
+  siClaude,
 } from 'simple-icons'
 
 /** 아이콘 1개. path는 24x24 viewBox 기준 SVG 경로다. */
@@ -53,5 +58,10 @@ export const techIcons: Record<string, TechIconData> = {
   postgresql: siPostgresql,
   python: siPython,
   pytorch: siPytorch,
+  react: siReact,
   redis: siRedis,
+  sqlite: siSqlite,
+  typescript: siTypescript,
+  vite: siVite,
+  claude: siClaude,
 }

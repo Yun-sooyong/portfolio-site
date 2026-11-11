@@ -78,7 +78,7 @@ export function CareerSection({ background }: { background: Background }) {
             rows={background.certificates.map((c) => ({
               key: c.name,
               when: c.date,
-              name: `${c.name} ${c.issuer}`,
+              name: c.name,
               notes: c.status ? [<span className="tag">{c.status}</span>] : undefined,
             }))}
           />

@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useState, type ReactNode } from 'react'
 import type { Project } from '../../domain/portfolio'
 import { splitSentences } from '../../domain/text'
 import { Chip } from '../../ui/Chip'
@@ -6,12 +6,26 @@ import { EmptyNote } from '../../ui/EmptyNote'
 import { ProjectLinks } from './ProjectLinks'
 import { SectionHead } from './SectionHead'
 
-function ProjectRow({ project, index, open, onToggle }: { project: Project; index: number; open: boolean; onToggle: () => void }) {
-  const no = `P/${String(index + 1).padStart(2, '0')}`
-  const buttonId = `project-btn-${project.id}`
-  const panelId = `project-panel-${project.id}`
+interface ProjectRowProps {
+  project: Project
+  index: number
+  open: boolean
+  onToggle: () => void
+  /** 번호 앞 글자. 팀 프로젝트는 P, AI 프로젝트는 A */
+  prefix?: string
+  /** id 앞 글자. 같은 프로젝트 id가 두 목록에 있어도 겹치지 않게 한다 */
+  idPrefix?: string
+  /** 3열 아래에 더하는 줄(AI 프로젝트의 둘째 줄) */
+  extra?: ReactNode
+}
+
+/** 펼침 행 1개. 프로젝트 구역과 AI 프로젝트 구역이 함께 쓴다. */
+export function ProjectRow({ project, index, open, onToggle, prefix = 'P', idPrefix = 'project', extra }: ProjectRowProps) {
+  const no = `${prefix}/${String(index + 1).padStart(2, '0')}`
+  const buttonId = `${idPrefix}-btn-${project.id}`
+  const panelId = `${idPrefix}-panel-${project.id}`
   return (
-    <li className={`project-item${open ? ' is-open' : ''}`} id={`project-${project.id}`}>
+    <li className={`project-item${open ? ' is-open' : ''}`} id={`${idPrefix}-${project.id}`}>
       <h3 className="project-heading">
         <button type="button" id={buttonId} className="project-toggle" aria-expanded={open} aria-controls={panelId} onClick={onToggle}>
           <span className="project-no label-mono">{no}</span>
@@ -54,6 +68,7 @@ function ProjectRow({ project, index, open, onToggle }: { project: Project; inde
               </ul>
             </div>
           </div>
+          {extra}
           <ProjectLinks project={project} className="project-links-row" />
         </div>
       </div>

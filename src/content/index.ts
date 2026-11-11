@@ -2,6 +2,7 @@ import type { Portfolio } from '../domain/portfolio'
 import { background, profile } from './profile'
 import { skillGroups } from './skills'
 import { projects } from './projects'
+import { aiProjects } from './aiProjects'
 import { contact, howBuilt } from './site'
 import { journal } from './journal'
 import { highlights } from './highlights'
@@ -13,6 +14,7 @@ export const portfolio: Portfolio = {
   background,
   skillGroups,
   projects,
+  aiProjects,
   contact,
   howBuilt,
   journal,
