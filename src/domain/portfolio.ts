@@ -161,32 +161,6 @@ export interface Contact {
   blog?: string
 }
 
-export interface HowBuiltItem {
-  title: string
-  body: string
-}
-
-/** "이 사이트와 기록" 장면의 사이트 소개 부분 */
-export interface HowBuilt {
-  lead: string
-  /** 구조와 보안 요점. 3~4개, 항목마다 1줄 */
-  points: HowBuiltItem[]
-  /** CI가 위에서 아래로 실행하는 명령. .github/workflows/ci.yml 의 run 항목과 같다 */
-  ciSteps: string[]
-  /** 전체 기록을 보는 곳. 주소는 https:// 로 시작한다 */
-  readmeUrl: string
-  /** 노션 기록 주소(선택) */
-  notionUrl?: string
-}
-
-export interface JournalEntry {
-  /** YYYY-MM-DD */
-  date: string
-  problem: string
-  cause: string
-  fix: string
-}
-
 /** 성과 숫자 칸 1개. 숫자는 프로젝트와 프로필에 적힌 사실만 쓴다. */
 export interface Highlight {
   id: string
@@ -218,8 +192,6 @@ export interface Portfolio {
   projects: Project[]
   aiProjects: AiProject[]
   contact: Contact
-  howBuilt: HowBuilt
-  journal: JournalEntry[]
   highlights: Highlight[]
   home: HomeCopy
 }

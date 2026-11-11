@@ -14,7 +14,6 @@ export const SECTIONS: readonly SectionInfo[] = [
   { id: 'projects', no: '03', label: '프로젝트' },
   { id: 'ai-projects', no: '04', label: 'AI 프로젝트' },
   { id: 'career', no: '05', label: '이력' },
-  { id: 'record', no: '06', label: '기록' },
   { id: 'contact', label: '연락처' },
 ]
 

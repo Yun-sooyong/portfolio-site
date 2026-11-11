@@ -97,13 +97,13 @@ export const aiProjects: AiProject[] = [
     ],
     impact: [
       { value: '1일', label: '참고 사이트 2개를 섞은 전체 화면 개편부터 배포까지 (2026.11.11)' },
-      { value: '92개', label: 'Vitest 시험. 빌드 결과에 전화번호와 주소가 없는지도 검사한다' },
+      { value: '81개', label: 'Vitest 시험. 빌드 결과에 전화번호와 주소가 없는지도 검사한다' },
       { value: '3가지 폭', label: '1440, 900, 390px 화면을 헤드리스 Chrome으로 캡처해 확인' },
     ],
     design: [
-      '내용과 화면을 나눴다. 내용 파일만 고치면 상세본과 A4 2쪽 단축본이 같이 바뀐다.',
-      '성과 숫자는 출처 프로젝트 id와 함께 적고, 시험이 출처와 숫자를 대조한다.',
-      'CSP로 외부 스크립트를 막고, 글꼴과 아이콘을 사이트 안에 넣었다.',
+      '내용과 화면을 나눴다. 새 프로젝트는 내용 파일에 항목 1개만 더하고, 상세본과 A4 2쪽 단축본이 같은 파일을 읽는다.',
+      '외부 요청이 없는 구조로 했다. 글꼴과 아이콘을 사이트 안에 넣고, CSP 등 응답 헤더로 외부 스크립트를 막았다.',
+      '개인 정보를 싣지 않는다. 이메일은 화면에서 조립하고, 전화번호와 주소는 쓰지 않는다.',
     ],
     cases: [
       { situation: '한 칸씩 넘기는 장면 구조는 화면이 낮으면 내용이 넘쳤고, 펼치는 목록을 넣을 수 없었다.', choice: 'AI가 제시한 두 방식 중 보통 스크롤을 골랐다.' },
@@ -111,9 +111,10 @@ export const aiProjects: AiProject[] = [
       { situation: '마음에 드는 포트폴리오 사이트 2개의 분위기가 서로 달랐다.', choice: '차분한 사이트를 기반으로 하고, 다른 사이트에서는 큰 구역 번호와 펼치는 목록만 가져오기로 했다.' },
     ],
     quality: [
-      'push마다 CI가 lint, 타입 검사, 테스트, 빌드, 의존성 점검을 돈다.',
+      'push마다 CI가 npm ci, lint, 타입 검사, 테스트, 빌드, npm audit(high 이상)을 차례로 돈다.',
+      '시험이 내용 형식을 검사한다. 역할, 성과 숫자와 출처, https 링크가 빠지면 CI가 막는다.',
       '하위 에이전트가 쓴 코드는 캡처와 검사 결과로 다시 확인하고, 내가 승인한 뒤에 커밋했다.',
-      '겪은 문제를 시행착오 기록으로 남기고, 사이트에 최근 3개를 보인다.',
+      '겪은 문제는 docs/journal.md에 날짜, 문제, 원인, 해결로 남긴다.',
     ],
     githubUrl: 'https://github.com/Yun-sooyong/portfolio-site',
     workflowUrl: 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/portfolio-site.md',

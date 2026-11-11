@@ -5,7 +5,6 @@ import { render, screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { MemoryRouter } from 'react-router-dom'
 import { AppRoutes } from '../app/routes'
-import { RECENT_JOURNAL_COUNT, recentJournal } from '../domain/journal'
 import { SECTIONS } from '../domain/sections'
 import { PrintSheet } from '../features/print/PrintSheet'
 import { portfolio } from '../content'
@@ -51,12 +50,12 @@ describe('주소', () => {
     expect(document.documentElement.classList.contains('snap')).toBe(false)
   })
 
-  it('헤더에 구역 링크 7개와 다크 모드 단추가 있다', () => {
+  it('헤더에 구역 링크 6개와 다크 모드 단추가 있다', () => {
     renderAt('/')
     const nav = screen.getByRole('navigation', { name: '구역 이동' })
     const links = within(nav).getAllByRole('link')
-    expect(links.map((a) => a.textContent)).toEqual(['소개', '기술', '프로젝트', 'AI 프로젝트', '이력', '기록', '연락처'])
-    expect(links).toHaveLength(7)
+    expect(links.map((a) => a.textContent)).toEqual(['소개', '기술', '프로젝트', 'AI 프로젝트', '이력', '연락처'])
+    expect(links).toHaveLength(6)
     links.forEach((a, i) => expect(a).toHaveAttribute('href', `#${SECTIONS[i]!.id}`))
     expect(screen.getByRole('button', { name: '다크 모드' })).toBeInTheDocument()
   })
@@ -308,58 +307,15 @@ describe('빌드 입력', () => {
   })
 })
 
-describe('기록 구역', () => {
-  it('기록이 없으면 빈 상태 문구를 보인다', async () => {
-    const { RecordSection } = await import('../features/detail/RecordSection')
-    render(<RecordSection data={portfolio.howBuilt} journal={[]} />)
-    expect(screen.getByText(/아직 기록한 시행착오가 없습니다/)).toBeInTheDocument()
-  })
-
-  it('최근 시행착오 3개를 날짜, 문제, 해결로 보인다(원인은 보이지 않는다)', () => {
+describe('기록 구역 제거', () => {
+  it('record 구역이 없고 큰 번호는 01~05이다', () => {
     renderAt('/')
-    const scene = document.getElementById('record')!
-    const items = scene.querySelectorAll('.recent-journal > li')
-    expect(items).toHaveLength(RECENT_JOURNAL_COUNT)
-    const expected = recentJournal(portfolio.journal)
-    expected.forEach((e, i) => {
-      const li = items[i] as HTMLElement
-      expect(li.querySelector('time')).toHaveAttribute('datetime', e.date)
-      expect(within(li).getByText('문제')).toBeInTheDocument()
-      expect(within(li).getByText('해결')).toBeInTheDocument()
-      expect(li.textContent).toContain(e.problem)
-      expect(li.textContent).toContain(e.fix)
-      expect(li.textContent).not.toContain(e.cause)
-    })
-    expect(within(scene).queryByText('원인')).toBeNull()
-  })
-
-  it('구조·보안 요점과 CI 단계를 보이고 폴더 표는 없다', () => {
-    renderAt('/')
-    const scene = document.getElementById('record')!
-    for (const pt of portfolio.howBuilt.points) expect(within(scene).getByText(pt.title)).toBeInTheDocument()
-    expect(scene.querySelector('table')).toBeNull()
-    expect(scene.querySelectorAll('ol.terminal > li')).toHaveLength(portfolio.howBuilt.ciSteps.length)
-  })
-
-  it('"전체 기록: GitHub README" 링크가 있고 주소가 맞다. 노션 주소가 없으면 노션 링크는 없다', () => {
-    renderAt('/')
-    const scene = document.getElementById('record')!
-    const readme = within(scene).getByRole('link', { name: /전체 기록: GitHub README/ })
-    expect(readme).toHaveAttribute('href', 'https://github.com/Yun-sooyong/portfolio-site#readme')
-    const notion = within(scene).queryByRole('link', { name: /노션 기록/ })
-    if (portfolio.howBuilt.notionUrl) expect(notion).toHaveAttribute('href', portfolio.howBuilt.notionUrl)
-    else expect(notion).toBeNull()
-  })
-
-  it('이 구역에는 연락처 링크(mailto)가 섞이지 않는다', () => {
-    renderAt('/')
-    expect(document.getElementById('record')!.querySelector('a[href^="mailto:"]')).toBeNull()
-  })
-
-  it('CI 단계가 .github/workflows/ci.yml 의 실제 run 명령과 같다', () => {
-    const yml = readFileSync(resolve(process.cwd(), '.github/workflows/ci.yml'), 'utf8')
-    const runs = [...yml.matchAll(/^\s*- run: (.+)$/gm)].map((m) => m[1])
-    expect(portfolio.howBuilt.ciSteps).toEqual(runs)
+    expect(document.getElementById('record')).toBeNull()
+    expect(screen.queryByText('이 사이트와 기록')).toBeNull()
+    const nos = [...document.querySelectorAll('main section[id]')]
+      .map((el) => el.querySelector('.section-num')?.textContent)
+      .filter((t): t is string => !!t)
+    expect(nos).toEqual(['01', '02', '03', '04', '05'])
   })
 })
 

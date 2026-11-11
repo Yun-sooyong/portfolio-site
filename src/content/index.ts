@@ -3,8 +3,7 @@ import { background, profile } from './profile'
 import { skillGroups } from './skills'
 import { projects } from './projects'
 import { aiProjects } from './aiProjects'
-import { contact, howBuilt } from './site'
-import { journal } from './journal'
+import { contact } from './site'
 import { highlights } from './highlights'
 import { home } from './home'
 
@@ -16,8 +15,6 @@ export const portfolio: Portfolio = {
   projects,
   aiProjects,
   contact,
-  howBuilt,
-  journal,
   highlights,
   home,
 }
