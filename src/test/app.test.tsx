@@ -558,11 +558,13 @@ describe('AI 프로젝트 구역', () => {
     portfolio.aiProjects.forEach((p, i) => {
       expect(buttons[i]).toHaveAttribute('aria-expanded', 'true')
       const panel = document.getElementById(`ai-project-panel-${p.id}`)!
-      for (const label of ['개요', '맡은 일', '결과', 'AI를 쓴 방식', '진행 방식', '중점적으로 본 것']) {
+      for (const label of ['개요', 'AI를 쓴 곳', '사용한 AI', '속도와 생산성', '시스템 설계', '문제 해결', '품질 관리']) {
         expect(within(panel).getByText(label)).toBeInTheDocument()
       }
+      expect(within(panel).queryByText('맡은 일')).toBeNull()
+      expect(within(panel).getByRole('link', { name: /작업 흐름 다이어그램/ })).toHaveAttribute('href', p.workflowUrl)
       expect(panel.querySelectorAll('.project-body')).toHaveLength(2)
-      expect(panel.querySelectorAll('a')).toHaveLength(p.githubUrl ? 1 : 0)
+      expect(panel.querySelectorAll('a')).toHaveLength(p.githubUrl ? 2 : 1)
     })
   })
 

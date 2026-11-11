@@ -107,13 +107,34 @@ describe('내용 형식', () => {
     for (const s of profile.strengths) expect(s.evidence.trim()).not.toBe('')
   })
 
-  it('AI 프로젝트는 aiUsage, process, focus 가 각각 1개 이상이고 단축본용 projects 에 섞이지 않는다', () => {
+  it('AI 프로젝트는 새 필드가 각각 1개 이상이고 단축본용 projects 에 섞이지 않는다', () => {
     expect(portfolio.aiProjects.length).toBeGreaterThan(0)
     for (const p of portfolio.aiProjects) {
-      expect(p.aiUsage.length, p.id).toBeGreaterThanOrEqual(1)
-      expect(p.process.length, p.id).toBeGreaterThanOrEqual(1)
-      expect(p.focus.length, p.id).toBeGreaterThanOrEqual(1)
+      for (const key of ['aiAreas', 'tools', 'impact', 'design', 'cases', 'quality'] as const) {
+        expect(p[key].length, `${p.id}.${key}`).toBeGreaterThanOrEqual(1)
+      }
       expect(projects.map((x) => x.id)).not.toContain(p.id)
+    }
+  })
+
+  it('AI 프로젝트의 workflowUrl 은 저장소의 작업 흐름 문서를 가리키고 문서와 다이어그램이 실제로 있다', () => {
+    const base = 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/'
+    for (const p of portfolio.aiProjects) {
+      expect(p.workflowUrl.startsWith(base), p.id).toBe(true)
+      expect(p.workflowUrl).toBe(`${base}${p.id}.md`)
+      expect(existsSync(resolve(process.cwd(), `docs/ai-workflow/${p.id}.md`)), `${p.id}.md`).toBe(true)
+      expect(existsSync(resolve(process.cwd(), `docs/ai-workflow/${p.id}.svg`)), `${p.id}.svg`).toBe(true)
+    }
+  })
+
+  it('작업 흐름 SVG 는 스크립트가 없고 다크 모드와 움직임 줄이기를 따른다', () => {
+    for (const p of portfolio.aiProjects) {
+      const svg = readFileSync(resolve(process.cwd(), `docs/ai-workflow/${p.id}.svg`), 'utf8')
+      expect(svg, p.id).not.toMatch(/<script/i)
+      expect(svg, p.id).not.toMatch(/https?:\/\/(?!www\.w3\.org)/)
+      expect(svg, p.id).toContain('prefers-color-scheme')
+      expect(svg, p.id).toContain('prefers-reduced-motion')
+      expect(svg, p.id).toMatch(/<title[^>]*>[^<]+<\/title>/)
     }
   })
 

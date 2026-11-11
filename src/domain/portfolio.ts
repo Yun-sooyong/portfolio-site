@@ -112,14 +112,46 @@ export interface Project {
   notionUrl?: string
 }
 
-/** AI로 만든 프로젝트. 프로젝트 필드에 AI를 쓴 방식을 더한다. */
-export interface AiProject extends Project {
-  /** AI를 쓴 방식 */
-  aiUsage: string[]
-  /** 바이브 코딩 진행 방식 */
-  process: string[]
-  /** 중점적으로 본 것 */
-  focus: string[]
+/** 사용한 AI 1개와 맡긴 일 */
+export interface AiTool {
+  name: string
+  use: string
+}
+
+/** 문제 해결 1건. 상황과, 그때 내가 내린 판단이다 */
+export interface AiCase {
+  situation: string
+  choice: string
+}
+
+/** AI로 만든 프로젝트. 팀 프로젝트(Project)와 형식이 다르다. */
+export interface AiProject {
+  id: string
+  name: string
+  kind: ProjectKind
+  period: string
+  /** 핵심 기술 1~3개 */
+  coreStack: string[]
+  /** 핵심 기술 이름 -> 아이콘 키(선택). 키는 src/ui/techIcons.ts 에 있어야 한다 */
+  coreStackIcons?: Record<string, string>
+  summary: string
+  overview: string
+  /** AI를 쓴 곳. 짧은 꼬리표 */
+  aiAreas: string[]
+  /** 사용한 AI와 맡긴 일 */
+  tools: AiTool[]
+  /** 속도와 생산성 */
+  impact: Result[]
+  /** 시스템 설계에 쓴 방식 */
+  design: string[]
+  /** 문제 해결: 상황과 내가 내린 판단 */
+  cases: AiCase[]
+  /** 품질 관리 */
+  quality: string[]
+  /** GitHub 저장소 주소(선택). https:// 로 시작한다 */
+  githubUrl?: string
+  /** GitHub의 작업 흐름 다이어그램 문서 주소. https:// 로 시작한다 */
+  workflowUrl: string
 }
 
 export interface Contact {

@@ -1,0 +1,105 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 372" width="960" height="372" role="img" aria-labelledby="t d">
+<title id="t">포트폴리오 사이트 — AI 작업 흐름</title>
+<desc id="d">참고 사이트와 수정 요청에서 분석, 결정, 구현, 검사, 캡처 검토, 승인, 배포까지 8단계와, 고칠 점이 있으면 분석과 계획으로 돌아가는 되돌림 고리를 보여 주는 작업 흐름도.</desc>
+<style>
+svg { --bg:#F3F4EE; --ink:#1F3326; --acc:#5E7A4A; --fill:#C8D8A4; --line:#D5DACB; --panel:#FBFBF7; --mute:#4A5D4F; font-family:-apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; }
+@media (prefers-color-scheme: dark) { svg { --bg:#131712; --ink:#E5EADC; --acc:#9DB57F; --fill:#3D5230; --line:#2E372C; --panel:#1B2219; --mute:#B4BFA9; } }
+.bg { fill:var(--bg); }
+text { fill:var(--ink); font-size:14px; }
+.ttl { font-size:20px; font-weight:800; }
+.lg { font-size:12px; fill:var(--mute); }
+.box { stroke-linejoin:round; }
+.me { fill:var(--fill); stroke:var(--ink); stroke-width:2.5; }
+.ai { fill:var(--panel); stroke:var(--line); stroke-width:1.5; }
+.check { fill:var(--panel); stroke:var(--acc); stroke-width:1.5; stroke-dasharray:5 4; }
+.side { fill:none; stroke:var(--line); stroke-width:1.5; }
+.bar { fill:var(--acc); }
+.pill-me { fill:var(--ink); }
+.pill-ai { fill:var(--acc); }
+.pill-check { fill:var(--bg); stroke:var(--acc); stroke-width:1.2; stroke-dasharray:3 2; }
+.pill-side { fill:var(--line); }
+.pt { font-size:11.5px; font-weight:700; }
+.pt-me { fill:var(--bg); }
+.pt-ai { fill:var(--bg); }
+.pt-check { fill:var(--ink); }
+.pt-side { fill:var(--ink); }
+.body { fill:var(--ink); }
+.flow { fill:none; stroke:var(--acc); stroke-width:2; stroke-dasharray:6 6; animation:dash 1.2s linear infinite; }
+.loop { fill:none; stroke:var(--acc); stroke-width:2; stroke-dasharray:3 5; animation:dash 1.2s linear infinite; }
+.head { fill:var(--acc); }
+.lpill { fill:var(--bg); stroke:var(--acc); stroke-width:1.2; }
+.ltxt { font-size:12px; font-weight:700; }
+.hl { fill:none; stroke:var(--acc); stroke-opacity:0.55; stroke-width:6; opacity:0; animation:glow 14.0s ease-in-out infinite; }
+.h1 { animation-delay:0.00s; }
+.h2 { animation-delay:1.75s; }
+.h3 { animation-delay:3.50s; }
+.h4 { animation-delay:5.25s; }
+.h5 { animation-delay:7.00s; }
+.h6 { animation-delay:8.75s; }
+.h7 { animation-delay:10.50s; }
+.h8 { animation-delay:12.25s; }
+@keyframes dash { to { stroke-dashoffset:-24; } }
+@keyframes glow { 0% { opacity:0; } 2% { opacity:1; } 11.50% { opacity:1; } 14.50% { opacity:0; } 100% { opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .flow, .loop { animation:none; } .hl { animation:none; opacity:0; } }
+</style>
+<rect class="bg" x="0" y="0" width="960" height="372"/>
+<text class="ttl" x="24" y="40">포트폴리오 사이트 — AI 작업 흐름</text>
+<rect class="box me" x="24" y="62" width="26" height="16" rx="4"/><text class="lg" x="58" y="74">나의 판단</text>
+<rect class="box ai" x="136" y="62" width="26" height="16" rx="4"/><text class="lg" x="170" y="74">AI</text>
+<rect class="box check" x="208" y="62" width="26" height="16" rx="4"/><text class="lg" x="242" y="74">검사·배포</text>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="head" d="M0,1 L10,5 L0,9 Z"/></marker></defs>
+<path class="flow" d="M229,152.0 L253,152.0" marker-end="url(#ah)"/>
+<path class="flow" d="M467,152.0 L491,152.0" marker-end="url(#ah)"/>
+<path class="flow" d="M705,152.0 L729,152.0" marker-end="url(#ah)"/>
+<path class="flow" d="M837.0,195 L837.0,257" marker-end="url(#ah)"/>
+<path class="flow" d="M731,302.0 L707,302.0" marker-end="url(#ah)"/>
+<path class="flow" d="M493,302.0 L469,302.0" marker-end="url(#ah)"/>
+<path class="flow" d="M255,302.0 L231,302.0" marker-end="url(#ah)"/>
+<path class="loop" d="M401.0,259 C471.0,251 471.0,205 401.0,197" marker-end="url(#ah)"/>
+<rect class="lpill" x="257.2" y="217.0" width="139.5" height="22" rx="11"/><text class="ltxt" x="327.0" y="232.0" text-anchor="middle">고칠 점이 있으면 다시</text>
+<rect class="hl h1" x="15" y="107" width="216" height="90" rx="14"/>
+<rect class="hl h2" x="253" y="107" width="216" height="90" rx="14"/>
+<rect class="hl h3" x="491" y="107" width="216" height="90" rx="14"/>
+<rect class="hl h4" x="729" y="107" width="216" height="90" rx="14"/>
+<rect class="hl h5" x="729" y="257" width="216" height="90" rx="14"/>
+<rect class="hl h6" x="491" y="257" width="216" height="90" rx="14"/>
+<rect class="hl h7" x="253" y="257" width="216" height="90" rx="14"/>
+<rect class="hl h8" x="15" y="257" width="216" height="90" rx="14"/>
+<g><rect class="box me" x="20" y="112" width="206" height="80" rx="10"/>
+<rect class="pill-me" x="32" y="101" width="49.7" height="22" rx="11"/><text class="pt pt-me" x="56.9" y="116" text-anchor="middle">1 · 나</text>
+<text class="body" x="32" y="148">참고 사이트와 수정 요청</text>
+<text class="body" x="32" y="168">(번호 목록)</text>
+</g>
+<g><rect class="box ai" x="258" y="112" width="206" height="80" rx="10"/>
+<rect class="pill-ai" x="270" y="101" width="65.2" height="22" rx="11"/><text class="pt pt-ai" x="302.6" y="116" text-anchor="middle">2 · Opus</text>
+<text class="body" x="270" y="148">분석과 계획, 선택지 질문</text>
+</g>
+<g><rect class="box me" x="496" y="112" width="206" height="80" rx="10"/>
+<rect class="pill-me" x="508" y="101" width="49.7" height="22" rx="11"/><text class="pt pt-me" x="532.9" y="116" text-anchor="middle">3 · 나</text>
+<text class="body" x="508" y="148">결정 (스크롤 방식, 다크</text>
+<text class="body" x="508" y="168">모드, 넣을 내용)</text>
+</g>
+<g><rect class="box ai" x="734" y="112" width="206" height="80" rx="10"/>
+<rect class="pill-ai" x="746" y="101" width="78.0" height="22" rx="11"/><text class="pt pt-ai" x="785.0" y="116" text-anchor="middle">4 · Sonnet</text>
+<text class="body" x="746" y="148">구현과 테스트 수정</text>
+</g>
+<g><rect class="box check" x="734" y="262" width="206" height="80" rx="10"/>
+<rect class="pill-check" x="746" y="251" width="61.2" height="22" rx="11"/><text class="pt pt-check" x="776.6" y="266" text-anchor="middle">5 · 검사</text>
+<text class="body" x="746" y="298">lint · typecheck · Vitest</text>
+<text class="body" x="746" y="318">· build</text>
+</g>
+<g><rect class="box ai" x="496" y="262" width="206" height="80" rx="10"/>
+<rect class="pill-ai" x="508" y="251" width="65.2" height="22" rx="11"/><text class="pt pt-ai" x="540.6" y="266" text-anchor="middle">6 · Opus</text>
+<text class="body" x="508" y="298">헤드리스 Chrome 캡처 검토</text>
+<text class="body" x="508" y="318">(1440 · 900 · 390px, 다크)</text>
+</g>
+<g><rect class="box me" x="258" y="262" width="206" height="80" rx="10"/>
+<rect class="pill-me" x="270" y="251" width="49.7" height="22" rx="11"/><text class="pt pt-me" x="294.9" y="266" text-anchor="middle">7 · 나</text>
+<text class="body" x="270" y="298">확인과 승인</text>
+</g>
+<g><rect class="box check" x="20" y="262" width="206" height="80" rx="10"/>
+<rect class="pill-check" x="32" y="251" width="61.2" height="22" rx="11"/><text class="pt pt-check" x="62.6" y="266" text-anchor="middle">8 · 배포</text>
+<text class="body" x="32" y="298">커밋 · push → GitHub</text>
+<text class="body" x="32" y="318">Actions CI → Vercel</text>
+</g>
+</svg>

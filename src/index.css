@@ -947,6 +947,56 @@ main:focus:not(:focus-visible) {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
+.project-body-ai-top {
+  padding-bottom: 1.5rem;
+}
+.ai-areas-title {
+  margin: 1.25rem 0 0.4rem !important;
+  font-size: 0.75rem !important;
+  color: var(--ink);
+}
+.ai-areas {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.35rem;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.ai-areas li {
+  padding: 0 0.5rem;
+  font-size: 0.78rem;
+  line-height: 1.6;
+  border: 1px solid var(--line);
+  border-radius: 4px;
+}
+.tool-list,
+.case-list {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.tool-list li {
+  padding: 0 0 0.75rem;
+  font-size: 0.9375rem;
+  line-height: 1.65;
+}
+.tool-list strong {
+  display: block;
+  color: var(--ink);
+}
+.case-list li {
+  padding: 0 0 1rem;
+}
+.project-col .case-situation {
+  margin: 0 0 0.35rem;
+}
+.project-col .case-choice {
+  margin: 0;
+  padding-left: 0.75rem;
+  color: var(--ink);
+  border-left: 2px solid var(--accent);
+}
 .project-col p {
   margin: 0 0 0.75rem;
   font-size: 0.9375rem;

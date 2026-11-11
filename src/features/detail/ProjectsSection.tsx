@@ -7,7 +7,8 @@ import { ProjectLinks } from './ProjectLinks'
 import { SectionHead } from './SectionHead'
 
 interface ProjectRowProps {
-  project: Project
+  /** 행 머리에 보이는 값 */
+  head: { id: string; name: string; period: string }
   index: number
   open: boolean
   onToggle: () => void
@@ -15,64 +16,69 @@ interface ProjectRowProps {
   prefix?: string
   /** id 앞 글자. 같은 프로젝트 id가 두 목록에 있어도 겹치지 않게 한다 */
   idPrefix?: string
-  /** 3열 아래에 더하는 줄(AI 프로젝트의 둘째 줄) */
-  extra?: ReactNode
+  /** 펼친 안쪽 내용 */
+  children: ReactNode
 }
 
-/** 펼침 행 1개. 프로젝트 구역과 AI 프로젝트 구역이 함께 쓴다. */
-export function ProjectRow({ project, index, open, onToggle, prefix = 'P', idPrefix = 'project', extra }: ProjectRowProps) {
+/** 펼침 행 1개의 틀. 프로젝트 구역과 AI 프로젝트 구역이 함께 쓴다. 안쪽 내용은 호출하는 쪽이 정한다. */
+export function ProjectRow({ head, index, open, onToggle, prefix = 'P', idPrefix = 'project', children }: ProjectRowProps) {
   const no = `${prefix}/${String(index + 1).padStart(2, '0')}`
-  const buttonId = `${idPrefix}-btn-${project.id}`
-  const panelId = `${idPrefix}-panel-${project.id}`
+  const buttonId = `${idPrefix}-btn-${head.id}`
+  const panelId = `${idPrefix}-panel-${head.id}`
   return (
-    <li className={`project-item${open ? ' is-open' : ''}`} id={`${idPrefix}-${project.id}`}>
+    <li className={`project-item${open ? ' is-open' : ''}`} id={`${idPrefix}-${head.id}`}>
       <h3 className="project-heading">
         <button type="button" id={buttonId} className="project-toggle" aria-expanded={open} aria-controls={panelId} onClick={onToggle}>
           <span className="project-no label-mono">{no}</span>
-          <span className="project-name">{project.name}</span>
-          <span className="project-period label-mono">{project.period}</span>
+          <span className="project-name">{head.name}</span>
+          <span className="project-period label-mono">{head.period}</span>
           <span className="pm" aria-hidden="true" />
         </button>
       </h3>
       <div className="project-panel" id={panelId} role="region" aria-labelledby={buttonId} inert={!open}>
-        <div className="project-panel-inner">
-          <div className="project-body">
-            <div className="project-col">
-              <p className="col-label label-mono">개요</p>
-              <p className="project-lead">{project.summary}</p>
-              <p>{project.overview}</p>
-              <ul className="chips">
-                {project.coreStack.map((name) => (
-                  <li key={name}>
-                    <Chip icon={project.coreStackIcons?.[name]}>{name}</Chip>
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <div className="project-col">
-              <p className="col-label label-mono">맡은 일</p>
-              <ul className="dash-list">
-                {splitSentences(project.role).map((s) => (
-                  <li key={s}>{s}</li>
-                ))}
-              </ul>
-            </div>
-            <div className="project-col project-col-results">
-              <p className="col-label label-mono">결과</p>
-              <ul className="arrow-list">
-                {project.results.map((r) => (
-                  <li key={r.value}>
-                    <strong>{r.value}</strong> {r.label}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          {extra}
-          <ProjectLinks project={project} className="project-links-row" />
-        </div>
+        <div className="project-panel-inner">{children}</div>
       </div>
     </li>
+  )
+}
+
+function TeamProjectBody({ project }: { project: Project }) {
+  return (
+    <>
+      <div className="project-body">
+        <div className="project-col">
+          <p className="col-label label-mono">개요</p>
+          <p className="project-lead">{project.summary}</p>
+          <p>{project.overview}</p>
+          <ul className="chips">
+            {project.coreStack.map((name) => (
+              <li key={name}>
+                <Chip icon={project.coreStackIcons?.[name]}>{name}</Chip>
+              </li>
+            ))}
+          </ul>
+        </div>
+        <div className="project-col">
+          <p className="col-label label-mono">맡은 일</p>
+          <ul className="dash-list">
+            {splitSentences(project.role).map((s) => (
+              <li key={s}>{s}</li>
+            ))}
+          </ul>
+        </div>
+        <div className="project-col project-col-results">
+          <p className="col-label label-mono">결과</p>
+          <ul className="arrow-list">
+            {project.results.map((r) => (
+              <li key={r.value}>
+                <strong>{r.value}</strong> {r.label}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </div>
+      <ProjectLinks project={project} className="project-links-row" />
+    </>
   )
 }
 
@@ -94,7 +100,9 @@ export function ProjectsSection({ projects }: { projects: Project[] }) {
         {projects.length === 0 ? <EmptyNote /> : null}
         <ol className="project-list">
           {projects.map((p, i) => (
-            <ProjectRow key={p.id} project={p} index={i} open={openIds.has(p.id)} onToggle={() => toggle(p.id)} />
+            <ProjectRow key={p.id} head={p} index={i} open={openIds.has(p.id)} onToggle={() => toggle(p.id)}>
+              <TeamProjectBody project={p} />
+            </ProjectRow>
           ))}
         </ol>
       </div>

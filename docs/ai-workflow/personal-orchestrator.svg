@@ -1,0 +1,111 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 564" width="960" height="564" role="img" aria-labelledby="t d">
+<title id="t">개인 작업 관리자 — AI 작업 흐름</title>
+<desc id="d">목표와 제약 정리에서 명세 작성, 설계 결정, 단계 계획, 구현, 검사, 검증, 승인과 커밋까지 9단계와, 승인 뒤 다음 단계 계획으로 돌아가는 되돌림 고리를 보여 주는 작업 흐름도.</desc>
+<style>
+svg { --bg:#F3F4EE; --ink:#1F3326; --acc:#5E7A4A; --fill:#C8D8A4; --line:#D5DACB; --panel:#FBFBF7; --mute:#4A5D4F; font-family:-apple-system, "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif; }
+@media (prefers-color-scheme: dark) { svg { --bg:#131712; --ink:#E5EADC; --acc:#9DB57F; --fill:#3D5230; --line:#2E372C; --panel:#1B2219; --mute:#B4BFA9; } }
+.bg { fill:var(--bg); }
+text { fill:var(--ink); font-size:14px; }
+.ttl { font-size:20px; font-weight:800; }
+.lg { font-size:12px; fill:var(--mute); }
+.box { stroke-linejoin:round; }
+.me { fill:var(--fill); stroke:var(--ink); stroke-width:2.5; }
+.ai { fill:var(--panel); stroke:var(--line); stroke-width:1.5; }
+.check { fill:var(--panel); stroke:var(--acc); stroke-width:1.5; stroke-dasharray:5 4; }
+.side { fill:none; stroke:var(--line); stroke-width:1.5; }
+.bar { fill:var(--acc); }
+.pill-me { fill:var(--ink); }
+.pill-ai { fill:var(--acc); }
+.pill-check { fill:var(--bg); stroke:var(--acc); stroke-width:1.2; stroke-dasharray:3 2; }
+.pill-side { fill:var(--line); }
+.pt { font-size:11.5px; font-weight:700; }
+.pt-me { fill:var(--bg); }
+.pt-ai { fill:var(--bg); }
+.pt-check { fill:var(--ink); }
+.pt-side { fill:var(--ink); }
+.body { fill:var(--ink); }
+.flow { fill:none; stroke:var(--acc); stroke-width:2; stroke-dasharray:6 6; animation:dash 1.2s linear infinite; }
+.loop { fill:none; stroke:var(--acc); stroke-width:2; stroke-dasharray:3 5; animation:dash 1.2s linear infinite; }
+.head { fill:var(--acc); }
+.lpill { fill:var(--bg); stroke:var(--acc); stroke-width:1.2; }
+.ltxt { font-size:12px; font-weight:700; }
+.hl { fill:none; stroke:var(--acc); stroke-opacity:0.55; stroke-width:6; opacity:0; animation:glow 14.0s ease-in-out infinite; }
+.h1 { animation-delay:0.00s; }
+.h2 { animation-delay:1.56s; }
+.h3 { animation-delay:3.11s; }
+.h4 { animation-delay:4.67s; }
+.h5 { animation-delay:6.22s; }
+.h6 { animation-delay:7.78s; }
+.h7 { animation-delay:9.33s; }
+.h8 { animation-delay:10.89s; }
+.h9 { animation-delay:12.44s; }
+@keyframes dash { to { stroke-dashoffset:-24; } }
+@keyframes glow { 0% { opacity:0; } 2% { opacity:1; } 10.11% { opacity:1; } 13.11% { opacity:0; } 100% { opacity:0; } }
+@media (prefers-reduced-motion: reduce) { .flow, .loop { animation:none; } .hl { animation:none; opacity:0; } }
+</style>
+<rect class="bg" x="0" y="0" width="960" height="564"/>
+<text class="ttl" x="24" y="40">개인 작업 관리자 — AI 작업 흐름</text>
+<rect class="box me" x="24" y="62" width="26" height="16" rx="4"/><text class="lg" x="58" y="74">나의 판단</text>
+<rect class="box ai" x="136" y="62" width="26" height="16" rx="4"/><text class="lg" x="170" y="74">AI</text>
+<rect class="box check" x="208" y="62" width="26" height="16" rx="4"/><text class="lg" x="242" y="74">검사·배포</text>
+<defs><marker id="ah" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path class="head" d="M0,1 L10,5 L0,9 Z"/></marker></defs>
+<path class="flow" d="M277,152.0 L309,152.0" marker-end="url(#ah)"/>
+<path class="flow" d="M567,152.0 L599,152.0" marker-end="url(#ah)"/>
+<path class="flow" d="M729.0,195 L729.0,235" marker-end="url(#ah)"/>
+<path class="flow" d="M601,280.0 L569,280.0" marker-end="url(#ah)"/>
+<path class="flow" d="M311,280.0 L279,280.0" marker-end="url(#ah)"/>
+<path class="flow" d="M149.0,323 L149.0,363" marker-end="url(#ah)"/>
+<path class="flow" d="M277,408.0 L309,408.0" marker-end="url(#ah)"/>
+<path class="flow" d="M567,408.0 L599,408.0" marker-end="url(#ah)"/>
+<path class="loop" d="M857,408.0 C940,408.0 940,280.0 859,280.0" marker-end="url(#ah)"/>
+<rect class="lpill" x="883.6" y="333.0" width="71.8" height="22" rx="11"/><text class="ltxt" x="919.5" y="348.0" text-anchor="middle">다음 단계</text>
+<rect class="hl h1" x="19" y="107" width="260" height="90" rx="14"/>
+<rect class="hl h2" x="309" y="107" width="260" height="90" rx="14"/>
+<rect class="hl h3" x="599" y="107" width="260" height="90" rx="14"/>
+<rect class="hl h4" x="599" y="235" width="260" height="90" rx="14"/>
+<rect class="hl h5" x="309" y="235" width="260" height="90" rx="14"/>
+<rect class="hl h6" x="19" y="235" width="260" height="90" rx="14"/>
+<rect class="hl h7" x="19" y="363" width="260" height="90" rx="14"/>
+<rect class="hl h8" x="309" y="363" width="260" height="90" rx="14"/>
+<rect class="hl h9" x="599" y="363" width="260" height="90" rx="14"/>
+<g><rect class="box me" x="24" y="112" width="250" height="80" rx="10"/>
+<rect class="pill-me" x="36" y="101" width="49.7" height="22" rx="11"/><text class="pt pt-me" x="60.9" y="116" text-anchor="middle">1 · 나</text>
+<text class="body" x="36" y="148">목표와 제약 (비용, 개인 정보, 복구)</text>
+</g>
+<g><rect class="box ai" x="314" y="112" width="250" height="80" rx="10"/>
+<rect class="pill-ai" x="326" y="101" width="65.2" height="22" rx="11"/><text class="pt pt-ai" x="358.6" y="116" text-anchor="middle">2 · Opus</text>
+<text class="body" x="326" y="148">명세 11개 작성 · 문서끼리 어긋난</text>
+<text class="body" x="326" y="168">곳 찾기</text>
+</g>
+<g><rect class="box me" x="604" y="112" width="250" height="80" rx="10"/>
+<rect class="pill-me" x="616" y="101" width="49.7" height="22" rx="11"/><text class="pt pt-me" x="640.9" y="116" text-anchor="middle">3 · 나</text>
+<text class="body" x="616" y="148">설계 결정 선택 (결정 기록 14건)</text>
+</g>
+<g><rect class="box ai" x="604" y="240" width="250" height="80" rx="10"/>
+<rect class="pill-ai" x="616" y="229" width="65.2" height="22" rx="11"/><text class="pt pt-ai" x="648.6" y="244" text-anchor="middle">4 · Opus</text>
+<text class="body" x="616" y="276">단계 계획 M0~M5</text>
+</g>
+<g><rect class="box ai" x="314" y="240" width="250" height="80" rx="10"/>
+<rect class="pill-ai" x="326" y="229" width="68.8" height="22" rx="11"/><text class="pt pt-ai" x="360.4" y="244" text-anchor="middle">5 · Haiku</text>
+<text class="body" x="326" y="276">코드 탐색과 내용 추출</text>
+</g>
+<g><rect class="box ai" x="24" y="240" width="250" height="80" rx="10"/>
+<rect class="pill-ai" x="36" y="229" width="78.0" height="22" rx="11"/><text class="pt pt-ai" x="75.0" y="244" text-anchor="middle">6 · Sonnet</text>
+<text class="body" x="36" y="276">구현</text>
+</g>
+<g><rect class="box check" x="24" y="368" width="250" height="80" rx="10"/>
+<rect class="pill-check" x="36" y="357" width="61.2" height="22" rx="11"/><text class="pt pt-check" x="66.6" y="372" text-anchor="middle">7 · 검사</text>
+<text class="body" x="36" y="404">pytest 1,078개 · 가짜 어댑터로</text>
+<text class="body" x="36" y="424">실패·재시작·승인 시험</text>
+</g>
+<g><rect class="box ai" x="314" y="368" width="250" height="80" rx="10"/>
+<rect class="pill-ai" x="326" y="357" width="65.2" height="22" rx="11"/><text class="pt pt-ai" x="358.6" y="372" text-anchor="middle">8 · Opus</text>
+<text class="body" x="326" y="404">결과 검증과 보고 (바뀐 것, 검증</text>
+<text class="body" x="326" y="424">결과, 남은 제한)</text>
+</g>
+<g><rect class="box me" x="604" y="368" width="250" height="80" rx="10"/>
+<rect class="pill-me" x="616" y="357" width="49.7" height="22" rx="11"/><text class="pt pt-me" x="640.9" y="372" text-anchor="middle">9 · 나</text>
+<text class="body" x="616" y="404">승인 → 커밋</text>
+</g>
+<g><rect class="box side" x="24" y="482" width="830" height="50" rx="10"/><rect class="bar" x="24" y="492" width="4" height="30" rx="2"/><rect class="pill-side" x="38" y="471" width="67.7" height="22" rx="11"/><text class="pt pt-side" x="71.8" y="486" text-anchor="middle">안전 장치</text><text class="body" x="40" y="515">API 키 차단 · 하위 에이전트 git 쓰기 금지 · 이력서 원본은 Git 밖</text></g>
+</svg>
