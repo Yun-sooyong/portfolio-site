@@ -232,7 +232,7 @@ main:focus:not(:focus-visible) {
   border-radius: 50%;
   background: linear-gradient(90deg, var(--ink) 50%, transparent 50%);
 }
-.theme-toggle[aria-pressed='true'] .theme-icon {
+[data-theme='dark'] .theme-toggle .theme-icon {
   background: linear-gradient(270deg, var(--ink) 50%, transparent 50%);
 }
 .menu-button {

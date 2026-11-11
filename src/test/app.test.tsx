@@ -139,17 +139,17 @@ describe('다크 모드', () => {
     }
   })
 
-  it('단추를 누르면 data-theme 가 바뀌고 선택이 저장된다', async () => {
+  it('단추를 누르면 data-theme 와 단추 글자가 바뀌고 선택이 저장된다', async () => {
     document.documentElement.dataset.theme = 'light'
     renderAt('/')
     const btn = screen.getByRole('button', { name: '다크 모드' })
-    expect(btn).toHaveAttribute('aria-pressed', 'false')
     await userEvent.click(btn)
     expect(document.documentElement.dataset.theme).toBe('dark')
-    expect(btn).toHaveAttribute('aria-pressed', 'true')
+    expect(btn).toHaveAccessibleName('밝은 모드')
     expect(window.localStorage.getItem('portfolio-theme')).toBe('dark')
     await userEvent.click(btn)
     expect(document.documentElement.dataset.theme).toBe('light')
+    expect(btn).toHaveAccessibleName('다크 모드')
     expect(window.localStorage.getItem('portfolio-theme')).toBe('light')
   })
 
