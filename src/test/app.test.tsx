@@ -520,7 +520,10 @@ describe('AI 프로젝트 구역', () => {
       expect(within(panel).queryByText('맡은 일')).toBeNull()
       expect(within(panel).getByRole('link', { name: /작업 흐름 다이어그램/ })).toHaveAttribute('href', p.workflowUrl)
       expect(panel.querySelectorAll('.project-body')).toHaveLength(2)
-      expect(panel.querySelectorAll('a')).toHaveLength(p.githubUrl ? 2 : 1)
+      if (p.notionUrl) {
+        expect(within(panel).getByRole('link', { name: /^노션에서 자세히/ })).toHaveAttribute('href', p.notionUrl)
+      }
+      expect(panel.querySelectorAll('a')).toHaveLength(1 + (p.githubUrl ? 1 : 0) + (p.notionUrl ? 1 : 0))
     })
   })
 

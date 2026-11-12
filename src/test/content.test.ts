@@ -217,6 +217,15 @@ describe('내용 형식', () => {
   })
 })
 
+describe('AI 프로젝트 노션 링크', () => {
+  it('모든 AI 프로젝트에 notionUrl 이 있고 노션 사이트 주소로 시작한다', () => {
+    for (const p of portfolio.aiProjects) {
+      expect(p.notionUrl, p.id).toBeDefined()
+      expect(p.notionUrl, p.id).toMatch(/^https:\/\/yun-sooyong\.notion\.site\//)
+    }
+  })
+})
+
 describe('기술 아이콘', () => {
   it('내용의 모든 icon 키가 techIcons.ts 에 있다', async () => {
     const { techIcons } = await import('../ui/techIcons')

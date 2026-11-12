@@ -96,6 +96,14 @@ function AiProjectBody({ project: p }: { project: AiProject }) {
             <span className="sr-only">, {p.name}</span>
           </ExternalLink>
         </li>
+        {p.notionUrl ? (
+          <li>
+            <ExternalLink href={p.notionUrl}>
+              노션에서 자세히
+              <span className="sr-only">, {p.name}</span>
+            </ExternalLink>
+          </li>
+        ) : null}
       </ul>
     </>
   )

@@ -40,6 +40,7 @@ export const aiProjects: AiProject[] = [
       'flutter analyze 문제 0건, 테스트 31개 통과 상태로 다음 세션에 인계했다.',
     ],
     githubUrl: 'https://github.com/Yun-sooyong/mangcut-bangji',
+    notionUrl: 'https://yun-sooyong.notion.site/416258595efe8109aa54ec25ade06be1',
     workflowUrl: 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/mangcut-bangji.md',
   },
   {
@@ -78,6 +79,7 @@ export const aiProjects: AiProject[] = [
       '하위 에이전트는 커밋과 push를 하지 못한다. 결과를 확인하고 내가 승인한 뒤에만 커밋한다.',
       '작업 환경에서 API 키를 막고 구독 로그인 CLI만 쓴다. 이력서 원본은 Git에 넣지 않는다.',
     ],
+    notionUrl: 'https://yun-sooyong.notion.site/416258595efe81ab96c2efa1ca242997',
     workflowUrl: 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/personal-orchestrator.md',
   },
   {
@@ -117,6 +119,7 @@ export const aiProjects: AiProject[] = [
       '겪은 문제는 docs/journal.md에 날짜, 문제, 원인, 해결로 남긴다.',
     ],
     githubUrl: 'https://github.com/Yun-sooyong/portfolio-site',
+    notionUrl: 'https://yun-sooyong.notion.site/416258595efe8157959ac4916b9abd37',
     workflowUrl: 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/portfolio-site.md',
   },
 ]
