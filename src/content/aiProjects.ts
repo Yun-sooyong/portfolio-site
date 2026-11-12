@@ -99,7 +99,7 @@ export const aiProjects: AiProject[] = [
     ],
     impact: [
       { value: '1일', label: '참고 사이트 2개를 섞은 전체 화면 개편부터 배포까지 (2026.11.11)' },
-      { value: '81개', label: 'Vitest 시험. 빌드 결과에 전화번호와 주소가 없는지도 검사한다' },
+      { value: '82개', label: 'Vitest 시험. 빌드 결과에 전화번호와 주소가 없는지도 검사한다' },
       { value: '3가지 폭', label: '1440, 900, 390px 화면을 헤드리스 Chrome으로 캡처해 확인' },
     ],
     design: [
