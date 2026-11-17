@@ -36,9 +36,9 @@ export const highlights: Highlight[] = [
   },
   {
     id: 'commits',
-    value: '53/116',
+    value: '38/85',
     unit: '개',
-    caption: '5일 동안 팀 커밋 116개 중 내가 쓴 커밋.',
+    caption: '6일 동안 팀 커밋 85개 중 내가 쓴 커밋입니다(병합 커밋 제외).',
     source: 'recare-dm',
   },
   {

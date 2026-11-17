@@ -40,8 +40,8 @@ export const skillGroups: SkillGroup[] = [
         can: 'EMPATHO에서 판독 모델을 서빙하고 소견문 서버를 만들었습니다.',
       },
       {
-        techs: [{ name: 'LightGBM' }, { name: 'SHAP' }],
-        can: 'ReCare-DM에서 재입원 확률과 위험 요인, 보호 요인을 보여 줬습니다.',
+        techs: [{ name: 'LightGBM' }],
+        can: 'ReCare-DM에서 LightGBM 재입원 확률로 퇴원 준비 상태를 계산하고 재방문 정보로 다시 예측했습니다. SHAP 요인 계산은 팀원이 맡았고, 저는 그 결과를 화면에 연결했습니다.',
       },
     ],
   },

@@ -39,7 +39,7 @@ export const projects: Project[] = [
     role: 'Django REST API와 GCP 인프라를 맡았습니다. API는 Cloud Run 서울 리전에 배포했습니다.',
     results: [
       { value: '54장', label: '32MB를 넘어 서명 URL 직접 업로드로 바꾼 이미지 (실측 151장, 최대 141.1MB)' },
-      { value: '7개', label: '프런트, 워커, DB 사이 계약을 묶은 DRF API 경로' },
+      { value: '8개', label: '프런트, 워커, DB 사이 계약을 묶은 DRF API 엔드포인트' },
       { value: '5가지', label: '이미지 1장마다 추적하는 처리 상태 (진행 4단계와 오류)' },
     ],
     githubUrl: 'https://github.com/Yun-sooyong/pathology-cdss',
@@ -74,10 +74,10 @@ export const projects: Project[] = [
     summary: '당뇨 환자의 재입원 위험과 퇴원 준비 점수를 보는 대시보드.',
     overview:
       '재입원 확률 옆에 위험 요인과 보호 요인을 SHAP 값으로 함께 보여 줍니다. 퇴원 뒤 재방문 정보를 넣으면 위험을 다시 계산합니다.',
-    role: '퇴원 관리 앱(discharge), 환자 모델 수정, 재방문 재예측, 앱 통합을 맡았습니다. 5일 동안 팀 커밋 116개 중 53개를 썼습니다.',
+    role: '퇴원 관리 앱(discharge), 환자 모델 수정, 재방문 재예측, 앱 통합을 맡았습니다. 6일 동안 팀 커밋 85개 중 38개를 썼습니다(병합 커밋 제외).',
     results: [
       { value: '5개 × 20점', label: '퇴원 준비 점수 항목과 배점 (100점 만점)' },
-      { value: '53 / 116개', label: '팀 전체 커밋 중 내 커밋' },
+      { value: '38 / 85개', label: '팀 전체 커밋 중 내 커밋 (병합 커밋 제외)' },
       { value: '5개 + 5개', label: '예측마다 보여 주는 SHAP 위험 요인과 보호 요인' },
     ],
     githubUrl: 'https://github.com/Yun-sooyong/recare-dm',
