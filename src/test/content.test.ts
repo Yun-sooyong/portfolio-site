@@ -242,4 +242,18 @@ describe('기술 아이콘', () => {
       for (const name of Object.keys(p.coreStackIcons ?? {})) expect(p.coreStack).toContain(name)
     }
   })
+
+  it('화면 이미지(shot)는 /shots/ 경로의 실제 파일이고 alt와 caption이 있다', () => {
+    const withShot = [...projects, ...portfolio.aiProjects].filter((p) => p.shot)
+    expect(withShot.length).toBeGreaterThan(0)
+    for (const p of withShot) {
+      const shot = p.shot!
+      expect(shot.src.startsWith('/shots/')).toBe(true)
+      expect(existsSync(resolve(process.cwd(), 'public' + shot.src))).toBe(true)
+      expect(shot.alt.trim()).not.toBe('')
+      expect(shot.caption.trim()).not.toBe('')
+      expect(shot.width).toBeGreaterThan(0)
+      expect(shot.height).toBeGreaterThan(0)
+    }
+  })
 })

@@ -77,7 +77,7 @@ export const skillGroups: SkillGroup[] = [
           { name: 'FCM' },
         ],
         printName: 'Flutter / Dart / Riverpod / Firebase (Auth, FCM)',
-        can: '태블릿 앱의 화면 9개, 상태 관리, 업로드, 푸시 알림을 혼자 만들었습니다.',
+        can: '태블릿 앱의 화면 9개, 상태 관리, 업로드, 푸시 알림을 단독으로 만들었습니다.',
       },
     ],
   },

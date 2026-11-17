@@ -3,6 +3,7 @@ import type { Project } from '../../domain/portfolio'
 import { splitSentences } from '../../domain/text'
 import { Chip } from '../../ui/Chip'
 import { EmptyNote } from '../../ui/EmptyNote'
+import { ProjectShot } from './ProjectShot'
 import { ProjectLinks } from './ProjectLinks'
 import { SectionHead } from './SectionHead'
 
@@ -77,6 +78,7 @@ function TeamProjectBody({ project }: { project: Project }) {
           </ul>
         </div>
       </div>
+      <ProjectShot shot={project.shot} />
       <ProjectLinks project={project} className="project-links-row" />
     </>
   )

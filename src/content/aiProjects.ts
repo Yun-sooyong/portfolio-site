@@ -41,6 +41,13 @@ export const aiProjects: AiProject[] = [
     ],
     githubUrl: 'https://github.com/Yun-sooyong/mangcut-bangji',
     notionUrl: 'https://yun-sooyong.notion.site/416258595efe8109aa54ec25ade06be1',
+    shot: {
+      src: '/shots/mangcut-bangji.png',
+      alt: '망컷방지 앱의 구도 가이드 14종 목록 화면',
+      caption: '앱에서 고를 수 있는 구도 가이드 14종입니다. 앱의 GuidePainter 코드로 그렸습니다.',
+      width: 1600,
+      height: 2250,
+    },
     workflowUrl: 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/mangcut-bangji.md',
   },
   {

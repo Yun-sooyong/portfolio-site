@@ -87,6 +87,20 @@ export interface Result {
   label: string
 }
 
+/** 프로젝트 화면 이미지 1장. 파일은 public/shots/ 에 둔다. 상세본에만 보인다. */
+export interface ProjectShot {
+  /** 이미지 주소. /shots/<파일> 형식 */
+  src: string
+  /** 화면 내용을 짧게 설명한 글 */
+  alt: string
+  /** 이미지 아래에 보이는 설명. 합성 데이터인지 밝힌다 */
+  caption: string
+  /** 원본 가로 픽셀. 레이아웃 흔들림을 막으려고 적는다 */
+  width: number
+  /** 원본 세로 픽셀 */
+  height: number
+}
+
 export interface Project {
   id: string
   name: string
@@ -110,6 +124,8 @@ export interface Project {
   demoUrl?: string
   /** 노션 상세 페이지 주소(선택). 구성도와 문제 해결 같은 자세한 내용은 여기로 넘긴다. https:// 로 시작한다 */
   notionUrl?: string
+  /** 화면 이미지(선택). 펼친 본문의 링크 줄 위에 보인다 */
+  shot?: ProjectShot
 }
 
 /** 사용한 AI 1개와 맡긴 일 */
@@ -154,6 +170,8 @@ export interface AiProject {
   notionUrl?: string
   /** GitHub의 작업 흐름 다이어그램 문서 주소. https:// 로 시작한다 */
   workflowUrl: string
+  /** 화면 이미지(선택). 펼친 본문의 링크 줄 위에 보인다 */
+  shot?: ProjectShot
 }
 
 export interface Contact {

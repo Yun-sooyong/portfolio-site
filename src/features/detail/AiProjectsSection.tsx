@@ -3,6 +3,7 @@ import type { AiProject } from '../../domain/portfolio'
 import { Chip } from '../../ui/Chip'
 import { EmptyNote } from '../../ui/EmptyNote'
 import { ExternalLink } from '../../ui/ExternalLink'
+import { ProjectShot } from './ProjectShot'
 import { ProjectRow } from './ProjectsSection'
 import { SectionHead } from './SectionHead'
 
@@ -81,6 +82,7 @@ function AiProjectBody({ project: p }: { project: AiProject }) {
         </div>
         <ListColumn label="품질 관리" items={p.quality} />
       </div>
+      <ProjectShot shot={p.shot} />
       <ul className="project-links project-links-row" aria-label={`${p.name} 링크`}>
         {p.githubUrl ? (
           <li>
