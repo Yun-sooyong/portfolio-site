@@ -15,7 +15,7 @@ export function PrintSheet({ data }: { data: Portfolio }) {
         <button type="button" className="print-button" onClick={() => window.print()}>
           PDF로 저장
         </button>
-        <p>인쇄 창에서 대상을 “PDF로 저장”으로 고른다. 여백은 “기본”, 배경 그래픽은 꺼도 된다.</p>
+        <p>인쇄 창에서 대상을 “PDF로 저장”으로 고릅니다. 여백은 “기본”, 배경 그래픽은 꺼도 됩니다.</p>
       </div>
 
       <article className="sheet">

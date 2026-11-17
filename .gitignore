@@ -6,3 +6,7 @@ coverage
 .vercel
 .env*
 *.log
+
+# 개인 작업 계획 문서 (공개하지 않는다)
+docs/career-kit.md
+*.tsbuildinfo

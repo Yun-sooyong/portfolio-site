@@ -352,7 +352,7 @@ describe('쪽 이동', () => {
   it('상세본에서 단축본 링크를 누르면 본문(main)에 초점이 간다', async () => {
     window.scrollTo = vi.fn() as unknown as typeof window.scrollTo
     renderAt('/')
-    await userEvent.click(screen.getAllByRole('link', { name: /단축본 PDF/ })[0]!)
+    await userEvent.click(screen.getAllByRole('link', { name: /인쇄용 단축본/ })[0]!)
     await screen.findByRole('button', { name: 'PDF로 저장' })
     await vi.waitFor(() => expect(document.activeElement?.tagName).toBe('MAIN'))
   })
@@ -360,7 +360,7 @@ describe('쪽 이동', () => {
   it('첫 화면 버튼은 프로젝트 구역과 단축본으로 간다', () => {
     renderAt('/')
     expect(screen.getByRole('link', { name: '프로젝트 보기' })).toHaveAttribute('href', '#projects')
-    expect(screen.getAllByRole('link', { name: /단축본 PDF/ }).every((a) => a.getAttribute('href') === '/print')).toBe(true)
+    expect(screen.getAllByRole('link', { name: /인쇄용 단축본/ }).every((a) => a.getAttribute('href') === '/print')).toBe(true)
   })
 
   it('바깥 링크는 새 탭에서 열린다고 보조 기술에 알린다', () => {
@@ -380,7 +380,7 @@ describe('쪽 이동', () => {
     renderAt('/')
     const contact = document.getElementById('contact')!
     expect(within(contact).getByRole('link', { name: 'ysyg22@gmail.com' })).toBeInTheDocument()
-    expect(within(contact).getByRole('link', { name: /단축본 PDF/ })).toHaveAttribute('href', '/print')
+    expect(within(contact).getByRole('link', { name: /인쇄용 단축본/ })).toHaveAttribute('href', '/print')
   })
 
   it('화면 그리기에 실패하면 안내와 새로고침 단추를 보인다', async () => {

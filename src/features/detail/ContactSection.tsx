@@ -4,7 +4,7 @@ import { ExternalLink } from '../../ui/ExternalLink'
 import { ObfuscatedEmail } from '../../ui/ObfuscatedEmail'
 import { SectionHead } from './SectionHead'
 
-/** 연락처(번호 없음). 제목 "연락처" 1개, 이메일, GitHub, 단축본 PDF 링크. */
+/** 연락처(번호 없음). 제목 "연락처" 1개, 이메일, GitHub, 인쇄용 단축본 링크. */
 export function ContactSection({ contact }: { contact: Contact }) {
   const host = (url: string) => url.replace(/^https:\/\//, '')
   return (
@@ -39,8 +39,8 @@ export function ContactSection({ contact }: { contact: Contact }) {
           <li>
             <p className="contact-label label-mono">A4 2쪽 요약</p>
             <p className="contact-value">
-              <Link to="/print">단축본 PDF (A4 2쪽)</Link>
-              <span className="contact-host">열린 화면에서 “PDF로 저장” 단추를 누른다.</span>
+              <Link to="/print">인쇄용 단축본 (A4 2쪽)</Link>
+              <span className="contact-host">열린 화면에서 “PDF로 저장” 단추를 누릅니다.</span>
             </p>
           </li>
         </ul>

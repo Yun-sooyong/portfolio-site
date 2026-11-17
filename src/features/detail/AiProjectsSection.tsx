@@ -124,7 +124,7 @@ export function AiProjectsSection({ projects }: { projects: AiProject[] }) {
     <section className="section" id="ai-projects" aria-labelledby="ai-projects-title">
       <div className="wrap">
         <SectionHead id="ai-projects" title="AI로 만든 프로젝트" />
-        <p className="section-note">Claude Code로 바이브 코딩한 개인 프로젝트. AI에게 맡긴 일과 내가 정한 것을 나눠 적었다.</p>
+        <p className="section-note">Claude Code로 바이브 코딩한 개인 프로젝트입니다. AI에게 맡긴 일과 내가 정한 것을 나눠 적었습니다.</p>
         {projects.length === 0 ? <EmptyNote /> : null}
         <ol className="project-list">
           {projects.map((p, i) => (

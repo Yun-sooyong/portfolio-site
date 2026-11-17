@@ -36,7 +36,7 @@ export function Hero({ data }: { data: Portfolio }) {
               프로젝트 보기
             </a>
             <Link className="btn btn-line" to="/print">
-              단축본 PDF
+              인쇄용 단축본
             </Link>
           </div>
         </div>

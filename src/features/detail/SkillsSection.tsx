@@ -8,7 +8,7 @@ export function SkillsSection({ groups }: { groups: SkillGroup[] }) {
   return (
     <section className="section" id="skills" aria-labelledby="skills-title">
       <div className="wrap">
-        <SectionHead id="skills" title="기술마다 쓴 곳이 있다" />
+        <SectionHead id="skills" title="기술마다 쓴 곳이 있습니다" />
         {groups.length === 0 ? <EmptyNote /> : null}
         <div className="skill-grid">
           {groups.map((g) => (
