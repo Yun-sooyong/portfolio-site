@@ -1,4 +1,3 @@
-import { Link } from 'react-router-dom'
 import type { Portfolio } from '../../domain/portfolio'
 
 const FLOW = ['판독 요청', '작업 큐', 'GPU 추론', '소견문']
@@ -34,12 +33,6 @@ export function Hero({ data }: { data: Portfolio }) {
           <div className="hero-actions rise rise-3">
             <a className="btn btn-fill" href="#projects">
               프로젝트 보기
-            </a>
-            <Link className="btn btn-line" to="/print">
-              인쇄용 단축본
-            </Link>
-            <a className="btn btn-line" href="/yun-sooyong-portfolio.pdf" download>
-              포트폴리오 PDF
             </a>
           </div>
         </div>

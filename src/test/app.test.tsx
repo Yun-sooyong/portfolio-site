@@ -349,29 +349,20 @@ describe('이력 구역', () => {
 })
 
 describe('쪽 이동', () => {
-  it('상세본에서 단축본 링크를 누르면 본문(main)에 초점이 간다', async () => {
+  it('없는 주소에서 상세본 링크를 누르면 본문(main)에 초점이 간다', async () => {
     window.scrollTo = vi.fn() as unknown as typeof window.scrollTo
-    renderAt('/')
-    await userEvent.click(screen.getAllByRole('link', { name: /인쇄용 단축본/ })[0]!)
-    await screen.findByRole('button', { name: 'PDF로 저장' })
+    renderAt('/no-such-page')
+    await userEvent.click(screen.getByRole('link', { name: '상세본으로 가기' }))
+    await screen.findByRole('link', { name: '프로젝트 보기' })
     await vi.waitFor(() => expect(document.activeElement?.tagName).toBe('MAIN'))
   })
 
-  it('첫 화면 버튼은 프로젝트 구역과 단축본으로 간다', () => {
-    renderAt('/')
-    expect(screen.getByRole('link', { name: '프로젝트 보기' })).toHaveAttribute('href', '#projects')
-    expect(screen.getAllByRole('link', { name: /인쇄용 단축본/ }).every((a) => a.getAttribute('href') === '/print')).toBe(true)
-  })
-
-  it('첫 화면과 연락처 구역에 포트폴리오 PDF 내려받기 링크가 있다', () => {
+  it('첫 화면 버튼은 프로젝트 보기 1개이고 단축본과 PDF 링크는 없다', () => {
     renderAt('/')
     const hero = document.getElementById('top')!
-    const link = within(hero).getByRole('link', { name: '포트폴리오 PDF' })
-    expect(link).toHaveAttribute('href', '/yun-sooyong-portfolio.pdf')
-    expect(link).toHaveAttribute('download')
-    const contactLink = within(document.getElementById('contact')!).getByRole('link', { name: '포트폴리오 PDF' })
-    expect(contactLink).toHaveAttribute('href', '/yun-sooyong-portfolio.pdf')
-    expect(contactLink).toHaveAttribute('download')
+    expect(within(hero).getByRole('link', { name: '프로젝트 보기' })).toHaveAttribute('href', '#projects')
+    expect(within(hero).queryByRole('link', { name: /인쇄용 단축본/ })).toBeNull()
+    expect(within(hero).queryByRole('link', { name: '포트폴리오 PDF' })).toBeNull()
   })
 
   it('/doc 는 PDF 원본이다. 프로젝트 4개와 AI 프로젝트 3개가 있고 noindex 이다', async () => {
@@ -395,11 +386,12 @@ describe('쪽 이동', () => {
     }
   })
 
-  it('연락처 구역에 이메일, GitHub, 단축본 링크가 있다', () => {
+  it('연락처 구역에 이메일이 있고 단축본과 PDF 링크는 없다', () => {
     renderAt('/')
     const contact = document.getElementById('contact')!
     expect(within(contact).getByRole('link', { name: 'ysyg22@gmail.com' })).toBeInTheDocument()
-    expect(within(contact).getByRole('link', { name: /인쇄용 단축본/ })).toHaveAttribute('href', '/print')
+    expect(within(contact).queryByRole('link', { name: /인쇄용 단축본/ })).toBeNull()
+    expect(within(contact).queryByRole('link', { name: '포트폴리오 PDF' })).toBeNull()
   })
 
   it('화면 그리기에 실패하면 안내와 새로고침 단추를 보인다', async () => {
