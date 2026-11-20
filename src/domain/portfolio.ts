@@ -177,6 +177,8 @@ export interface AiProject {
 export interface Contact {
   email: EmailParts
   github: string
+  /** 이 사이트 주소(선택). PDF 머리에 글자로 보인다. https:// 로 시작한다 */
+  site?: string
   /** 블로그 주소(선택). 없으면 화면에서 숨긴다 */
   blog?: string
 }

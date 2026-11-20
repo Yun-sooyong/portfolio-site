@@ -4,7 +4,7 @@ import type { HomeCopy } from '../domain/portfolio'
 // 띠의 줄은 profile.strengths 와 projects.ts 에 적힌 사실을 줄인 것이고, source 는 출처 프로젝트 id 이다.
 
 export const home: HomeCopy = {
-  headline: ['의료 AI 모델을', '서비스로 잇는', '백엔드를 만듭니다.'],
+  headline: ['AI 모델을', '서비스로 잇는', '백엔드를 만듭니다.'],
   band: [
     { label: '모델 서빙', line: '판독 모델 4종을 FastAPI 추론 서버 1개로 서빙', source: 'empatho' },
     { label: '비동기 작업', line: '이미지마다 처리 상태 5가지와 조회 API', source: 'pathology-cdss' },

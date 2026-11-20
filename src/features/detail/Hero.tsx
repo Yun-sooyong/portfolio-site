@@ -38,6 +38,9 @@ export function Hero({ data }: { data: Portfolio }) {
             <Link className="btn btn-line" to="/print">
               인쇄용 단축본
             </Link>
+            <a className="btn btn-line" href="/yun-sooyong-portfolio.pdf" download>
+              포트폴리오 PDF
+            </a>
           </div>
         </div>
 

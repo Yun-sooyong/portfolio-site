@@ -10,6 +10,10 @@
     {
       "source": "/print",
       "destination": "/index.html"
+    },
+    {
+      "source": "/doc",
+      "destination": "/index.html"
     }
   ],
   "headers": [
@@ -40,6 +44,15 @@
     },
     {
       "source": "/print",
+      "headers": [
+        {
+          "key": "X-Robots-Tag",
+          "value": "noindex"
+        }
+      ]
+    },
+    {
+      "source": "/doc",
       "headers": [
         {
           "key": "X-Robots-Tag",

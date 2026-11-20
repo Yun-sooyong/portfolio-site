@@ -10,13 +10,13 @@ describe('vercel.json', () => {
     headers: { source: string; headers: { key: string; value: string }[] }[]
   }
 
-  it('rewrites는 아는 주소(/, /print)만 index.html로 보낸다', () => {
-    expect(config.rewrites.map((r) => r.source).sort()).toEqual(['/', '/print'])
+  it('rewrites는 아는 주소(/, /print, /doc)만 index.html로 보낸다', () => {
+    expect(config.rewrites.map((r) => r.source).sort()).toEqual(['/', '/doc', '/print'])
     for (const r of config.rewrites) expect(r.destination).toBe('/index.html')
   })
 
-  it('/print 와 /404.html 에 X-Robots-Tag noindex 헤더가 있다', () => {
-    for (const source of ['/print', '/404.html']) {
+  it('/print, /doc, /404.html 에 X-Robots-Tag noindex 헤더가 있다', () => {
+    for (const source of ['/print', '/doc', '/404.html']) {
       const rule = config.headers.find((h) => h.source === source)
       expect(rule?.headers).toContainEqual({ key: 'X-Robots-Tag', value: 'noindex' })
     }
@@ -25,6 +25,14 @@ describe('vercel.json', () => {
   it('CSP 헤더는 모든 주소에 있다', () => {
     const all = config.headers.find((h) => h.source === '/(.*)')
     expect(all?.headers.some((h) => h.key === 'Content-Security-Policy')).toBe(true)
+  })
+})
+
+describe('다운로드용 PDF', () => {
+  it('public/yun-sooyong-portfolio.pdf 가 있다', () => {
+    const file = resolve(process.cwd(), 'public/yun-sooyong-portfolio.pdf')
+    expect(existsSync(file)).toBe(true)
+    expect(readFileSync(file).subarray(0, 5).toString()).toBe('%PDF-')
   })
 })
 

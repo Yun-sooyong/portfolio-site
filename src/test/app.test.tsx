@@ -40,7 +40,7 @@ afterEach(() => {
 describe('주소', () => {
   it('/ 는 상세본이다. 첫 화면과 구역 7개가 한 페이지에 이어진다', () => {
     const { container } = renderAt('/')
-    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('의료 AI 모델을 서비스로 잇는 백엔드를 만듭니다.')
+    expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('AI 모델을 서비스로 잇는 백엔드를 만듭니다.')
     expect(document.getElementById('top')).not.toBeNull()
     const ids = [...container.querySelectorAll('main > section')].map((s) => s.id)
     expect(ids).toEqual(['top', ...SECTIONS.map((s) => s.id)])
@@ -361,6 +361,25 @@ describe('쪽 이동', () => {
     renderAt('/')
     expect(screen.getByRole('link', { name: '프로젝트 보기' })).toHaveAttribute('href', '#projects')
     expect(screen.getAllByRole('link', { name: /인쇄용 단축본/ }).every((a) => a.getAttribute('href') === '/print')).toBe(true)
+  })
+
+  it('첫 화면과 연락처 구역에 포트폴리오 PDF 내려받기 링크가 있다', () => {
+    renderAt('/')
+    const hero = document.getElementById('top')!
+    const link = within(hero).getByRole('link', { name: '포트폴리오 PDF' })
+    expect(link).toHaveAttribute('href', '/yun-sooyong-portfolio.pdf')
+    expect(link).toHaveAttribute('download')
+    const contactLink = within(document.getElementById('contact')!).getByRole('link', { name: '포트폴리오 PDF' })
+    expect(contactLink).toHaveAttribute('href', '/yun-sooyong-portfolio.pdf')
+    expect(contactLink).toHaveAttribute('download')
+  })
+
+  it('/doc 는 PDF 원본이다. 프로젝트 4개와 AI 프로젝트 3개가 있고 noindex 이다', async () => {
+    const { container } = renderAt('/doc')
+    await screen.findByRole('heading', { level: 1, name: portfolio.profile.name })
+    expect(container.querySelectorAll('.doc-project')).toHaveLength(portfolio.projects.length + portfolio.aiProjects.length)
+    expect(document.head.querySelector('meta[name="robots"][content="noindex"]')).not.toBeNull()
+    expect(container.querySelector('.print-toolbar')).toBeNull()
   })
 
   it('바깥 링크는 새 탭에서 열린다고 보조 기술에 알린다', () => {

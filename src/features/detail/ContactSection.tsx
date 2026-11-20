@@ -43,6 +43,15 @@ export function ContactSection({ contact }: { contact: Contact }) {
               <span className="contact-host">열린 화면에서 “PDF로 저장” 단추를 누릅니다.</span>
             </p>
           </li>
+          <li>
+            <p className="contact-label label-mono">PDF 내려받기</p>
+            <p className="contact-value">
+              <a href="/yun-sooyong-portfolio.pdf" download>
+                포트폴리오 PDF
+              </a>
+              <span className="contact-host">내용 전체를 A4 10쪽 이내로 정리한 파일입니다.</span>
+            </p>
+          </li>
         </ul>
       </div>
     </section>

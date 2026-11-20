@@ -6,6 +6,7 @@ import { RouteEffects } from './RouteEffects'
 
 // 상세본이 첫 화면이므로 바로 불러온다. 단축본과 없는 주소 화면은 쪽을 열 때 불러온다.
 const PrintPage = lazy(() => import('./PrintPage').then((m) => ({ default: m.PrintPage })))
+const DocPage = lazy(() => import('./DocPage').then((m) => ({ default: m.DocPage })))
 const NotFoundPage = lazy(() => import('./NotFoundPage').then((m) => ({ default: m.NotFoundPage })))
 
 export function AppRoutes() {
@@ -16,6 +17,7 @@ export function AppRoutes() {
         <Routes>
           <Route path="/" element={<DetailPage />} />
           <Route path="/print" element={<PrintPage />} />
+          <Route path="/doc" element={<DocPage />} />
           <Route path="*" element={<NotFoundPage />} />
         </Routes>
       </Suspense>
