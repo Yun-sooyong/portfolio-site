@@ -17,14 +17,14 @@ export const highlights: Highlight[] = [
     id: 'lora-swap',
     value: '0.06~0.28',
     unit: '초',
-    caption: 'LoRA 어댑터 교체 시간입니다. 3종을 5번 갈아 끼우며 따로 올린 결과와 비교해 차이가 0이었습니다.',
+    caption: '영상 종류가 바뀌어도 모델을 다시 올리지 않고 LoRA 어댑터만 0.3초 안에 바꿉니다. 따로 올린 결과와 차이는 0이었습니다.',
     source: 'empatho',
   },
   {
     id: 'report-stable',
     value: '50',
     unit: '회',
-    caption: '같은 입력으로 소견문을 50회 생성해 모두 같았습니다. 판독 수치 150개 보존.',
+    caption: '같은 입력으로 소견문을 50회 만들어 모두 같았습니다. 실행마다 소견문이 달라지지 않고, 판독 수치 150개도 그대로 옮깁니다.',
     source: 'empatho',
   },
   {
@@ -35,11 +35,11 @@ export const highlights: Highlight[] = [
     source: 'pathology-cdss',
   },
   {
-    id: 'commits',
-    value: '38/85',
-    unit: '개',
-    caption: '6일 동안 팀 커밋 85개 중 내가 쓴 커밋입니다(병합 커밋 제외).',
-    source: 'recare-dm',
+    id: 'one-server',
+    value: '4→1',
+    unit: '서버',
+    caption: '판독 모델 4종(맘모그래피, 초음파, MRI, 병리)을 FastAPI 추론 서버 1개로 서빙합니다.',
+    source: 'empatho',
   },
   {
     id: 'award',

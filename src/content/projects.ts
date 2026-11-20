@@ -21,6 +21,7 @@ export const projects: Project[] = [
     results: [
       { value: '13,602 → 4,148MiB', label: '영상 모델 3종을 백본 1벌 + LoRA 교체로 합친 뒤 대기 기준 GPU 메모리 (약 70% 감소, 판독 중 4,942MiB)' },
       { value: '0.06~0.28초', label: 'LoRA 어댑터 교체 시간. 3종을 5번 갈아 끼우며 따로 올린 결과와 비교했고, 차이는 0이었습니다' },
+      { value: '4종 → 1개', label: '판독 모델 4종(맘모그래피, 초음파, MRI, 병리)을 FastAPI 추론 서버 1개로 서빙' },
       { value: '50회 중 50회', label: '같은 입력으로 소견문을 생성했을 때 같은 결과 (판독 수치 150개 보존)' },
     ],
     githubUrl: 'https://github.com/Yun-sooyong/empatho',

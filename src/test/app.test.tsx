@@ -365,7 +365,7 @@ describe('쪽 이동', () => {
     expect(within(hero).queryByRole('link', { name: '포트폴리오 PDF' })).toBeNull()
   })
 
-  it('/doc 는 PDF 원본이다. 프로젝트 4개와 AI 프로젝트 3개가 있고 noindex 이다', async () => {
+  it('/doc 는 PDF 원본이다. 팀 프로젝트와 AI 프로젝트가 모두 있고 noindex 이다', async () => {
     const { container } = renderAt('/doc')
     await screen.findByRole('heading', { level: 1, name: portfolio.profile.name })
     expect(container.querySelectorAll('.doc-project')).toHaveLength(portfolio.projects.length + portfolio.aiProjects.length)
