@@ -188,6 +188,11 @@ main:focus:not(:focus-visible) {
 .brand:hover {
   text-decoration: none;
 }
+/* 누르는 영역만 44px 이상으로 넓힌다. 같은 크기의 음수 margin으로 배치는 그대로 둔다. */
+.brand {
+  padding-block: 0.6rem;
+  margin-block: -0.6rem;
+}
 .brand-mark {
   width: 0.7rem;
   height: 0.7rem;
@@ -897,6 +902,7 @@ main:focus:not(:focus-visible) {
   transition: grid-template-rows 180ms ease, visibility 0s;
 }
 .project-panel-inner {
+  position: relative;
   min-height: 0;
   overflow: hidden;
 }
@@ -1238,6 +1244,11 @@ main:focus:not(:focus-visible) {
   color: var(--ink);
   overflow-wrap: anywhere;
 }
+.contact-value a {
+  display: inline-block;
+  padding-block: 0.7rem;
+  margin-block: -0.7rem;
+}
 .contact-host {
   display: block;
   margin-top: 0.15rem;
@@ -1299,6 +1310,11 @@ main:focus:not(:focus-visible) {
 }
 .footer-row p {
   margin: 0;
+}
+.footer-row a {
+  display: inline-block;
+  padding-block: 0.7rem;
+  margin-block: -0.7rem;
 }
 
 /* ---------- 없는 주소, 불러오는 중 ---------- */
