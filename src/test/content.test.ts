@@ -147,14 +147,6 @@ describe('내용 형식', () => {
     }
   })
 
-  it('포트폴리오 사이트의 품질 관리 문구에 적은 CI 단계가 ci.yml 의 실제 run 명령과 같다', () => {
-    const ci = readFileSync(resolve(process.cwd(), '.github/workflows/ci.yml'), 'utf8')
-    const runs = [...ci.matchAll(/^\s*-\s*run:\s*(.+)$/gm)].map((m) => (m[1] ?? "").trim())
-    expect(runs).toEqual(['npm ci', 'npm run lint', 'npm run typecheck', 'npm test', 'npm run build', 'npm audit --audit-level=high'])
-    const site = portfolio.aiProjects.find((p) => p.id === 'portfolio-site')
-    expect(site?.quality[0]).toContain('npm ci, lint, 타입 검사, 테스트, 빌드, npm audit(high 이상)')
-  })
-
   it('전화번호와 상세 주소 형태가 없다', () => {
     const all = JSON.stringify(portfolio)
     expect(all).not.toMatch(/0\d{1,2}-\d{3,4}-\d{4}/)

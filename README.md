@@ -31,7 +31,7 @@
 - 프로젝트 목록은 첫 번째 프로젝트만 펼친 채로 시작합니다. AI 프로젝트 목록은 모두 접힌 채로 시작합니다. 단추는 `aria-expanded` 와 `aria-controls` 를 씁니다.
 - 프로젝트 구역에는 요약만 둡니다. 구성도, 문제와 해결 같은 자세한 설명은 노션 페이지(`notionUrl`)에 있습니다.
 - 프로젝트 링크는 `githubUrl`, `demoUrl`, `notionUrl` 이고 모두 선택입니다. 값이 없는 링크는 화면에 보이지 않습니다.
-- 이 사이트의 구조, 보안, CI 설명은 04 AI 프로젝트의 "포트폴리오 사이트" 항목에 있습니다. 구현 중 겪은 문제는 `docs/journal.md` 에 적었습니다.
+- 이 사이트의 구조, 보안, CI 설명은 이 README에 있습니다. 구현 중 겪은 문제는 `docs/journal.md` 에 적었습니다.
 - `/doc` 는 같은 내용 파일을 읽어 PDF 원본을 만듭니다. 내용 파일을 고친 뒤에는 `npm run pdf` 를 다시 실행해 `public/yun-sooyong-portfolio.pdf` 를 갱신하고 함께 커밋합니다. Chrome 경로가 다르면 `CHROME_PATH` 환경 변수로 지정합니다.
 - `/print` 는 같은 내용 파일을 읽고, 프로젝트마다 GitHub, 데모, 노션 주소를 글자로 보입니다.
 
