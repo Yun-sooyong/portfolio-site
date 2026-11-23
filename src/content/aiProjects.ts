@@ -125,6 +125,7 @@ export const aiProjects: AiProject[] = [
     ],
     githubUrl: 'https://github.com/Yun-sooyong/dl-study',
     demoUrl: 'https://yun-sooyong.github.io/dl-study/',
+    notionUrl: 'https://yun-sooyong.notion.site/421258595efe811b96bee683affec789',
     workflowUrl: 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/dl-study.md',
   },
   {
@@ -160,6 +161,7 @@ export const aiProjects: AiProject[] = [
       '보안 점검을 3번 했습니다. 해당 없는 항목은 코드 검색 근거를 남기고, 요청 제한과 경로 검사 등 빈 곳을 메웠습니다.',
       '수집한 데이터는 저장소에 넣지 않고, 공개용 빌드에는 대표 10경기만 넣도록 했습니다.',
     ],
+    notionUrl: 'https://yun-sooyong.notion.site/421258595efe81789913c5eeb8e2f615',
     workflowUrl: 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/g1-archive-viewer.md',
   },
 ]

@@ -80,6 +80,15 @@ describe('주소', () => {
     }
   })
 
+  it('번호가 있는 구역은 구역 이름을 큰 제목(h2)으로 쓴다', () => {
+    renderAt('/')
+    for (const info of SECTIONS.filter((x) => x.no)) {
+      const section = document.getElementById(info.id)!
+      expect(within(section).getAllByRole('heading', { level: 2 })[0]).toHaveTextContent(new RegExp(`^${info.label}$`))
+      expect(section.querySelector('.section-label')?.textContent).not.toBe(info.label)
+    }
+  })
+
   it('연락처 구역에는 큰 번호와 작은 라벨이 없고 제목은 "연락처" 하나다', () => {
     renderAt('/')
     const contact = document.getElementById('contact')!
@@ -510,7 +519,8 @@ describe('AI 프로젝트 구역', () => {
   it('프로젝트 앞에서 이력 앞까지 구역이 있고 기본은 모두 접혀 있다', () => {
     renderAt('/')
     const section = document.getElementById('ai-projects')!
-    expect(within(section).getByRole('heading', { level: 2 })).toHaveTextContent('AI로 만든 프로젝트')
+    expect(within(section).getByRole('heading', { level: 2 })).toHaveTextContent('AI 프로젝트')
+    expect(section.querySelector('.section-label')).toHaveTextContent('AI로 만든 프로젝트')
     const buttons = within(section).getAllByRole('button')
     expect(buttons).toHaveLength(portfolio.aiProjects.length)
     for (const b of buttons) expect(b).toHaveAttribute('aria-expanded', 'false')
