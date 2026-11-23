@@ -92,6 +92,14 @@ function AiProjectBody({ project: p }: { project: AiProject }) {
             </ExternalLink>
           </li>
         ) : null}
+        {p.demoUrl ? (
+          <li>
+            <ExternalLink href={p.demoUrl}>
+              데모
+              <span className="sr-only">, {p.name}</span>
+            </ExternalLink>
+          </li>
+        ) : null}
         <li>
           <ExternalLink href={p.workflowUrl}>
             작업 흐름 다이어그램

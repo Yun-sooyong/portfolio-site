@@ -168,6 +168,8 @@ export interface AiProject {
   githubUrl?: string
   /** 노션 상세 페이지 주소(선택). https:// 로 시작한다 */
   notionUrl?: string
+  /** 공개 사이트나 데모 주소(선택). https:// 로 시작한다 */
+  demoUrl?: string
   /** GitHub의 작업 흐름 다이어그램 문서 주소. https:// 로 시작한다 */
   workflowUrl: string
   /** 화면 이미지(선택). 펼친 본문의 링크 줄 위에 보인다 */

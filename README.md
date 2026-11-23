@@ -60,7 +60,7 @@ npm run pdf       # 빌드 뒤 /doc 를 PDF로 저장 (시스템 Chrome 필요, 
 | `profile.ts` | 이름, 직무, 소개, 강점, 경력, 학력, 교육 이력(`stack`, `summary`, 선택 `study`), 자격증(선택 `status`) |
 | `skills.ts` | 기술. 기술마다 `techs` 에 `{ name, icon? }` 를 1개씩 둡니다. 점수 대신 어느 프로젝트에서 썼는지(`can`)를 문장으로 적습니다. `lacks` 와 `printName` 은 선택입니다 |
 | `projects.ts` | 프로젝트. 배열에 항목 1개를 더하면 상세본에 나타납니다. 단축본에는 앞의 4개만 보입니다. 선택 필드 `shot` 은 화면 이미지이며 파일은 `public/shots/` 에 둡니다. 단축본에는 나오지 않습니다 |
-| `aiProjects.ts` | AI로 만든 프로젝트. `aiAreas`, `tools`, `impact`, `design`, `cases`, `quality`, `workflowUrl` 을 둡니다. `notionUrl` 은 선택입니다. 선택 필드 `shot` 은 화면 이미지이며 파일은 `public/shots/` 에 둡니다. 단축본에는 나오지 않습니다 |
+| `aiProjects.ts` | AI로 만든 프로젝트. `aiAreas`, `tools`, `impact`, `design`, `cases`, `quality`, `workflowUrl` 을 둡니다. `githubUrl`, `notionUrl`, `demoUrl` 은 선택입니다. 선택 필드 `shot` 은 화면 이미지이며 파일은 `public/shots/` 에 둡니다. 단축본에는 나오지 않습니다 |
 | `home.ts` | 첫 화면의 큰 제목 3줄과 강점 3칸 띠. 띠의 `source` 는 출처 프로젝트 id입니다 |
 | `highlights.ts` | 소개 구역의 성과 숫자 6칸. `source` 는 출처 프로젝트 id(프로필이면 `'profile'`)입니다. `accent: true` 인 칸 1개만 강조색입니다 |
 | `site.ts` | 연락처. 블로그(`blog`)는 선택입니다 |

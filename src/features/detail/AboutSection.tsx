@@ -14,7 +14,7 @@ export function AboutSection({ data }: { data: Portfolio }) {
   return (
     <section className="section" id="about" aria-labelledby="about-title">
       <div className="wrap">
-        <SectionHead id="about" title="모델을 서비스로 잇는 일" />
+        <SectionHead id="about" title="소개" label="모델을 서비스로 잇는 일" />
         <div className="about-grid">
           <div className="prose">
             {middle.map((l) => (

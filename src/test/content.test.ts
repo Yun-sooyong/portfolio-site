@@ -104,6 +104,14 @@ describe('내용 형식', () => {
     }
   })
 
+  it('AI 프로젝트의 githubUrl, demoUrl, notionUrl 은 선택이고, 있으면 https이다', () => {
+    for (const p of portfolio.aiProjects) {
+      for (const url of [p.githubUrl, p.demoUrl, p.notionUrl]) {
+        if (url !== undefined) expect(url, p.name).toMatch(/^https:\/\/[^\s]+$/)
+      }
+    }
+  })
+
   it('AI 프로젝트의 workflowUrl 은 저장소의 작업 흐름 문서를 가리키고 문서와 다이어그램이 실제로 있다', () => {
     const base = 'https://github.com/Yun-sooyong/portfolio-site/blob/main/docs/ai-workflow/'
     for (const p of portfolio.aiProjects) {
@@ -218,9 +226,9 @@ describe('내용 형식', () => {
 })
 
 describe('AI 프로젝트 노션 링크', () => {
-  it('모든 AI 프로젝트에 notionUrl 이 있고 노션 사이트 주소로 시작한다', () => {
+  it('notionUrl 이 있는 AI 프로젝트는 노션 사이트 주소로 시작한다', () => {
     for (const p of portfolio.aiProjects) {
-      expect(p.notionUrl, p.id).toBeDefined()
+      if (p.notionUrl === undefined) continue
       expect(p.notionUrl, p.id).toMatch(/^https:\/\/yun-sooyong\.notion\.site\//)
     }
   })

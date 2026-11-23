@@ -534,7 +534,10 @@ describe('AI 프로젝트 구역', () => {
       if (p.notionUrl) {
         expect(within(panel).getByRole('link', { name: /^노션에서 자세히/ })).toHaveAttribute('href', p.notionUrl)
       }
-      expect(panel.querySelectorAll('a')).toHaveLength(1 + (p.githubUrl ? 1 : 0) + (p.notionUrl ? 1 : 0))
+      if (p.demoUrl) {
+        expect(within(panel).getByRole('link', { name: /^데모/ })).toHaveAttribute('href', p.demoUrl)
+      }
+      expect(panel.querySelectorAll('a')).toHaveLength(1 + (p.githubUrl ? 1 : 0) + (p.demoUrl ? 1 : 0) + (p.notionUrl ? 1 : 0))
     })
   })
 
