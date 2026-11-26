@@ -7,11 +7,11 @@ export interface ProjectLinkItem {
   url: string
 }
 
-/** 프로젝트에 값이 있는 링크만 GitHub, 데모, 노션 순서로 돌려준다. 값이 없는 링크는 넣지 않는다. */
+/** 프로젝트에 값이 있는 링크만 GitHub, 노션, 데모 순서로 돌려준다. 값이 없는 링크는 넣지 않는다. */
 export function projectLinkItems(p: Pick<Project, 'githubUrl' | 'demoUrl' | 'notionUrl'>): ProjectLinkItem[] {
   const items: ProjectLinkItem[] = []
   if (p.githubUrl) items.push({ kind: 'github', label: 'GitHub', url: p.githubUrl })
+  if (p.notionUrl) items.push({ kind: 'notion', label: '프로젝트 자세히 보기', url: p.notionUrl })
   if (p.demoUrl) items.push({ kind: 'demo', label: '데모', url: p.demoUrl })
-  if (p.notionUrl) items.push({ kind: 'notion', label: '노션에서 자세히', url: p.notionUrl })
   return items
 }

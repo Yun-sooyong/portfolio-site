@@ -47,11 +47,11 @@ describe('내용 형식', () => {
     expect(projects.every((p) => p.githubUrl !== undefined)).toBe(true)
   })
 
-  it('프로젝트 링크 목록은 GitHub, 데모, 노션 순서이고 값이 없는 링크는 넣지 않는다', () => {
+  it('프로젝트 링크 목록은 GitHub, 노션, 데모 순서이고 값이 없는 링크는 넣지 않는다', () => {
     expect(projectLinkItems({ githubUrl: 'https://g', demoUrl: 'https://d', notionUrl: 'https://n' }).map((l) => l.label)).toEqual([
       'GitHub',
+      '프로젝트 자세히 보기',
       '데모',
-      '노션에서 자세히',
     ])
     expect(projectLinkItems({ notionUrl: 'https://n' }).map((l) => l.kind)).toEqual(['notion'])
     expect(projectLinkItems({ githubUrl: 'https://g', demoUrl: undefined })).toHaveLength(1)

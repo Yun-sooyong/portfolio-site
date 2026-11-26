@@ -293,7 +293,13 @@ main:focus:not(:focus-visible) {
     white-space: nowrap;
   }
   .theme-toggle {
+    justify-content: center;
+    min-width: 2.75rem;
+    min-height: 2.75rem;
     padding: 0.5rem;
+  }
+  .menu-button {
+    min-height: 2.75rem;
   }
 }
 
@@ -1084,6 +1090,9 @@ main:focus:not(:focus-visible) {
   list-style: none;
 }
 .project-links.project-links-row {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 0;
   margin: 0 0.25rem 1.75rem;
   padding: 0.5rem 0 0;
   border-top: 1px solid var(--line);

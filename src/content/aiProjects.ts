@@ -1,6 +1,6 @@
 import type { AiProject } from '../domain/portfolio'
 
-// Claude Code로 바이브 코딩한 개인 프로젝트다. 상세본의 "AI로 만든 프로젝트" 구역에만 보이고 단축본(/print)에는 넣지 않는다.
+// Claude Code로 만든 개인 프로젝트다. 상세본의 "AI로 만든 프로젝트" 구역에만 보이고 단축본(/print)에는 넣지 않는다.
 // 팀 프로젝트는 projects.ts 에 둔다. 숫자는 각 저장소 README 에 적힌 값만 쓴다.
 
 export const aiProjects: AiProject[] = [

@@ -92,6 +92,14 @@ function AiProjectBody({ project: p }: { project: AiProject }) {
             </ExternalLink>
           </li>
         ) : null}
+        {p.notionUrl ? (
+          <li>
+            <ExternalLink href={p.notionUrl}>
+              프로젝트 자세히 보기
+              <span className="sr-only">, {p.name}</span>
+            </ExternalLink>
+          </li>
+        ) : null}
         {p.demoUrl ? (
           <li>
             <ExternalLink href={p.demoUrl}>
@@ -106,14 +114,6 @@ function AiProjectBody({ project: p }: { project: AiProject }) {
             <span className="sr-only">, {p.name}</span>
           </ExternalLink>
         </li>
-        {p.notionUrl ? (
-          <li>
-            <ExternalLink href={p.notionUrl}>
-              노션에서 자세히
-              <span className="sr-only">, {p.name}</span>
-            </ExternalLink>
-          </li>
-        ) : null}
       </ul>
     </>
   )
@@ -134,7 +134,7 @@ export function AiProjectsSection({ projects }: { projects: AiProject[] }) {
     <section className="section" id="ai-projects" aria-labelledby="ai-projects-title">
       <div className="wrap">
         <SectionHead id="ai-projects" title="AI로 만든 프로젝트" />
-        <p className="section-note">Claude Code로 바이브 코딩한 개인 프로젝트입니다. AI에게 맡긴 일과 내가 정한 것을 나눠 적었습니다.</p>
+        <p className="section-note">Claude Code로 만든 개인 프로젝트입니다. AI에게 맡긴 일과 내가 정한 것을 나눠 적었습니다.</p>
         {projects.length === 0 ? <EmptyNote /> : null}
         <ol className="project-list">
           {projects.map((p, i) => (

@@ -232,13 +232,13 @@ describe('프로젝트 펼침', () => {
     }
   })
 
-  it('GitHub, 데모, 노션에서 자세히 링크가 값이 있을 때만 보인다', () => {
+  it('GitHub, 데모, 프로젝트 자세히 보기 링크가 값이 있을 때만 보인다', () => {
     renderAt('/')
     for (const p of portfolio.projects) {
       const root = document.getElementById(`project-${p.id}`)!
       const github = within(root).queryByRole('link', { name: /^GitHub/ })
       const demo = within(root).queryByRole('link', { name: /^데모/ })
-      const notion = within(root).queryByRole('link', { name: /^노션에서 자세히/ })
+      const notion = within(root).queryByRole('link', { name: /^프로젝트 자세히 보기/ })
       expect(github === null, `${p.id} github`).toBe(p.githubUrl === undefined)
       expect(demo === null, `${p.id} demo`).toBe(p.demoUrl === undefined)
       expect(notion === null, `${p.id} notion`).toBe(p.notionUrl === undefined)
@@ -542,7 +542,7 @@ describe('AI 프로젝트 구역', () => {
       expect(within(panel).getByRole('link', { name: /작업 흐름 다이어그램/ })).toHaveAttribute('href', p.workflowUrl)
       expect(panel.querySelectorAll('.project-body')).toHaveLength(2)
       if (p.notionUrl) {
-        expect(within(panel).getByRole('link', { name: /^노션에서 자세히/ })).toHaveAttribute('href', p.notionUrl)
+        expect(within(panel).getByRole('link', { name: /^프로젝트 자세히 보기/ })).toHaveAttribute('href', p.notionUrl)
       }
       if (p.demoUrl) {
         expect(within(panel).getByRole('link', { name: /^데모/ })).toHaveAttribute('href', p.demoUrl)
